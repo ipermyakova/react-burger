@@ -1,0 +1,35 @@
+.header {
+    width: 1240px;
+    height: 88px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.menu {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 383px;
+
+}
+.menu > button + button {
+    margin-left: 8px;
+
+}
+.button {
+    background: #1C1C21; 
+    border: none;
+    outline: none;
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    border-radius: 40px;
+}
+
+.title {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 16px;
+    white-space: nowrap;
+}

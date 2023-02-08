@@ -1,0 +1,50 @@
+.burger_container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.items_container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+@media (max-width: 768px) {
+    .items_container {
+        max-height:  200px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .items_container {
+        max-height:  300px;
+    }
+}
+
+@media (min-width: 1366px) {
+    .items_container {
+        max-height:  600px;
+    }   
+}
+
+.total_price_container {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    flex-direction: row;
+}
+
+.price {
+    font-family: 'Iceland', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 48px;
+    margin: 0;
+} 
+
+.items {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+}
