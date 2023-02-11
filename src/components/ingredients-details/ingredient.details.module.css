@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+}
+
+.title {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 24px;
+    margin: 0;
+}
+
+.item_container {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    width: 520px;
+
+}
+
+.item_container > div + div {
+    margin-left: 28px;
+
+}
+
+.item {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+}
+
+.title_description {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #8585AD;
+    font-size: 16px;
+    margin: 0;
+}
+
+.number {
+    font-family: 'Iceland', Arial, sans-serif;
+    color: #8585AD;
+    font-size: 28px;
+    margin: 0;
+
+}

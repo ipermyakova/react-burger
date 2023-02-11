@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './header.module.css'
 
@@ -9,25 +10,32 @@ const Menu = (props) => {
         </nav>
     )
 }
+Menu.propTypes = {
+    children: PropTypes.array.isRequired
+}
 
 const MenuItem = (props) => {
     return (
-        <button type='button' className={styles.button}>
+        <a href="#" className={styles.link}>
             {props.children}
-        </button>
+        </a>
     )
+}
+
+MenuItem.propTypes = {
+    children: PropTypes.array.isRequired
 }
 
 const Button = () => {
     return (
-        <button type='button' className={styles.button}>
+        <a href="#" className={styles.link}>
                 <div className = "ml-5">
                     <ProfileIcon className = "ml-5" type="primary"/>
                 </div>
                 <div className="ml-2 mr-5">
                     <p className={styles.title}>Личный кабинет</p>
                 </div>
-        </button>
+        </a>
     )
 }
 

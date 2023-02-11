@@ -20,28 +20,34 @@
     align-items: center;
 }
 
-.items_container {
+.types_container {
     display: flex;
     flex-direction: column;
     justify-content: start;
     overflow-y: auto;
     overflow-x: hidden;
 }
+
+.items_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
     
 @media (max-width: 768px) {
-    .items_container {
+    .types_container {
         max-height:  200px;
     }
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
-    .items_container {
+    .types_container {
         max-height:  289px;
     }
 }
 
 @media (min-width: 1366px) {
-    .items_container {
+    .types_container {
         max-height:  579px;
     }   
 }

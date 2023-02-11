@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ConstructorElement, Button, DragIcon, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components'
-import styles from './burger.constructor.module.css'
+import { ConstructorElement, Button, DragIcon, CurrencyIcon, LockIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import styles from './burger.constructor.module.css';
+import { ingredientsPropTypes } from '../utils/prop-types';
 
 const getElementType = (index, lastIndex) => {
     return index === 0 ? "top" : index === lastIndex ? "bottom" : undefined;
@@ -19,6 +20,7 @@ const Ingredient = ({ name, price, image, elementType }) => {
                     price={price}
                     text={name}
                     thumbnail={image}
+                    isLocked={elementType === "top" || elementType === "bottom" ? true : false}
                 />
             </div>
         </div>)
@@ -31,22 +33,12 @@ Ingredient.propTypes = {
     elementType: PropTypes.string
 }
 
-const ingredientsPropTypes = PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    proteins: PropTypes.number,
-    fat: PropTypes.number,
-    carbohydrates: PropTypes.number,
-    calories: PropTypes.number,
-    price: PropTypes.number,
-    image: PropTypes.string,
-    image_mobile: PropTypes.string,
-    image_large: PropTypes.string,
-    __v: PropTypes.number
-}) 
-
-const BurgerConstructor = ({ ingredients }) => {
+const BurgerConstructor = ({ ingredients, onButtonClick }) => {
+    
+    const handleButtonClick = () => {
+        return onButtonClick();
+    };
+    
     return (
         <div className="ml-10">
             <div className={styles.burger_container}>
@@ -69,7 +61,7 @@ const BurgerConstructor = ({ ingredients }) => {
                             </div>
                         </div>
                         <div className="ml-10">
-                            <Button htmlType="button" type="primary" size="large">Оформить заказ</Button>
+                            <Button htmlType="button" type="primary" size="large" onClick={handleButtonClick}>Оформить заказ</Button>
                         </div>
                         </div>
                 </div>
@@ -80,7 +72,8 @@ const BurgerConstructor = ({ ingredients }) => {
 }
 
 BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientsPropTypes)
+    ingredients: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
+    onButtonClick: PropTypes.func.isRequired
 }
 
 export default BurgerConstructor;

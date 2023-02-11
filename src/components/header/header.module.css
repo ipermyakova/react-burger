@@ -13,11 +13,12 @@
     width: 383px;
 
 }
-.menu > button + button {
+.menu > a + a {
     margin-left: 8px;
 
 }
-.button {
+
+.link {
     background: #1C1C21; 
     border: none;
     outline: none;
@@ -25,6 +26,7 @@
     flex-direction: row; 
     align-items: center;
     border-radius: 40px;
+    text-decoration: none;
 }
 
 .title {

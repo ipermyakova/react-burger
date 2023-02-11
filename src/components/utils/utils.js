@@ -13,3 +13,7 @@ export const mapToColums = (arr) => {
     }
     return result;
 }
+
+export const filter = (ingredients, current) => {
+    return ingredients.filter(item => item.type === current);  
+}
