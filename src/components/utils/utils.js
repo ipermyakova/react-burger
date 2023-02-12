@@ -17,3 +17,7 @@ export const mapToColums = (arr) => {
 export const filter = (ingredients, current) => {
     return ingredients.filter(item => item.type === current);  
 }
+
+export const checkResponse = (res) => {
+    return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+}

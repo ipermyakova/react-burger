@@ -7,6 +7,7 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import OrderDetails from '../order-details/oder-details'
 import Modal from '../modal/modal'
 import IngredientDetails from '../ingredients-details/ingredient-details';
+import { checkResponse } from '../utils/utils'
 
 const url = 'https://norma.nomoreparties.space/api/ingredients';
 
@@ -25,7 +26,7 @@ const App = () => {
     const getIngredients = () => {
         setState({ ...state, hasError: false, isLoading: true });
         fetch(url)
-        .then(res => res.json())
+        .then(checkResponse)
         .then(data => setState({ ...state, data: data.data, isLoading: false }))
         .catch(e => {
             setState({ ...state, hasError: true, isLoading: false })
