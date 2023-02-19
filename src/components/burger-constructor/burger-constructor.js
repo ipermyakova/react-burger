@@ -1,11 +1,30 @@
-import React from 'react';
+import React, { useContext, useEffect, useState, useMemo, useReducer } from 'react';
 import PropTypes from 'prop-types';
 import { ConstructorElement, Button, DragIcon, CurrencyIcon, LockIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger.constructor.module.css';
-import { ingredientsPropTypes } from '../utils/prop-types';
+import { IngredientsContext, TotalPriceContext, OrderContext } from  '../../services/appContext.js';
+import { checkResponse } from '../utils/utils';
 
-const getElementType = (index, lastIndex) => {
-    return index === 0 ? "top" : index === lastIndex ? "bottom" : undefined;
+const url = 'https://norma.nomoreparties.space/api/orders';
+
+const renderName = {
+    top: "(верх)",
+    bottom: "(низ)",
+    center: ""
+}
+
+const TotalPrice = () => {
+    const { totalPriceState } = useContext(TotalPriceContext); 
+
+    return (
+        <div className={styles.items}>
+            <p className={styles.price}>{totalPriceState.totalPrice}
+            </p>
+            <div className="ml-2">
+                <CurrencyIcon type="primary"/>
+            </div>
+        </div>
+    )
 }
 
 const Ingredient = ({ name, price, image, elementType }) => {
@@ -18,7 +37,7 @@ const Ingredient = ({ name, price, image, elementType }) => {
                 <ConstructorElement
                     type={elementType}
                     price={price}
-                    text={name}
+                    text={name + " " + renderName[elementType]}
                     thumbnail={image}
                     isLocked={elementType === "top" || elementType === "bottom" ? true : false}
                 />
@@ -33,46 +52,112 @@ Ingredient.propTypes = {
     elementType: PropTypes.string
 }
 
-const BurgerConstructor = ({ ingredients, onButtonClick }) => {
+const totalPriceInitialState = { totalPrice:  0 };
+
+function reducer(state, action) {
+    switch(action.type) {
+        case "set":
+            return { totalPrice: action.payload};
+        case "reset":
+            return totalPriceInitialState;
+        default: 
+            throw new Error(`Wrong type of action: ${action.type}`);        
+    }
+
+}
+
+const BurgerConstructor = ({ onButtonClick }) => {
+
+    const { ingredientsState, setIngredientsState } = useContext(IngredientsContext);
+   
+    const { orderState, setOrderState } = useContext(OrderContext);
+
+    const [itemBunId, setItemBunId] = useState('');
+
+    const [totalPriceState, totalPriceDispatcher] = useReducer(reducer, totalPriceInitialState);
+
+    const { data } = ingredientsState;
     
     const handleButtonClick = () => {
+        if(data) {
+            getOrder();
+        }
         return onButtonClick();
     };
+
+    const getOrder = () => {
+        setOrderState({ ...orderState, hasError: false, isLoading: true });
+        fetch(url, 
+            { method: 'POST', headers: { 'Content-Type': 'application/json;charset=utf-8'}, body: JSON.stringify(getIngredientsRequest())})
+        .then(checkResponse)
+        .then(data => setOrderState({ ...orderState, orderData: { order: data.order, name: data.name }, isLoading: false, hasError: false }))
+        .catch(e => {
+            setOrderState( { ...orderState, hasError: true, isLoading: false })
+        });
+    }
+
+    const getIngredientsRequest = () => {
+        const ingredientsId = getIngredients().map(item => item._id);
+        return { ingredients: ingredientsId };
+
+    }
+
+    const getIngredients = () => {
+        return data.filter(item => item.type !== 'bun' || item._id === itemBunId);
+    }
+
+    const itemFirstBunId = useMemo(()=> data.find((item) => item.type === "bun")._id, [data]);
+
+    const totalPrice = useMemo(() => {
+            return getIngredients().reduce((acc, item) => { 
+                    const itemPrice = (item._id === itemBunId) ? (2 * item.price) : item.price;
+                    return acc + itemPrice
+                }, 0)
+    }, [data, itemBunId])
+
+    useEffect(() => {
+        setItemBunId(itemFirstBunId);
+
+    }, [itemFirstBunId])
+
+    useEffect(() => {
+        totalPriceDispatcher({ type: "set", payload: totalPrice });
+
+    }, [totalPrice])
+
     
     return (
         <div className="ml-10">
+            <TotalPriceContext.Provider value={{ totalPriceState, totalPriceDispatcher }}>
             <div className={styles.burger_container}>
                 <div className='pl-4 pr-4 pt-25 pb-10'>
-                    <div className={styles.items_container}>
-                        { ingredients.map((item, index) => 
+                    <div className={styles.items_container}> 
+                        { getIngredients().map((item, index) => 
                             <Ingredient key={item._id} name={item.name} price={item.price} image={item.image_mobile} 
-                            elementType={ getElementType(index, ingredients.length - 1)}/>
+                            elementType={ item.type === 'bun' ? "top" : 'center'}/>
+                        )}
+                        {itemBunId && data.filter(item => item._id === itemBunId).map((item, index) => 
+                            <Ingredient key={item._id} name={item.name} price={item.price} image={item.image_mobile} 
+                            elementType="bottom"/> 
                         )}
                     </div>
                 </div>
                 <div className="pl-4 pr-4">
-                        <div className={styles.total_price_container}>
-                            <div className={styles.items}>
-                                <p className={styles.price}>{ ingredients.reduce((acc, item) => {
-                                    return acc + item.price
-                                }, 0) }</p>
-                            <div className="ml-2">
-                                <CurrencyIcon type="primary"/>
-                            </div>
-                        </div>
+                    <div className={styles.total_price_container}>
+                        <TotalPrice />
                         <div className="ml-10">
                             <Button htmlType="button" type="primary" size="large" onClick={handleButtonClick}>Оформить заказ</Button>
                         </div>
-                        </div>
+                    </div>    
                 </div>
 
             </div>
+            </TotalPriceContext.Provider>
         </div>
     )
 }
 
 BurgerConstructor.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
     onButtonClick: PropTypes.func.isRequired
 }
 

@@ -1,9 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger.ingredients.module.css';
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { mapToColums, filter} from '../utils/utils';
 import { ingredientsPropTypes } from '../utils/prop-types';
+
+import { IngredientsContext } from  '../../services/appContext.js';
 
 const renderName = {
     bun: "Булки",
@@ -49,7 +51,10 @@ Items.propTypes = {
     children: PropTypes.array
 }
 
-const BurgerIngredients = ({ ingredients, onCardClick }) => {
+const BurgerIngredients = ({ onCardClick }) => {
+
+    const { ingredientsState, setIngredientsState } = useContext(IngredientsContext);
+    const { data } = ingredientsState;
 
     const [current, setCurrent] = React.useState('bun');
 
@@ -80,7 +85,7 @@ const BurgerIngredients = ({ ingredients, onCardClick }) => {
                     <h2 className={styles.tab_title}>{renderName[name]}</h2>
                 </div>
                 <div className={styles.items_container}>
-                        { mapToColums(filter(ingredients, name)).map((items, index) => {
+                        { mapToColums(filter(data, name)).map((items, index) => {
                             return (
                             <Items key={index}>
                              { items.first && <div className="ml-4 mb-8">
@@ -97,7 +102,6 @@ const BurgerIngredients = ({ ingredients, onCardClick }) => {
 }
 
 BurgerIngredients.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
     onCardClick: PropTypes.func.isRequired
 }
 

@@ -7,29 +7,34 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import OrderDetails from '../order-details/oder-details'
 import Modal from '../modal/modal'
 import IngredientDetails from '../ingredients-details/ingredient-details';
-import { checkResponse } from '../utils/utils'
+import { checkResponse } from '../utils/utils';
+import { IngredientsContext, OrderContext } from  '../../services/appContext.js';
 
 const url = 'https://norma.nomoreparties.space/api/ingredients';
 
 const App = () => {
 
     const [stateModal, setStateModal] = useState({visibleOrder: false, visibleIngredient: false, ingredientId: ""});
-    const [state, setState] = useState({ data: [], isLoading: false, hasError: false });
+
+    const [ingredientsState, setIngredientsState] = useState({ data: [], isLoading: false, hasError: false });
+
+    const [orderState, setOrderState] = useState( { orderData: null, isLoading: false, hasError: false });
+
 
     const { visibleOrder, visibleIngredient, ingredientId } = stateModal;
-    const { data, isLoading, hasError } = state;
+    const { data, isLoading, hasError } = ingredientsState;
 
     useEffect(()=> {
-        getIngredients();
+        const ingredients = getIngredients();
     },[]);
 
     const getIngredients = () => {
-        setState({ ...state, hasError: false, isLoading: true });
+        setIngredientsState({ ...ingredientsState, hasError: false, isLoading: true });
         fetch(url)
         .then(checkResponse)
-        .then(data => setState({ ...state, data: data.data, isLoading: false }))
+        .then(data => setIngredientsState({ ...ingredientsState, data: data.data, isLoading: false }))
         .catch(e => {
-            setState({ ...state, hasError: true, isLoading: false })
+            setIngredientsState({ ...ingredientsState, hasError: true, isLoading: false })
         });
     };
 
@@ -50,22 +55,26 @@ const App = () => {
    
     return (
         <div className={appStyles.app}>
-            {isLoading && 'Загрузка'}
-            {hasError && 'Возникла ошибка'}
-            {!isLoading && !hasError && data && data.length > 0 &&
-            <div>
-                <AppHeader />
-                <div className={appStyles.container}>
-                    <BurgerIngredients ingredients={data} onCardClick={handleOpenModal}/>
-                    <BurgerConstructor ingredients={data} onButtonClick={handleOpenModal}/>
+            <IngredientsContext.Provider value={{ ingredientsState, setIngredientsState }}>
+                <OrderContext.Provider value={{ orderState, setOrderState }}>
+                    {isLoading && 'Загрузка'}
+                    {hasError && 'Возникла ошибка'}
+                    {!isLoading && !hasError && data && data.length > 0 &&
+                    <div>
+                        <AppHeader />
+                        <div className={appStyles.container}>
+                            <BurgerIngredients onCardClick={handleOpenModal}/>
+                            <BurgerConstructor onButtonClick={handleOpenModal}/>
+                        </div>
+                        {(visibleOrder || visibleIngredient) && <Modal header={visibleIngredient ? "Детали ингредиента" : ""} onCloseClick={handleCloseModal}>
+                        {visibleOrder && !orderState.hasError && <OrderDetails />}
+                        {visibleIngredient && ingredientData && <IngredientDetails {...ingredientData}/>}  
+                        </Modal>
+                    }
                 </div>
-                {(visibleOrder || visibleIngredient) && <Modal header={visibleIngredient ? "Детали ингредиента" : ""} onCloseClick={handleCloseModal}>
-                    {visibleOrder && <OrderDetails />}
-                    {visibleIngredient && ingredientData && <IngredientDetails {...ingredientData}/>}  
-                </Modal>
                 }
-            </div>
-            }
+                </OrderContext.Provider>
+            </IngredientsContext.Provider>
         </div>
     );
 };
