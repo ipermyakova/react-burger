@@ -7,10 +7,8 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import OrderDetails from '../order-details/oder-details'
 import Modal from '../modal/modal'
 import IngredientDetails from '../ingredients-details/ingredient-details';
-import { checkResponse } from '../utils/utils';
 import { IngredientsContext, OrderContext } from  '../../services/appContext.js';
-
-const url = 'https://norma.nomoreparties.space/api/ingredients';
+import { getIngredients } from '../utils/burger-api.js'
 
 const App = () => {
 
@@ -25,19 +23,10 @@ const App = () => {
     const { data, isLoading, hasError } = ingredientsState;
 
     useEffect(()=> {
-        const ingredients = getIngredients();
+        getIngredients(ingredientsState, setIngredientsState);
     },[]);
 
-    const getIngredients = () => {
-        setIngredientsState({ ...ingredientsState, hasError: false, isLoading: true });
-        fetch(url)
-        .then(checkResponse)
-        .then(data => setIngredientsState({ ...ingredientsState, data: data.data, isLoading: false }))
-        .catch(e => {
-            setIngredientsState({ ...ingredientsState, hasError: true, isLoading: false })
-        });
-    };
-
+    
     const handleOpenModal = useCallback((id) => {
         if (id) {
             setStateModal({...stateModal, visibleIngredient: true, ingredientId: id});
@@ -52,29 +41,31 @@ const App = () => {
     });
 
     const ingredientData = useMemo(() => data.find(item => item._id === ingredientId), [ingredientId, data]);
+
+    const ingredientsValue = useMemo(() => { return { ingredientsState, setIngredientsState }}, [ingredientsState, setIngredientsState])
+    const orderValue = useMemo(() => { return { orderState, setOrderState }}, [orderState, setOrderState])
    
     return (
-        <div className={appStyles.app}>
-            <IngredientsContext.Provider value={{ ingredientsState, setIngredientsState }}>
-                <OrderContext.Provider value={{ orderState, setOrderState }}>
-                    {isLoading && 'Загрузка'}
-                    {hasError && 'Возникла ошибка'}
-                    {!isLoading && !hasError && data && data.length > 0 &&
+        <div className={appStyles.app}>    
+            {isLoading && 'Загрузка'}
+                {hasError && 'Возникла ошибка'}
+                {!isLoading && !hasError && data && data.length > 0 &&
                     <div>
                         <AppHeader />
+                        <OrderContext.Provider value={orderValue}>
                         <div className={appStyles.container}>
-                            <BurgerIngredients onCardClick={handleOpenModal}/>
-                            <BurgerConstructor onButtonClick={handleOpenModal}/>
+                            <IngredientsContext.Provider value={ingredientsValue}>
+                                <BurgerIngredients onCardClick={handleOpenModal}/>
+                                <BurgerConstructor onButtonClick={handleOpenModal}/>
+                            </IngredientsContext.Provider>    
                         </div>
                         {(visibleOrder || visibleIngredient) && <Modal header={visibleIngredient ? "Детали ингредиента" : ""} onCloseClick={handleCloseModal}>
-                        {visibleOrder && !orderState.hasError && <OrderDetails />}
+                            {visibleOrder && !orderState.hasError && <OrderDetails />}
                         {visibleIngredient && ingredientData && <IngredientDetails {...ingredientData}/>}  
-                        </Modal>
-                    }
-                </div>
+                        </Modal>}
+                        </OrderContext.Provider>
+                    </div>
                 }
-                </OrderContext.Provider>
-            </IngredientsContext.Provider>
         </div>
     );
 };

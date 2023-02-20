@@ -17,7 +17,7 @@ const TotalPrice = () => {
     const { totalPriceState } = useContext(TotalPriceContext); 
 
     return (
-        <div className={styles.items}>
+        <div className={styles.total_price}>
             <p className={styles.price}>{totalPriceState.totalPrice}
             </p>
             <div className="ml-2">
@@ -131,11 +131,17 @@ const BurgerConstructor = ({ onButtonClick }) => {
             <TotalPriceContext.Provider value={{ totalPriceState, totalPriceDispatcher }}>
             <div className={styles.burger_container}>
                 <div className='pl-4 pr-4 pt-25 pb-10'>
-                    <div className={styles.items_container}> 
-                        { getIngredients().map((item, index) => 
+                    <div className={styles.items_container}>
+                        {itemBunId && data.filter(item => item._id === itemBunId).map((item, index) => 
                             <Ingredient key={item._id} name={item.name} price={item.price} image={item.image_mobile} 
-                            elementType={ item.type === 'bun' ? "top" : 'center'}/>
+                            elementType="top"/> 
                         )}
+                        <div className={styles.items_constructor}> 
+                            { data.filter(item => item.type !== 'bun').map((item, index) => 
+                                <Ingredient key={item._id} name={item.name} price={item.price} image={item.image_mobile} 
+                                elementType={ item.type === 'bun' ? "top" : 'center'}/>
+                            )}
+                        </div>
                         {itemBunId && data.filter(item => item._id === itemBunId).map((item, index) => 
                             <Ingredient key={item._id} name={item.name} price={item.price} image={item.image_mobile} 
                             elementType="bottom"/> 
