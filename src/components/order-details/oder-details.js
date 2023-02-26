@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styles from './order.details.module.css';
 import imagePath from '../images/done.png';
-import { OrderContext } from  '../../services/appContext.js'
 
 const OrderDetails = ({ orderData }) => {
 

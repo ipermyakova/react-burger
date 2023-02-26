@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, connect, useSelector } from 'react-redux';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -11,36 +11,44 @@ import OrderDetails from '../order-details/oder-details'
 import Modal from '../modal/modal'
 import IngredientDetails from '../ingredients-details/ingredient-details';
 import { actions } from '../../services/actions'
-import PropTypes from 'prop-types';
-import {ingredientsPropTypes} from '../utils/prop-types';
 
-const App = ({ ingredients, isLoading, hasError, getIngredients, ingredientDetails, addIngredientDetails, removeIngredientDetails, addIngredientConstructor, 
-    orderData, orderHasError, updateCountIngredients, removeOrderDetails }) => {
+const App = () => {
+
+    const { ingredients, isLoading, hasError, ingredientDetails, orderData, orderHasError } = useSelector(store => ({
+        ingredients: store?.ingredients?.ingredients || null, 
+        isLoading: store?.ingredients?.isLoading || false, 
+        hasError: store?.ingredients?.hasError || false,
+        ingredientDetails: store?.ingredientDetails?.currentIngredient || null,
+        orderData: store?.order?.orderData || null,
+        orderHasError: store?.order?.hasError || false
+    }))
+    
+    const dispatch = useDispatch();
 
     useEffect(()=> {
-        getIngredients();
+        dispatch(actions.getIngredients());
     },[]);
 
     const handleOpenModal = useCallback((id) => {
         if (id) {
             const currentIngredient = ingredients.find(item => item._id === id)
             if(currentIngredient) {
-                addIngredientDetails(currentIngredient);
+                dispatch(actions.addIngredientDetails(currentIngredient));
             }  
         }
     })
 
     const handleCloseModal = useCallback(() => {
         if(ingredientDetails) {
-            removeIngredientDetails();
+            dispatch(actions.removeIngredientDetails());
         }
-        removeOrderDetails(); 
+        dispatch(actions.removeOrderDetails()); 
     });
 
     const handleDrop = (item, itemBunId) => {
         if(item._id != itemBunId) {
-            updateCountIngredients(item._id, itemBunId, item.type === 'bun' ? 2 : 1, item.type)
-            addIngredientConstructor(item);
+            dispatch(actions.updateCountIngredients(item._id, itemBunId, item.type === 'bun' ? 2 : 1, item.type));
+            dispatch(actions.addIngredientConstructor(item));
         }            
     }
    
@@ -67,45 +75,4 @@ const App = ({ ingredients, isLoading, hasError, getIngredients, ingredientDetai
     );
 };
 
-const mapStateToProps= (state) => {
-    return {
-        ingredients: state?.ingredients?.ingredients || null, 
-        isLoading: state?.ingredients?.isLoading || false, 
-        hasError: state?.ingredients?.hasError || false,
-        ingredientDetails: state?.ingredientDetails?.currentIngredient || null,
-        orderData: state?.order?.orderData || null,
-        orderHasError: state?.order?.hasError || false
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getIngredients: () => dispatch(actions.getIngredients()),
-        addIngredientDetails: (ingredient) => dispatch(actions.addIngredientDetails(ingredient)),
-        removeIngredientDetails: () => dispatch(actions.removeIngredientDetails()), 
-        getIngredientsConstructor: () => dispatch(actions.getIngredientsConstructor()),
-        addIngredientConstructor: (ingredient) => dispatch(actions.addIngredientConstructor(ingredient)),
-        updateCountIngredients: (id, itemBunId, value, itemType) => dispatch(actions.updateCountIngredients(id, itemBunId, value, itemType)),
-        removeOrderDetails: () => dispatch(actions.removeOrderDetails())
-
-    }
-}
-
-App.propTypes = {
-    ingredients: PropTypes.arrayOf(ingredientsPropTypes),
-    isLoading: PropTypes.bool,
-    hasError: PropTypes.bool,
-    ingredientDetails: PropTypes.object,
-    orderData: PropTypes.object,
-    orderHasError: PropTypes.bool,
-    getIngredients: PropTypes.func,
-    addIngredientDetails: PropTypes.func,
-    removeIngredientDetails: PropTypes.func, 
-    getIngredientsConstructor: PropTypes.func,
-    addIngredientConstructor: PropTypes.func,
-    updateCountIngredients: PropTypes.func,
-    removeOrderDetails: PropTypes.func
-
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default App;

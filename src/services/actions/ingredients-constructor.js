@@ -8,7 +8,7 @@ export const getIngredientsConstructor = () => ({
 
 export const addIngredientConstructor = (ingredient) => ({
     type: ADD_INGREDIENT_CONSTRUCTOR,
-    ingredient: {...ingredient},
+    ingredient: ingredient,
     dragId: uuid()
 });
 

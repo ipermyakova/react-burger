@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState, useMemo, useReducer, useRef } from 'react';
+import React, { useContext, useEffect, useState, useMemo, useReducer, useRef, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import { ConstructorElement, Button, DragIcon, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
 import styles from './burger.constructor.module.css';
 import { TotalPriceContext} from  '../../services/appContext.js';
-import { useDispatch, connect } from 'react-redux'
-import { actions } from '../../services/actions'
-import {ingredientsPropTypes} from '../utils/prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { actions } from '../../services/actions';
 import { useDrop, useDrag } from "react-dnd";
 
 const renderName = {
@@ -51,7 +50,7 @@ const Ingredient = ({ item, index, elementType, moveItem }) => {
         collect(monitor){
             return { handlerId: monitor.getHandlerId()}
         },
-        hover(item, monitor) {
+        drop(item, monitor) {
             if(!ref.current){
                 return;
             }
@@ -71,7 +70,7 @@ const Ingredient = ({ item, index, elementType, moveItem }) => {
                return;
             }
             moveItem(dragIndex, hoverIndex);
-            item.index = hoverIndex;    
+            item.index = hoverIndex;       
         }
 
     })
@@ -104,7 +103,7 @@ const Ingredient = ({ item, index, elementType, moveItem }) => {
 }
 
 Ingredient.propTypes = {
-    item: PropTypes.objectOf(ingredientsPropTypes).isRequired,
+    item: PropTypes.object.isRequired,
     index: PropTypes.number,
     elementType: PropTypes.string.isRequired,
     moveItem: PropTypes.func
@@ -124,8 +123,15 @@ function reducer(state, action) {
 
 }
 
-const BurgerConstructor = ({ ingredientsConstructor, onButtonClick, orderData, getOrder, onDropHandler, updateCountIngredients }) => {
-   
+const BurgerConstructor = ({ onButtonClick, onDropHandler }) => {
+
+    const {orderData, ingredientsConstructor} = useSelector(store => ({
+        orderData: store?.order?.orderData,
+        ingredientsConstructor: store?.ingredientsConstructor || []
+    }))
+
+    const dispatch = useDispatch();
+
     const [itemBunId, setItemBunId] = useState('');
 
     const [totalPriceState, totalPriceDispatcher] = useReducer(reducer, totalPriceInitialState);
@@ -141,25 +147,26 @@ const BurgerConstructor = ({ ingredientsConstructor, onButtonClick, orderData, g
         }
     })
 
-    const onSortHandler = (dragIndex, hoverIndex) => {
+    const onSortHandler = useCallback((dragIndex, hoverIndex) => {
         const dragItem = ingredientsConstructor[dragIndex];
-        const newListConstructor = [...ingredientsConstructor];
-        newListConstructor.splice(dragIndex, 1);
-        newListConstructor.splice(hoverIndex, 0, dragItem);
-        updateCountIngredients(newListConstructor);
-    }
+        const newList = [...ingredientsConstructor];
+        newList.splice(dragIndex, 1);
+        newList.splice(hoverIndex, 0, dragItem);
+        dispatch(actions.updateIngredientConstructor(newList));
+    }, [ingredientsConstructor])
 
     const handleButtonClick = () => {
         if(ingredientsConstructor) {
             const request = getIngredientsRequest();
-            getOrder(request);
+            dispatch(actions.getOrder(request));
         }
         return onButtonClick();
     };
 
     const getIngredientsRequest = () => {
-        const ingredientsId = ingredientsConstructor.map(item => item._id);
-        return { ingredients: ingredientsId };
+        const ingredientsId = ingredientsConstructor.filter(item => item.type !== 'bun').map(item => item._id);
+        const allIngredientsId = [itemBunId, ...ingredientsId, itemBunId];
+        return { ingredients: allIngredientsId };
     }
 
 
@@ -193,8 +200,8 @@ const BurgerConstructor = ({ ingredientsConstructor, onButtonClick, orderData, g
                             <Ingredient key={item.dragId} item={item} elementType="top"/> 
                         )}
                         <div className={styles.items_constructor}> 
-                            { ingredientsConstructor.map((item, index) => item._id !== itemBunId && <Ingredient key={item.dragId} item={item} index={index} elementType='center' moveItem={onSortHandler}/>
-                            )}
+                            { ingredientsConstructor.map((item, index) => item._id !== itemBunId 
+                                && <Ingredient key={item.dragId} item={item} index={index} elementType='center' moveItem={onSortHandler}/>)}
                         </div>
                         {itemBunId && ingredientsConstructor.filter(item => item._id === itemBunId).map((item) => 
                             <Ingredient key={item.dragId} item={item} elementType="bottom"/> 
@@ -206,7 +213,7 @@ const BurgerConstructor = ({ ingredientsConstructor, onButtonClick, orderData, g
                     <div className={styles.total_price_container}>
                         <TotalPrice />
                         <div className="ml-10">
-                            <Button htmlType="button" type="primary" size="large" onClick={handleButtonClick}>Оформить заказ</Button>
+                            <Button htmlType="button" disabled={itemBunId === ''} type="primary" size="large" onClick={handleButtonClick}>Оформить заказ</Button>
                         </div>
                     </div>    
                 </div>
@@ -217,27 +224,4 @@ const BurgerConstructor = ({ ingredientsConstructor, onButtonClick, orderData, g
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        orderData: state?.order?.orderData,
-        ingredientsConstructor: state?.ingredientsConstructor || []
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getOrder: (request) => dispatch(actions.getOrder(request)),
-        updateCountIngredients: (ingredients) => dispatch(actions.updateIngredientConstructor(ingredients))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(BurgerConstructor);
-
-BurgerConstructor.propTypes = {
-    onButtonClick: PropTypes.func.isRequired,
-    orderData: PropTypes.object,
-    ingredientsConstructor: PropTypes.array,
-    getOrder: PropTypes.func,
-    updateCountIngredients: PropTypes.func
-
-}
+export default BurgerConstructor;

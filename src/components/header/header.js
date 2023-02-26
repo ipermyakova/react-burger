@@ -54,10 +54,10 @@ const AppHeader = () => {
                     </MenuItem>
                     <MenuItem>
                         <div className = "ml-5">
-                            <ListIcon type="primary" />
+                            <ListIcon type="secondary" />
                         </div>
                         <div className="ml-2 mr-5">
-                            <p className={styles.title}>Лента заказов</p>
+                            <p className={styles.title_secondary}>Лента заказов</p>
                         </div>
                     </MenuItem>
                 </Menu>

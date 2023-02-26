@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger.ingredients.module.css';
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -15,7 +15,7 @@ const renderName = {
 const types = ['bun', 'sauce', 'main'];
 
 const Item = ({ item, onItemClick }) => {
-    
+
     const [{ opacity }, dragRef] = useDrag({
         type: "ingredient",
         item: {...item},
@@ -47,7 +47,7 @@ const Item = ({ item, onItemClick }) => {
 }
 
 Item.propTypes = {
-    item: PropTypes.objectOf(ingredientsPropTypes).isRequired,
+    item: PropTypes.object.isRequired,
     onItemClick: PropTypes.func.isRequired
 }
 
@@ -71,6 +71,20 @@ const BurgerIngredients = ({ ingredients, onCardClick }) => {
     const nameSauceRef = useRef();
     const nameMainRef = useRef();
 
+    const handleScroll = () => {
+        const topBun = Math.abs(nameBunRef.current?.getBoundingClientRect().top);
+        const topSauce = Math.abs(nameSauceRef.current?.getBoundingClientRect().top);
+        const topMain = Math.abs(nameMainRef.current?.getBoundingClientRect().top);
+
+        if(topBun < topSauce && topBun < topMain) {
+            setCurrent('bun');
+        } else if(topSauce < topBun && topSauce < topMain) {
+            setCurrent('sauce');
+        } else {
+            setCurrent('main')
+        }    
+    };
+
     const getNameRef = (name) => name === 'bun' ? nameBunRef : name === 'sauce' ? nameSauceRef : nameMainRef;
 
     const handleClick = (value) => {
@@ -88,7 +102,7 @@ const BurgerIngredients = ({ ingredients, onCardClick }) => {
                 <Tab value="sauce" active={current === 'sauce'} onClick={handleClick}>Соусы</Tab>
                 <Tab value="main" active={current === 'main'} onClick={handleClick}>Начинки</Tab>
             </div>
-            <div className={styles.types_container}>
+            <div className={styles.types_container} onScroll={handleScroll}>
             {types.map((name, index) => <div key={index} ref={getNameRef(name)}>
                 <div className="mt-10 mb-6">
                     <h2 className={styles.tab_title}>{renderName[name]}</h2>
