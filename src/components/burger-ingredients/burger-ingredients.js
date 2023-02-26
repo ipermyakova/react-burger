@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import styles from './burger.ingredients.module.css';
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { mapToColums, filter} from '../utils/utils';
-import { ingredientsPropTypes } from '../utils/prop-types';
-
-import { IngredientsContext } from  '../../services/appContext.js';
+import {ingredientsPropTypes} from '../utils/prop-types';
+import { useDrag } from 'react-dnd';
 
 const renderName = {
     bun: "Булки",
@@ -16,26 +15,39 @@ const renderName = {
 const types = ['bun', 'sauce', 'main'];
 
 const Item = ({ item, onItemClick }) => {
+    
+    const [{ opacity }, dragRef] = useDrag({
+        type: "ingredient",
+        item: {...item},
+        collect: monitor => ({
+            opacity: monitor.isDragging ? 0.5 : 1
+        }) 
+    });
+
     const handleClick = () => onItemClick(item._id);
     return (
-        <div className={styles.item} onClick={handleClick}>
-            <Counter count={1} size="default" extraClass='m-1'></Counter>
-            <img src={item.image} />
-            <div className={styles.items}>
-                <div className="mt-2 mb-2">
-                    <p className={styles.price}>{item.price}</p>
-                </div>
-                <div className="ml-2">
-                    <CurrencyIcon type="primary"/>
+        <div onClick={handleClick} className={styles.item}>
+            {item.count && <Counter count={item.count} size="default" extraClass='m-1'></Counter>}
+            < div styles={{ opacity }}>
+                <div className={styles.item_drag} ref={dragRef}>
+                    <img src={item.image} />
+                    <div className={styles.items}>
+                        <div className="mt-2 mb-2">
+                            <p className={styles.price}>{item.price}</p>
+                        </div>
+                        <div className="ml-2">
+                            <CurrencyIcon type="primary"/>
+                        </div>
+                    </div>
+                    <p className={styles.text}>{item.name}</p>
                 </div>
             </div>
-            <p className={styles.text}>{item.name}</p>
         </div>
     )
 }
 
 Item.propTypes = {
-    item: PropTypes.object.isRequired,
+    item: PropTypes.objectOf(ingredientsPropTypes).isRequired,
     onItemClick: PropTypes.func.isRequired
 }
 
@@ -51,10 +63,7 @@ Items.propTypes = {
     children: PropTypes.array
 }
 
-const BurgerIngredients = ({ onCardClick }) => {
-
-    const { ingredientsState, setIngredientsState } = useContext(IngredientsContext);
-    const { data } = ingredientsState;
+const BurgerIngredients = ({ ingredients, onCardClick }) => {
 
     const [current, setCurrent] = React.useState('bun');
 
@@ -85,7 +94,7 @@ const BurgerIngredients = ({ onCardClick }) => {
                     <h2 className={styles.tab_title}>{renderName[name]}</h2>
                 </div>
                 <div className={styles.items_container}>
-                        { mapToColums(filter(data, name)).map((items, index) => {
+                        { mapToColums(filter(ingredients, name)).map((items, index) => {
                             return (
                             <Items key={index}>
                              { items.first && <div className="ml-4 mb-8">
@@ -102,7 +111,8 @@ const BurgerIngredients = ({ onCardClick }) => {
 }
 
 BurgerIngredients.propTypes = {
-    onCardClick: PropTypes.func.isRequired
+    ingredients: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
+    onCardClick: PropTypes.func.isRequired,   
 }
 
 export default BurgerIngredients;

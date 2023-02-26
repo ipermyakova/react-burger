@@ -8,6 +8,7 @@
     display: flex;
     flex-direction: column;
     width: 568px;
+    min-height: 600px;
 }
 
 @media (max-width: 768px) {
@@ -57,15 +58,18 @@
 
 .items_constructor {
     overflow-y: scroll;
-    max-height: 464px;
+    height: 464px;
     overflow-x: hidden;
-} 
+}
+
 .items_constructor::-webkit-scrollbar {
     width: 8px;
     background-color: #2f2f37;
-
 }
+
 .items_constructor::-webkit-scrollbar-thumb {
-    background-color: #8585AD;
-    
+    background-color: #8585AD;    
 }  
+.on_hover {
+    border-color: #8585AD;
+}

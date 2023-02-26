@@ -4,10 +4,9 @@ import styles from './order.details.module.css';
 import imagePath from '../images/done.png';
 import { OrderContext } from  '../../services/appContext.js'
 
-const OrderDetails = () => {
+const OrderDetails = ({ orderData }) => {
 
-    const { orderState } = useContext(OrderContext);
-    const orderNumber = orderState.orderData?.order?.number
+    const orderNumber = orderData?.order?.number
 
     return (
         <div className={styles.container}>
