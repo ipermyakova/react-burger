@@ -1,14 +1,10 @@
 import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED, REMOVE_ORDER_DETAILS } from '../constants'
-import { checkResponse } from '../../components/utils/utils';
-
-const URL_GET_ORDER = 'https://norma.nomoreparties.space/api/orders';
+import { sendOrder } from '../../components/utils/burger-api'
 
 
-export const getOrder = (ingredientsRequest) => (dispatch) => {
+export const sendOrderAction = (request) => (dispatch) => {
     dispatch({type: GET_ORDER_REQUEST })
-    fetch(URL_GET_ORDER, 
-        { method: 'POST', headers: { 'Content-Type': 'application/json;charset=utf-8'}, body: JSON.stringify(ingredientsRequest)})
-    .then(checkResponse)
+    sendOrder(request)
     .then(data => {
         dispatch({
             type: GET_ORDER_SUCCESS,

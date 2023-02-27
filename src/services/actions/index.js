@@ -1,7 +1,7 @@
-import { getIngredients, updateCountIngredients } from './ingredients'
+import { getIngredientsAction, updateCountIngredients } from './ingredients'
 import { getIngredientsConstructor, addIngredientConstructor, removeIngredientConstructor, updateIngredientConstructor } from './ingredients-constructor'
 import { addIngredientDetails, removeIngredientDetails } from './ingredient-details'
-import { getOrder, removeOrderDetails } from './order'
+import { sendOrderAction, removeOrderDetails } from './order'
 
-export const actions = { getIngredients, getIngredientsConstructor, addIngredientConstructor, removeIngredientConstructor, addIngredientDetails, 
-    removeIngredientDetails, getOrder, updateCountIngredients, updateIngredientConstructor, removeOrderDetails }
+export const actions = { getIngredientsAction, getIngredientsConstructor, addIngredientConstructor, removeIngredientConstructor, addIngredientDetails, 
+    removeIngredientDetails, sendOrderAction, updateCountIngredients, updateIngredientConstructor, removeOrderDetails }

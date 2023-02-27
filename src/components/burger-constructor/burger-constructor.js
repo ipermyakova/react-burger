@@ -86,9 +86,8 @@ const Ingredient = ({ item, index, elementType, moveItem }) => {
         <div className="mb-4">
             <div ref={dragDropRef} style={{ opacity }} onDrop={onDropHandler}>
              <div className={styles.items} >
-                <div className="mr-2">
-                    <DragIcon type="primary" />
-                </div>
+                {item.type !== 'bun' ? <div className="mr-2">
+                    <DragIcon type="primary" /></div> : <div className="mr-8"/>}
                 <ConstructorElement
                     type={elementType}
                     price={item.price}
@@ -158,7 +157,7 @@ const BurgerConstructor = ({ onButtonClick, onDropHandler }) => {
     const handleButtonClick = () => {
         if(ingredientsConstructor) {
             const request = getIngredientsRequest();
-            dispatch(actions.getOrder(request));
+            dispatch(actions.sendOrderAction(request));
         }
         return onButtonClick();
     };

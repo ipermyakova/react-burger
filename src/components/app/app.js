@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react';
-import { useDispatch, connect, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -14,11 +14,17 @@ import { actions } from '../../services/actions'
 
 const App = () => {
 
-    const { ingredients, isLoading, hasError, ingredientDetails, orderData, orderHasError } = useSelector(store => ({
+    const { ingredients, isLoading, hasError } = useSelector(store => ({
         ingredients: store?.ingredients?.ingredients || null, 
         isLoading: store?.ingredients?.isLoading || false, 
-        hasError: store?.ingredients?.hasError || false,
+        hasError: store?.ingredients?.hasError || false
+    }))
+
+    const { ingredientDetails } = useSelector(store => ({
         ingredientDetails: store?.ingredientDetails?.currentIngredient || null,
+    }))
+
+    const { orderData, orderHasError } = useSelector(store => ({
         orderData: store?.order?.orderData || null,
         orderHasError: store?.order?.hasError || false
     }))
@@ -26,7 +32,7 @@ const App = () => {
     const dispatch = useDispatch();
 
     useEffect(()=> {
-        dispatch(actions.getIngredients());
+        dispatch(actions.getIngredientsAction());
     },[]);
 
     const handleOpenModal = useCallback((id) => {

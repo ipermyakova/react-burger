@@ -1,13 +1,16 @@
-import { checkResponse } from '../utils/utils';
+import { checkResponse } from './utils'; 
 
-const urlGetIngredients = 'https://norma.nomoreparties.space/api/ingredients'
+const NORMA_API = 'https://norma.nomoreparties.space/api'
 
-export const getIngredients = (ingredientsState, setIngredientsState) => {
-    setIngredientsState({ ...ingredientsState, hasError: false, isLoading: true });
-    fetch(urlGetIngredients)
-    .then(checkResponse)
-    .then(data => setIngredientsState({ ...ingredientsState, data: data.data, isLoading: false }))
-    .catch(e => {
-        setIngredientsState({ ...ingredientsState, hasError: true, isLoading: false })
-    });
-};
+export const getIngredients = () => {
+    return fetch(`${NORMA_API}/ingredients`)
+        .then(checkResponse)
+}
+
+export const sendOrder = (data) => {
+    return fetch(`${NORMA_API}/orders`, 
+        { method: 'POST', headers: { 'Content-Type': 'application/json;charset=utf-8'}, body: JSON.stringify(data)})
+    .then(checkResponse)    
+}
+
+

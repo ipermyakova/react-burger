@@ -1,12 +1,9 @@
 import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED, UPDATE_COUNT_INGREDIENT } from '../constants'
-import { checkResponse } from '../../components/utils/utils';
+import { getIngredients } from '../../components/utils/burger-api'
 
-const URL_GET_INGREDIENTS = 'https://norma.nomoreparties.space/api/ingredients'
-
-export const getIngredients = () => (dispatch) => {
+export const getIngredientsAction = () => (dispatch) => {
     dispatch({ type: GET_INGREDIENTS_REQUEST })
-    fetch(URL_GET_INGREDIENTS)
-    .then(checkResponse)
+    getIngredients()
     .then(data => {
         dispatch({
             type: GET_INGREDIENTS_SUCCESS,
