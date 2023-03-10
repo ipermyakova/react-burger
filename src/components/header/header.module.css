@@ -35,3 +35,8 @@
     font-size: 16px;
     white-space: nowrap;
 }
+
+.title_secondary {
+    composes: title;
+    color: #8585AD 
+}

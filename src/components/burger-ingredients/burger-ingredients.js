@@ -1,9 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import styles from './burger.ingredients.module.css';
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
 import { mapToColums, filter} from '../utils/utils';
-import { ingredientsPropTypes } from '../utils/prop-types';
+import {ingredientsPropTypes} from '../utils/prop-types';
+import { useDrag } from 'react-dnd';
 
 const renderName = {
     bun: "Булки",
@@ -14,20 +15,33 @@ const renderName = {
 const types = ['bun', 'sauce', 'main'];
 
 const Item = ({ item, onItemClick }) => {
+
+    const [{ opacity }, dragRef] = useDrag({
+        type: "ingredient",
+        item: {...item},
+        collect: monitor => ({
+            opacity: monitor.isDragging ? 0.5 : 1
+        }) 
+    });
+
     const handleClick = () => onItemClick(item._id);
     return (
-        <div className={styles.item} onClick={handleClick}>
-            <Counter count={1} size="default" extraClass='m-1'></Counter>
-            <img src={item.image} />
-            <div className={styles.items}>
-                <div className="mt-2 mb-2">
-                    <p className={styles.price}>{item.price}</p>
-                </div>
-                <div className="ml-2">
-                    <CurrencyIcon type="primary"/>
+        <div onClick={handleClick} className={styles.item}>
+            {item.count && <Counter count={item.count} size="default" extraClass='m-1'></Counter>}
+            < div styles={{ opacity }}>
+                <div className={styles.item_drag} ref={dragRef}>
+                    <img src={item.image} />
+                    <div className={styles.items}>
+                        <div className="mt-2 mb-2">
+                            <p className={styles.price}>{item.price}</p>
+                        </div>
+                        <div className="ml-2">
+                            <CurrencyIcon type="primary"/>
+                        </div>
+                    </div>
+                    <p className={styles.text}>{item.name}</p>
                 </div>
             </div>
-            <p className={styles.text}>{item.name}</p>
         </div>
     )
 }
@@ -57,6 +71,20 @@ const BurgerIngredients = ({ ingredients, onCardClick }) => {
     const nameSauceRef = useRef();
     const nameMainRef = useRef();
 
+    const handleScroll = () => {
+        const topBun = Math.abs(nameBunRef.current?.getBoundingClientRect().top);
+        const topSauce = Math.abs(nameSauceRef.current?.getBoundingClientRect().top);
+        const topMain = Math.abs(nameMainRef.current?.getBoundingClientRect().top);
+
+        if(topBun < topSauce && topBun < topMain) {
+            setCurrent('bun');
+        } else if(topSauce < topBun && topSauce < topMain) {
+            setCurrent('sauce');
+        } else {
+            setCurrent('main')
+        }    
+    };
+
     const getNameRef = (name) => name === 'bun' ? nameBunRef : name === 'sauce' ? nameSauceRef : nameMainRef;
 
     const handleClick = (value) => {
@@ -74,7 +102,7 @@ const BurgerIngredients = ({ ingredients, onCardClick }) => {
                 <Tab value="sauce" active={current === 'sauce'} onClick={handleClick}>Соусы</Tab>
                 <Tab value="main" active={current === 'main'} onClick={handleClick}>Начинки</Tab>
             </div>
-            <div className={styles.types_container}>
+            <div className={styles.types_container} onScroll={handleScroll}>
             {types.map((name, index) => <div key={index} ref={getNameRef(name)}>
                 <div className="mt-10 mb-6">
                     <h2 className={styles.tab_title}>{renderName[name]}</h2>
@@ -98,7 +126,7 @@ const BurgerIngredients = ({ ingredients, onCardClick }) => {
 
 BurgerIngredients.propTypes = {
     ingredients: PropTypes.arrayOf(ingredientsPropTypes).isRequired,
-    onCardClick: PropTypes.func.isRequired
+    onCardClick: PropTypes.func.isRequired,   
 }
 
 export default BurgerIngredients;

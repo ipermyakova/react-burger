@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import styles from './order.details.module.css';
-import imagePath from '../images/done.png'
+import imagePath from '../images/done.png';
 
+const OrderDetails = ({ orderData }) => {
 
-const OrderDetails = () => {
+    const orderNumber = orderData?.order?.number
+
     return (
         <div className={styles.container}>
-            <p className={styles.order_number_title}>034536</p>
-            <div className="mt-8">
+            <p className={styles.order_number_title}>{orderNumber || "" }</p>
+            <div className="mt-8"> 
                 <p className={styles.title}>идентификатор заказа</p>
             </div>
             <div className="m-15">

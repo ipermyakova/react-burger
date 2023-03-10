@@ -3,6 +3,7 @@
     flex-direction: column;
     justify-content: start;
     align-items: center;
+    background-color: #1c1c21;
 }
 .order_number_title {
     font-family: 'Iceland', Arial, sans-serif;

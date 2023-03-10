@@ -1,5 +1,8 @@
-import React, { useCallback, useMemo, useEffect } from 'react';
-import { useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
 import appStyles from './app.module.css';
 import AppHeader from '../header/header';
 import BurgerIngredients from '../burger-ingredients/burger-ingredients';
@@ -7,65 +10,73 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import OrderDetails from '../order-details/oder-details'
 import Modal from '../modal/modal'
 import IngredientDetails from '../ingredients-details/ingredient-details';
-import { checkResponse } from '../utils/utils'
-
-const url = 'https://norma.nomoreparties.space/api/ingredients';
+import { actions } from '../../services/actions'
 
 const App = () => {
 
-    const [stateModal, setStateModal] = useState({visibleOrder: false, visibleIngredient: false, ingredientId: ""});
-    const [state, setState] = useState({ data: [], isLoading: false, hasError: false });
+    const { ingredients, isLoading, hasError } = useSelector(store => ({
+        ingredients: store?.ingredients?.ingredients || null, 
+        isLoading: store?.ingredients?.isLoading || false, 
+        hasError: store?.ingredients?.hasError || false
+    }))
 
-    const { visibleOrder, visibleIngredient, ingredientId } = stateModal;
-    const { data, isLoading, hasError } = state;
+    const { ingredientDetails } = useSelector(store => ({
+        ingredientDetails: store?.ingredientDetails?.currentIngredient || null,
+    }))
+
+    const { orderData, orderHasError } = useSelector(store => ({
+        orderData: store?.order?.orderData || null,
+        orderHasError: store?.order?.hasError || false
+    }))
+    
+    const dispatch = useDispatch();
 
     useEffect(()=> {
-        getIngredients();
+        dispatch(actions.getIngredientsAction());
     },[]);
-
-    const getIngredients = () => {
-        setState({ ...state, hasError: false, isLoading: true });
-        fetch(url)
-        .then(checkResponse)
-        .then(data => setState({ ...state, data: data.data, isLoading: false }))
-        .catch(e => {
-            setState({ ...state, hasError: true, isLoading: false })
-        });
-    };
 
     const handleOpenModal = useCallback((id) => {
         if (id) {
-            setStateModal({...stateModal, visibleIngredient: true, ingredientId: id});
-        } else {
-            setStateModal({...stateModal, visibleOrder: true });
+            const currentIngredient = ingredients.find(item => item._id === id)
+            if(currentIngredient) {
+                dispatch(actions.addIngredientDetails(currentIngredient));
+            }  
         }
     })
 
-
     const handleCloseModal = useCallback(() => {
-        setStateModal({...stateModal, visibleOrder: false, visibleIngredient: false, ingredientId: ''})
+        if(ingredientDetails) {
+            dispatch(actions.removeIngredientDetails());
+        }
+        dispatch(actions.removeOrderDetails()); 
     });
 
-    const ingredientData = useMemo(() => data.find(item => item._id === ingredientId), [ingredientId, data]);
+    const handleDrop = (item, itemBunId) => {
+        if(item._id != itemBunId) {
+            dispatch(actions.updateCountIngredients(item._id, itemBunId, item.type === 'bun' ? 2 : 1, item.type));
+            dispatch(actions.addIngredientConstructor(item));
+        }            
+    }
    
     return (
-        <div className={appStyles.app}>
+        <div className={appStyles.app}>    
             {isLoading && 'Загрузка'}
-            {hasError && 'Возникла ошибка'}
-            {!isLoading && !hasError && data && data.length > 0 &&
-            <div>
-                <AppHeader />
-                <div className={appStyles.container}>
-                    <BurgerIngredients ingredients={data} onCardClick={handleOpenModal}/>
-                    <BurgerConstructor ingredients={data} onButtonClick={handleOpenModal}/>
-                </div>
-                {(visibleOrder || visibleIngredient) && <Modal header={visibleIngredient ? "Детали ингредиента" : ""} onCloseClick={handleCloseModal}>
-                    {visibleOrder && <OrderDetails />}
-                    {visibleIngredient && ingredientData && <IngredientDetails {...ingredientData}/>}  
-                </Modal>
+                {hasError && 'Возникла ошибка'}
+                {!isLoading && !hasError && ingredients && ingredients.length > 0 &&
+                    <div>
+                        <AppHeader />
+                        <DndProvider backend={HTML5Backend}>
+                            <div className={appStyles.container}>
+                                <BurgerIngredients onCardClick={handleOpenModal} ingredients={ingredients}/>
+                                <BurgerConstructor onButtonClick={handleOpenModal} onDropHandler={handleDrop}/>                               
+                            </div>
+                        </DndProvider>
+                        {(orderData || ingredientDetails) && <Modal header={ingredientDetails ? "Детали ингредиента" : ""} onCloseClick={handleCloseModal}>
+                        {orderData && !orderHasError && <OrderDetails orderData={orderData} />}
+                        {ingredientDetails && <IngredientDetails {...ingredientDetails}/>}  
+                        </Modal>}
+                    </div>
                 }
-            </div>
-            }
         </div>
     );
 };
