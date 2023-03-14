@@ -2,7 +2,7 @@ import { loginRequest, registerRequest, logoutRequest, getUserRequest, patchUser
 import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED, REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILED, LOGOUT_REQUEST, 
     LOGOUT_SUCCESS, LOGOUT_FAILED, GET_USER_REQUEST, GET_USER_FAILED, GET_USER_SUCCESS, UPDATE_USER_FAILED, UPDATE_USER_SUCCESS, 
     UPDATE_USER_REQUEST, TOKEN_SUCCESS, TOKEN_REQUEST, TOKEN_FAILED, RESET_PASSWORD_FAILED, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_REQUEST, 
-    CONFIRM_RESET_PASSWORD_FAILED, CONFIRM_RESET_PASSWORD_REQUEST, CONFIRM_RESET_PASSWORD_SUCCESS } from "../constants";
+    CONFIRM_RESET_PASSWORD_FAILED, CONFIRM_RESET_PASSWORD_REQUEST, CONFIRM_RESET_PASSWORD_SUCCESS, TOKEN_EXPIRED_ERROR, TOKEN_MALFORMED_ERROR } from "../constants";
 
 export const login = (form) => (dispatch) => {
     dispatch({ type: LOGIN_REQUEST })
@@ -101,7 +101,7 @@ export const getUser = () => (dispatch) => {
                 
     })
     .catch(error => {
-        if(error.message === 'jwt malformed') {
+        if(error.message === TOKEN_EXPIRED_ERROR || error.message === TOKEN_MALFORMED_ERROR) {
             dispatch({ type: TOKEN_REQUEST })
             tokenRequest()
                 .then(dataToken => {
@@ -144,7 +144,7 @@ export const updateUser = (form) => (dispatch) => {
                 
     })
     .catch(error => {
-        if(error.message === 'jwt malformed') {
+        if(error.message === TOKEN_EXPIRED_ERROR || error.message === TOKEN_MALFORMED_ERROR) {
             dispatch({ type: TOKEN_REQUEST })
             tokenRequest()
             .then(dataToken => {

@@ -1,6 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useAuth } from '../../services/auth'
+import { getCookie } from '../utils/utils'
+
 
 export const ProtectedRoute = ({ children, onlyUnAuth=false }) => {
 
@@ -16,6 +19,15 @@ export const ProtectedRoute = ({ children, onlyUnAuth=false }) => {
 
 
     const location = useLocation();
+
+    const auth = useAuth();
+
+
+    useEffect(()=> {
+        if(getCookie("refreshToken") && !user) {
+            auth.getUser();
+        }
+    }, [])
 
     if(isLoadingUser) {
         return null;    
@@ -41,7 +53,7 @@ export const ProtectedRoute = ({ children, onlyUnAuth=false }) => {
         if(user) {
             return children
         } 
-        return <Navigate to={{pathname: "/login", state: {from: location}}} replace />
+        return <Navigate to="/login" state = {{from: location}} replace />
     }
 
     return null;

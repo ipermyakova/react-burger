@@ -16,6 +16,7 @@ import { actions } from '../../services/actions'
 import { ProvideAuth } from '../../services/auth'
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { useAuth } from '../../services/auth';
+import { getCookie } from '../utils/utils'
 
 const HomePage = () => {
 
@@ -27,19 +28,13 @@ const HomePage = () => {
         hasError: store?.ingredients?.hasError || false
     }))
 
-    const { ingredientDetails } = useSelector(store => ({
-        ingredientDetails: store?.ingredientDetails?.currentIngredient || null,
-    }))
-
-    const { orderData, orderHasError } = useSelector(store => ({
-        orderData: store?.order?.orderData || null,
-        orderHasError: store?.order?.hasError || false
-    }))
     
     const dispatch = useDispatch();
 
     useEffect(()=> {
-        auth.getUser();
+        if(getCookie("refreshToken")) {
+            auth.getUser();         
+        }
         dispatch(actions.getIngredientsAction());
     },[]);
 

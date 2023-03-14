@@ -10,7 +10,7 @@ import styles from './login.module.css'
 export const ForgotPasswordPage = () => {
 
     let auth = useAuth();
-    
+
     const { isLoading, hasError, messageResetPassword } = useSelector(store => ({ 
         isLoadingUser: store?.auth?.isLoading || null,
         hasErrorUser: store?.auth?.hasErrorUser || false,
@@ -30,11 +30,6 @@ export const ForgotPasswordPage = () => {
         e.stopPropagation();
         auth.resetPassword(state);
     }, [auth, state])
-
-    if(auth.auth) {
-        return (<Navigate to={"/"} replace />)
-    }
-
 
     if(messageResetPassword && !isLoading && !hasError) {
         return <Navigate to="/reset-password" state={{from: {pathname: pathname}}}/>
