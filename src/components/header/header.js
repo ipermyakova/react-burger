@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './header.module.css'
+import { NavLink, useMatch, useLocation } from 'react-router-dom';
 
 const Menu = (props) => {
     return (
@@ -26,16 +27,19 @@ MenuItem.propTypes = {
     children: PropTypes.array.isRequired
 }
 
-const Button = () => {
+const Profile = () => {
+    const {state, pathname } = useLocation();
+    const match = useMatch('/profile/*'); 
+    
     return (
-        <a href="#" className={styles.link}>
+        <NavLink to="/profile" state={{from: {pathname: pathname}}} className={styles.link}>
                 <div className = "ml-5">
-                    <ProfileIcon className = "ml-5" type="primary"/>
+                    <ProfileIcon className = "ml-5" type={ match ? "primary" : 'secondary'}/>
                 </div>
                 <div className="ml-2 mr-5">
-                    <p className={styles.title}>Личный кабинет</p>
+                    <p className={match ? styles.title : styles.title_secondary}>Личный кабинет</p>
                 </div>
-        </a>
+        </NavLink>
     )
 }
 
@@ -62,7 +66,7 @@ const AppHeader = () => {
                     </MenuItem>
                 </Menu>
                 <Logo />
-                <Button />
+                <Profile />
         </header>
     )
 }

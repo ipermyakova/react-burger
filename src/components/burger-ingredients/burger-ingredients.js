@@ -5,6 +5,10 @@ import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger
 import { mapToColums, filter} from '../utils/utils';
 import {ingredientsPropTypes} from '../utils/prop-types';
 import { useDrag } from 'react-dnd';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { actions } from '../../services/actions';
+
 
 const renderName = {
     bun: "Булки",
@@ -14,7 +18,11 @@ const renderName = {
 
 const types = ['bun', 'sauce', 'main'];
 
-const Item = ({ item, onItemClick }) => {
+const Item = ({ item }) => {
+
+    const location = useLocation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const [{ opacity }, dragRef] = useDrag({
         type: "ingredient",
@@ -24,7 +32,12 @@ const Item = ({ item, onItemClick }) => {
         }) 
     });
 
-    const handleClick = () => onItemClick(item._id);
+    const handleClick = (e) => {
+        const ingredientId = item._id;
+        dispatch(actions.addIngredientDetails(item));
+        navigate(`/ingredients/${ingredientId}`, {state: { background: location }} )
+    }
+
     return (
         <div onClick={handleClick} className={styles.item}>
             {item.count && <Counter count={item.count} size="default" extraClass='m-1'></Counter>}

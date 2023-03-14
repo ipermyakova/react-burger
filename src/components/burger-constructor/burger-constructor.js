@@ -6,6 +6,7 @@ import { TotalPriceContext} from  '../../services/appContext.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../services/actions';
 import { useDrop, useDrag } from "react-dnd";
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const renderName = {
     top: "(верх)",
@@ -122,10 +123,12 @@ function reducer(state, action) {
 
 }
 
-const BurgerConstructor = ({ onButtonClick, onDropHandler }) => {
+const BurgerConstructor = ({ onDropHandler }) => {
 
-    const {orderData, ingredientsConstructor} = useSelector(store => ({
+    const { orderData, ingredientsConstructor, isLoading, hasError } = useSelector(store => ({
         orderData: store?.order?.orderData,
+        isLoading: store?.order?.isLoading,
+        hasError: store?.order?.hasError,
         ingredientsConstructor: store?.ingredientsConstructor || []
     }))
 
@@ -134,6 +137,17 @@ const BurgerConstructor = ({ onButtonClick, onDropHandler }) => {
     const [itemBunId, setItemBunId] = useState('');
 
     const [totalPriceState, totalPriceDispatcher] = useReducer(reducer, totalPriceInitialState);
+
+    const location = useLocation();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const orderNumber = orderData?.order?.number
+        if(!isLoading && !hasError && orderNumber) {
+            navigate(`profile/orders/${orderNumber}`, {state: { background: location }})
+        }
+
+    }, [orderData])
 
 
     const [{ isHover }, dropTarget] = useDrop({
@@ -159,7 +173,6 @@ const BurgerConstructor = ({ onButtonClick, onDropHandler }) => {
             const request = getIngredientsRequest();
             dispatch(actions.sendOrderAction(request));
         }
-        return onButtonClick();
     };
 
     const getIngredientsRequest = () => {
