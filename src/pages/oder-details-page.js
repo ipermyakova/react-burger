@@ -1,14 +1,9 @@
 import React from 'react';
-import styles from './order.details.module.css';
-import imagePath from '../images/done.png';
-import { useSelector } from 'react-redux';
 
-const OrderDetails = () => {
+import styles from '../components/order-details/oder-details';
+import imagePath from '../components/images/done.png';
 
-    const { orderData } = useSelector(store => ({
-        orderData: store?.order?.orderData,
-    }))
-
+export const OrderDetailsPage = ({ orderData }) => {
 
     const orderNumber = orderData?.order?.number
 
@@ -28,8 +23,5 @@ const OrderDetails = () => {
                 <p className={styles.description_title}>Дождитесь готовности на орбитальной станции</p>
             </div>
         </div>
-
     )
 };
-
-export default OrderDetails;

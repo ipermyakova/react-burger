@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { BurgerIcon, ListIcon, Logo, ProfileIcon } from '@ya.praktikum/react-developer-burger-ui-components'
 import styles from './header.module.css'
+import { NavLink, useMatch, useLocation } from 'react-router-dom';
 
 const Menu = (props) => {
     return (
@@ -16,9 +17,9 @@ Menu.propTypes = {
 
 const MenuItem = (props) => {
     return (
-        <a href="#" className={styles.link}>
+        <NavLink to="/" className={styles.link}>
             {props.children}
-        </a>
+        </NavLink>
     )
 }
 
@@ -26,30 +27,36 @@ MenuItem.propTypes = {
     children: PropTypes.array.isRequired
 }
 
-const Button = () => {
+const Profile = () => {
+    const {state, pathname } = useLocation();
+    const match = useMatch('/profile/*'); 
+
     return (
-        <a href="#" className={styles.link}>
+        <NavLink to="/profile" state={{ from: { pathname: pathname }}} className={styles.link}>
                 <div className = "ml-5">
-                    <ProfileIcon className = "ml-5" type="primary"/>
+                    <ProfileIcon className = "ml-5" type={ match ? "primary" : "secondary" }/>
                 </div>
                 <div className="ml-2 mr-5">
-                    <p className={styles.title}>Личный кабинет</p>
+                    <p className={ match ? styles.title : styles.title_secondary }>Личный кабинет</p>
                 </div>
-        </a>
+        </NavLink>
     )
 }
 
 
 const AppHeader = () => {
+    const {state, pathname } = useLocation();
+    const matchHome = useMatch('/'); 
+
     return (
         <header className={styles.header}>
                 <Menu>
                     <MenuItem>
                         <div className = "ml-5">
-                            <BurgerIcon className = "ml-5" type="primary"/>
+                            <BurgerIcon className = "ml-5" type={ matchHome ? "primary" : "secondary"}/>
                         </div>
                         <div className="ml-2 mr-5">
-                            <p className={styles.title}>Конструктор</p>
+                            <p className={ matchHome ? styles.title : styles.title_secondary }>Конструктор</p>
                         </div>
                     </MenuItem>
                     <MenuItem>
@@ -57,12 +64,12 @@ const AppHeader = () => {
                             <ListIcon type="secondary" />
                         </div>
                         <div className="ml-2 mr-5">
-                            <p className={styles.title_secondary}>Лента заказов</p>
+                            <p className={ styles.title_secondary }>Лента заказов</p>
                         </div>
                     </MenuItem>
                 </Menu>
                 <Logo />
-                <Button />
+                <Profile />
         </header>
     )
 }

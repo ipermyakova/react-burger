@@ -29,6 +29,11 @@
     text-decoration: none;
 }
 
+.link_inactive {
+    composes: link;
+    color: #8585AD 
+}
+
 .title {
     font-family: 'Jet Brains Mono', Arial, sans-serif;
     color: #F2F2F3;

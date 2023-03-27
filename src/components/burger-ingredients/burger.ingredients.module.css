@@ -87,3 +87,7 @@
     font-size: 16px;
     height: 48px;
 }
+
+.link {
+    text-decoration: none;
+}
