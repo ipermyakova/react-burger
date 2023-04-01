@@ -1,4 +1,4 @@
-import { GET_INGREDIENTS_CONSTRUCTOR, ADD_INGREDIENT_CONSTRUCTOR, REMOVE_INGREDIENT_CONSTRUCTOR, UPDATE_INGREDIENT_CONSTRUCTOR } from '../constants'
+import { GET_INGREDIENTS_CONSTRUCTOR, ADD_INGREDIENT_CONSTRUCTOR, REMOVE_INGREDIENT_CONSTRUCTOR, UPDATE_INGREDIENT_CONSTRUCTOR, REMOVE_INGREDIENTS_CONSTRUCTOR } from '../constants'
 import { TIngredient } from '../types/data';
 
 export type TIngredientsConstructorState = Array<TIngredient>
@@ -29,7 +29,11 @@ export const getIngredientsConstructorReducer = (state = initialState, action: a
         } 
 
         case UPDATE_INGREDIENT_CONSTRUCTOR: {
-            return [... action.ingredients]
+            return [...action.ingredients]
+        }
+
+        case REMOVE_INGREDIENTS_CONSTRUCTOR: {
+            return initialState;
         }
 
         default: return state;    

@@ -1,4 +1,4 @@
-import { GET_INGREDIENTS_CONSTRUCTOR, ADD_INGREDIENT_CONSTRUCTOR, REMOVE_INGREDIENT_CONSTRUCTOR, UPDATE_INGREDIENT_CONSTRUCTOR } from '../constants'
+import { GET_INGREDIENTS_CONSTRUCTOR, ADD_INGREDIENT_CONSTRUCTOR, REMOVE_INGREDIENT_CONSTRUCTOR, UPDATE_INGREDIENT_CONSTRUCTOR, REMOVE_INGREDIENTS_CONSTRUCTOR } from '../constants'
 import uuid from 'react-uuid';
 import { TIngredient } from '../types/data'
 
@@ -40,4 +40,8 @@ export const removeIngredientConstructor = (id: string): IRemoveIngredientConstr
 export const updateIngredientConstructor = (ingredients: Array<TIngredient>): IUpdateIngredientConstructor => ({
     type: UPDATE_INGREDIENT_CONSTRUCTOR,
     ingredients: [...ingredients]
-})
+});
+
+export const removeIngredientsConstructor = () => ({
+    type: REMOVE_INGREDIENTS_CONSTRUCTOR
+});

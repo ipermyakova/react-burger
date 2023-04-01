@@ -1,12 +1,9 @@
-import { checkResponse } from './utils'; 
+import { request } from './utils'; 
 import { getCookie } from './cookie-utils'
-import { TIngredient, TOrder, TUser, TResponseBody, TResponseBodyAuth, TForm, TRegisterForm, TFormResetPassword, TFormConfirmPassword, TRequestOrder } from '../../services/types/data'
-
-const NORMA_API = 'https://norma.nomoreparties.space/api'
-
+import { TIngredient, TOrder, TUser, TResponseBody, TResponseBodyAuth, TForm, TRegisterForm, TFormResetPassword, TFormConfirmPassword, TRequestOrder } from '../services/types/data'
 
 export const getIngredients = ():Promise<TResponseBody<'data', ReadonlyArray<TIngredient>>> => {
-    return fetch(`${NORMA_API}/ingredients`, {
+    return request(`/ingredients`, {
         method: 'GET', 
         mode: 'cors', 
         cache: 'no-cache', 
@@ -16,12 +13,11 @@ export const getIngredients = ():Promise<TResponseBody<'data', ReadonlyArray<TIn
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer'
-        })
-    .then(checkResponse)
+        });
 }
 
 export const sendOrder = (data: TRequestOrder):Promise<TResponseBody<'order', TOrder>> => {
-    return fetch(`${NORMA_API}/orders`, {
+    return request(`/orders`, {
         method: 'POST', 
         mode: 'cors', 
         cache: 'no-cache', 
@@ -31,12 +27,11 @@ export const sendOrder = (data: TRequestOrder):Promise<TResponseBody<'order', TO
             Authorization: 'Bearer ' + getCookie('token')
         },
         redirect: 'follow',
-        body: JSON.stringify(data)})
-    .then(checkResponse)    
+        body: JSON.stringify(data)});
 }
 
 export const loginRequest = (form: TForm): Promise<TResponseBodyAuth<'user', TUser>> => {
-    return fetch(`${NORMA_API}/auth/login`, {
+    return request(`/auth/login`, {
         method: 'POST', 
         mode: 'cors', 
         cache: 'no-cache', 
@@ -47,13 +42,11 @@ export const loginRequest = (form: TForm): Promise<TResponseBodyAuth<'user', TUs
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(form)
-    })
-    .then(checkResponse);
-
+    });
 }
 
 export const registerRequest = (form: TRegisterForm): Promise<TResponseBodyAuth<'user', TUser>> => {
-    return fetch(`${NORMA_API}/auth/register`, {
+    return request(`/auth/register`, {
         method: 'POST', 
         mode: 'cors', 
         cache: 'no-cache', 
@@ -64,13 +57,12 @@ export const registerRequest = (form: TRegisterForm): Promise<TResponseBodyAuth<
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(form)
-    })
-    .then(checkResponse);
+    });
 }
 
 export const logoutRequest = (): Promise<TResponseBody<'message', string>> => {
     const token = { token: getCookie('refreshToken')}
-    return fetch(`${NORMA_API}/auth/logout`, {
+    return request(`/auth/logout`, {
         method: 'POST', 
         mode: 'cors', 
         cache: 'no-cache', 
@@ -81,13 +73,11 @@ export const logoutRequest = (): Promise<TResponseBody<'message', string>> => {
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(token)
-    })
-    .then(checkResponse);
+    });
 }
 
 export const getUserRequest = (): Promise<TResponseBody<'user', TUser>>  => {
-
-    return fetch(`${NORMA_API}/auth/user`, {
+    return request(`/auth/user`, {
         method: 'GET', 
         mode: 'cors', 
         cache: 'no-cache', 
@@ -98,12 +88,11 @@ export const getUserRequest = (): Promise<TResponseBody<'user', TUser>>  => {
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer'
-    })
-    .then(checkResponse);
+    });
 }
 
 export const patchUserRequest = (form: TRegisterForm): Promise<TResponseBody<'user', TUser>> => {
-    return fetch(`${NORMA_API}/auth/user`, {
+    return request(`/auth/user`, {
         method: 'PATCH', 
         mode: 'cors', 
         cache: 'no-cache', 
@@ -115,13 +104,12 @@ export const patchUserRequest = (form: TRegisterForm): Promise<TResponseBody<'us
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(form)
-    })
-    .then(checkResponse);
+    });
 }
 
 export const tokenRequest = (): Promise<TResponseBodyAuth> => {
     const token = { token: getCookie('refreshToken')}
-    return fetch(`${NORMA_API}/auth/token`, {
+    return request(`/auth/token`, {
         method: 'POST', 
         mode: 'cors', 
         cache: 'no-cache', 
@@ -132,12 +120,11 @@ export const tokenRequest = (): Promise<TResponseBodyAuth> => {
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(token)
-    })
-    .then(checkResponse);
+    });
 }
 
 export const resetPasswordRequest = (form: TFormResetPassword): Promise<TResponseBody<'message', string>> => {
-    return fetch(`${NORMA_API}/password-reset`, {
+    return request(`/password-reset`, {
         method: 'POST', 
         mode: 'cors', 
         cache: 'no-cache', 
@@ -148,12 +135,11 @@ export const resetPasswordRequest = (form: TFormResetPassword): Promise<TRespons
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(form)
-    })
-    .then(checkResponse);
+    });
 }
 
 export const confirmResetPasswordRequest = (form: TFormConfirmPassword): Promise<TResponseBody<'message', string>> => {
-    return fetch(`${NORMA_API}/password-reset/reset`, {
+    return request(`/password-reset/reset`, {
         method: 'POST', 
         mode: 'cors', 
         cache: 'no-cache', 
@@ -164,8 +150,7 @@ export const confirmResetPasswordRequest = (form: TFormConfirmPassword): Promise
         redirect: 'follow',
         referrerPolicy: 'no-referrer',
         body: JSON.stringify(form)
-    })
-    .then(checkResponse);
+    });
 }
 
 

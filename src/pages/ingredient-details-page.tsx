@@ -15,10 +15,6 @@ export const IngredientDetailsPage =() => {
     const { id } = useParams();
     const [ ingredient, setIngredient ] = useState<TIngredient | null>(null);
 
-    useEffect(() => {
-        dispatch(actions.getIngredientsAction());      
-    }, [id])
-
     const { ingredients, hasError, isLoading } = useSelector((store: RootState) => ({
         ingredients: store?.ingredients?.ingredients || null,
         isLoading: store?.ingredients?.isLoading || false, 

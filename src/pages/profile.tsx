@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef, ChangeEvent, SyntheticEvent } from 'react';
+import React, { useCallback, useEffect, useState, useRef, ChangeEvent, FormEvent } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -6,17 +6,17 @@ import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-de
 
 import styles from './login.module.css';
 import { useAuth } from '../services/auth';
-import { getCookie } from '../components/utils/cookie-utils';
+import { getCookie } from '../utils/cookie-utils';
 import { RootState } from '../services/reducers';
 import { TRegisterForm} from '../services/types/data';
+import { useForm } from '../hooks/useForm';
 
 export const ProfilePage = () => {
 
-    const [form, setState] = useState<TRegisterForm>({ name: "", email: "", password: ""})
-
-    const [edit, setEdit ] = useState<boolean>(false)
+    const { values, handleChange, setValues, edit, setEdit } = useForm<TRegisterForm>({ name: "", email: "", password: ""});
     const [editName, setEditName] = useState<boolean>(false)
     const { getUser, updateUser, user, signOut, ...auth } = useAuth();
+
     const ref = useRef<HTMLInputElement>(null);
 
     const { isLoadingLogout, hasErrorLogout } = useSelector((store: RootState) => ({ 
@@ -28,15 +28,9 @@ export const ProfilePage = () => {
 
     useEffect(() => {
         if(user) {
-            setState({...form, name: user.name, email: user.email });
+            setValues({...values, name: user.name, email: user.email });
         }
     }, [user])
-
-
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setState({ ...form, [e.target.name]: e.target.value });
-        setEdit(true);
-    }
 
     const handleIconClick = () => {
         ref.current?.focus();
@@ -48,15 +42,15 @@ export const ProfilePage = () => {
         setEditName(false);
     }
 
-    const handleSaveClick = useCallback((e: SyntheticEvent) => {
+    const handleSaveClick = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        updateUser(form);
-    }, [updateUser, form])
+        updateUser(values);
+    }, [updateUser, values])
 
     const handleCancelClick = useCallback(() => {
         if(user) {
-            setState({...form, name: user.name, email: user.email });
+            setValues({...values, name: user.name, email: user.email });
         }
         setEdit(false);
     }, [user])
@@ -85,13 +79,13 @@ export const ProfilePage = () => {
                     <div className='ml-15'>
                         <form className={styles.form} onSubmit={handleSaveClick}>
                             <div className="mb-6">
-                                <Input value={form.name} name='name' placeholder={'Имя'} icon={'EditIcon'} disabled={!editName} ref={ref} onBlur={handleBlur} onIconClick={handleIconClick} onChange={handleChange}/>
+                                <Input value={values.name} name='name' placeholder={'Имя'} icon={'EditIcon'} disabled={!editName} ref={ref} onBlur={handleBlur} onIconClick={handleIconClick} onChange={handleChange}/>
                             </div>
                             <div className="mb-6">
-                                <EmailInput value={form.email} name='email' isIcon={true} onChange={handleChange}/>
+                                <EmailInput value={values.email} name='email' isIcon={true} onChange={handleChange}/>
                             </div>
                             <div className="mb-10">
-                                <PasswordInput value={form.password} name='password' icon="EditIcon" onChange={handleChange}/>
+                                <PasswordInput value={values.password} name='password' icon="EditIcon" onChange={handleChange}/>
                             </div>
                             {edit && <div className={styles.button_container}>
                                 <Button htmlType='submit'>Сохранить</Button>

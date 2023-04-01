@@ -1,5 +1,5 @@
 import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED, REMOVE_ORDER_DETAILS } from '../constants'
-import { sendOrder } from '../../components/utils/burger-api'
+import { sendOrder } from '../../utils/burger-api'
 import { TOrder, TRequestOrder } from '../types/data';
 
 export interface ISendOrderRequestAction {
@@ -30,12 +30,12 @@ export const sendOrderFailedAction = (): ISendOrderFailedAction => ({
 
 
 export const sendOrderAction = (request: TRequestOrder) => (dispatch: any) => {
-    dispatch(sendOrderRequestAction)
+    dispatch(sendOrderRequestAction());
     sendOrder(request)
     .then(data => {
         dispatch(sendOrderSuccessAction(data.order))})
     .catch(e => {
-        dispatch(sendOrderFailedAction)
+        dispatch(sendOrderFailedAction())
     })
 }
 

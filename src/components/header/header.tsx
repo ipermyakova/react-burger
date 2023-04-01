@@ -67,7 +67,9 @@ const AppHeader = () => {
                         </div>
                     </MenuItem>
                 </Menu>
-                <Logo />
+                <NavLink to="/">
+                    <Logo />
+                </NavLink>
                 <Profile />
         </header>
     )

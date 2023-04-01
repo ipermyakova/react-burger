@@ -16,7 +16,7 @@ import { actions } from '../../services/actions'
 import { ProvideAuth } from '../../services/auth'
 import { ProtectedRoute } from '../protected-route/protected-route';
 import { useAuth } from '../../services/auth';
-import { getCookie } from '../utils/cookie-utils';
+import { getCookie } from '../../utils/cookie-utils';
 import { RootState } from '../../services/reducers';
 import { AppDispatch } from '../../services';
 import { TIngredient } from '../../services/types/data';
@@ -106,8 +106,8 @@ const ModalSwitch = () => {
             <Routes>
                     {background && (<Route path='/ingredients/:ingredientId' element={<Modal header="Детали ингредиента" onCloseClick={handleCloseModal}>
                      <IngredientDetails/></Modal>}></Route>)}
-                    {background && (<Route path='/profile/orders/:orderNumber' element={<Modal header="" onCloseClick={handleCloseModal}>
-                     <OrderDetails /></Modal>}></Route>)} 
+                    {background && (<Route path='/profile/orders/:orderNumber' element={<ProtectedRoute><Modal header="" onCloseClick={handleCloseModal}>
+                     <OrderDetails /></Modal></ProtectedRoute>}></Route>)} 
                      <Route path="*" element={null} />
             </Routes>
         </div>

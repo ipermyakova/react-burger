@@ -1,7 +1,7 @@
 import React, { useRef, FC, RefObject, ReactNode } from 'react';
 import styles from './burger.ingredients.module.css';
 import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger-ui-components';
-import { mapToColums, filter} from '../utils/utils';
+import { mapToColums, filter} from '../../utils/utils';
 import { useDrag } from 'react-dnd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';

@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import styles from './login.module.css';
-import { getCookie } from '../components/utils/cookie-utils';
+import { getCookie } from '../utils/cookie-utils';
 import { RootState } from '../services/reducers';
 import { useAuth } from '../services/auth';
 

@@ -2,7 +2,7 @@ import { useEffect, FC  } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useAuth } from '../../services/auth';
-import { getCookie } from '../utils/cookie-utils';
+import { getCookie } from '../../utils/cookie-utils';
 import { RootState } from '../../services/reducers';
 
 type TProtectedRouteProps = {

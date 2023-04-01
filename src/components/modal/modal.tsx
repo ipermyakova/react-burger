@@ -33,16 +33,15 @@ const Modal: FC<TModalProps> = ({ header,  children, onCloseClick}) => {
     const modalRoot = document.getElementById('modal-root');
 
     useEffect(() => {
+        const handleKeyDown = (event: React.KeyboardEvent<HTMLElement> | KeyboardEvent): void => {
+            if(event.key === "Escape") {
+                onCloseClick();
+            } 
+        };
         document.addEventListener('keydown', handleKeyDown);
 
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, []);
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLElement> | KeyboardEvent): void => {
-        if(event.key === "Escape") {
-            onCloseClick();
-        } 
-    };
 
     return modalRoot ? ReactDOM.createPortal(
         (

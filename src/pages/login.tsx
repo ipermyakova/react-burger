@@ -1,30 +1,27 @@
-import React, { useCallback, useState, ChangeEvent, SyntheticEvent } from 'react';
+import React, { useCallback, FormEvent } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../services/auth';
-import { TForm } from '../services/types/data'
+import { TForm } from '../services/types/data';
 
 import { EmailInput, PasswordInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './login.module.css';
+import { useForm } from '../hooks/useForm';
 
 export const LoginPage = () => {
 
     let auth = useAuth();
 
-    const [form, setState] = useState<TForm>({ email: "", password: ""})
+    const { values, handleChange } = useForm<TForm>({ email: "", password: ""});
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setState({ ...form, [e.target.name]: e.target.value })
-    }
-
-    const handleLogin = useCallback((e: SyntheticEvent) => {
+    const handleLogin = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        auth.signIn(form);
-    }, [auth, form])
+        auth.signIn(values);
+    }, [auth, values])
 
     if(auth.user) {
-        return (<Navigate to="/" replace />)
+        return (<Navigate to="/" replace />);
     }
 
     return (
@@ -33,10 +30,10 @@ export const LoginPage = () => {
                 <form className={styles.form} onSubmit={handleLogin}>
                     <h2 className={styles.heading}>Вход</h2>
                     <div className="mt-6">
-                        <EmailInput value={form?.email} name='email' isIcon={false} onChange={handleChange}/>
+                        <EmailInput value={values?.email} name='email' isIcon={false} onChange={handleChange}/>
                     </div>
                     <div className="mt-6">
-                        <PasswordInput value={form?.password} name='password' onChange={handleChange}/>
+                        <PasswordInput value={values?.password} name='password' onChange={handleChange}/>
                     </div>
                     <div className='mt-6 mb-20'>
                         <Button htmlType="submit">Войти</Button>

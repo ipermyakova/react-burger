@@ -1,4 +1,4 @@
-import React, { useCallback, useState, ChangeEvent, SyntheticEvent } from 'react';
+import React, { useCallback, FormEvent } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../services/auth';
 import { useSelector } from 'react-redux';
@@ -6,13 +6,12 @@ import { useSelector } from 'react-redux';
 import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { TFormConfirmPassword } from '../services/types/data';
 import { RootState } from '../services/reducers';
-
+import { useForm } from '../hooks/useForm';
 
 import styles from './login.module.css';
 
 export const ResetPasswordPage = () => {
-
-    const [state, setState] = useState<TFormConfirmPassword>({ token: "", password: "" })
+    let auth = useAuth();
 
     const { isLoading, hasError, messageConfirmResetPassword } = useSelector((store: RootState) => ({ 
         isLoading: store?.auth?.isLoading || null,
@@ -20,18 +19,13 @@ export const ResetPasswordPage = () => {
         messageConfirmResetPassword: store?.auth?.messageConfirmResetPassword || null
     }))
 
+    const { values, handleChange } = useForm<TFormConfirmPassword>({ token: "", password: "" });
 
-    let auth = useAuth();
-    
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setState({ ...state, [e.target.name]: e.target.value })
-    }
-    
-    const handleSaveClick = useCallback((e: SyntheticEvent) => {
+    const handleSaveClick = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        auth.confirmResetPassword(state);
-    }, [auth, state])
+        auth.confirmResetPassword(values);
+    }, [auth, values])
 
     if(auth.user) {
         return (<Navigate to={"/"} replace />)
@@ -47,10 +41,10 @@ export const ResetPasswordPage = () => {
                 <form className={styles.form} onSubmit={handleSaveClick}>
                     <h2 className={styles.heading}>Восстановление пароля</h2>
                     <div className="mt-6">
-                        <PasswordInput value={state.password} name='password' placeholder={"Введите новый пароль"} onChange={handleChange}/>
+                        <PasswordInput value={values.password} name='password' placeholder={"Введите новый пароль"} onChange={handleChange}/>
                     </div>
                     <div className="mt-6">
-                        <Input value={state.token} name='token' placeholder={'Введите код из письма'} onChange={handleChange} />
+                        <Input value={values.token} name='token' placeholder={'Введите код из письма'} onChange={handleChange} />
                     </div>
                     <div className='mt-6 mb-20'>
                         <Button htmlType='submit'>Сохранить</Button>

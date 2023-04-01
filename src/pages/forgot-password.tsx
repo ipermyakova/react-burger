@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useState, ChangeEvent, SyntheticEvent } from 'react';
+import React, { useCallback, useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../services/auth'
 import { useSelector } from 'react-redux';
 import { RootState } from '../services/reducers';
 import { TFormResetPassword } from '../services/types/data';
+import { useForm } from '../hooks/useForm';
 
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -21,17 +22,13 @@ export const ForgotPasswordPage = () => {
 
     const {pathname} = useLocation();
 
-    const [state, setState] = useState<TFormResetPassword>({ email: ""})
+    const { values, handleChange } = useForm<TFormResetPassword>({ email: ""});
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setState({ ...state, [e.target.name]: e.target.value })
-    }
-
-    const handleReset = useCallback((e: SyntheticEvent) => {
+    const handleReset = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        auth.resetPassword(state);
-    }, [auth, state])
+        auth.resetPassword(values);
+    }, [auth, values])
 
     if(messageResetPassword && !isLoading && !hasError) {
         return <Navigate to="/reset-password" state={{from: {pathname: pathname}}}/>
@@ -43,7 +40,7 @@ export const ForgotPasswordPage = () => {
                 <form className={styles.form} onSubmit={handleReset}>
                     <h2 className={styles.heading}>Восстановление пароля</h2>
                     <div className="mt-6">
-                        <EmailInput value={state.email} name='email' placeholder="Укажите e-mail" isIcon={false} onChange={handleChange}/>
+                        <EmailInput value={values.email} name='email' placeholder="Укажите e-mail" isIcon={false} onChange={handleChange}/>
                     </div>
                     <div className='mt-6 mb-20'>
                         <Button htmlType='submit'>Восстановить</Button>

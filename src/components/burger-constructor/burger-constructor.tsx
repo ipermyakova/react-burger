@@ -1,16 +1,19 @@
 import React, { useContext, useEffect, useState, useMemo, useReducer, useRef, useCallback, FC } from 'react';
-import { ConstructorElement, Button, DragIcon, CurrencyIcon } from '@ya.praktikum/react-developer-burger-ui-components';
+import { ConstructorElement, Button, DragIcon, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { TotalPriceContext} from  '../../services/appContext';
 import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../services/actions';
 import { useDrop, useDrag, DropTargetMonitor } from "react-dnd";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { ThreeDots } from 'react-loader-spinner'
+import { useAuth } from '../../services/auth'
 import { TIngredient, TTotalPriceState, TAction, TRequestOrder } from '../../services/types/data';
 import { RootState } from '../../services/reducers'
 import { AppDispatch } from '../../services';
 import { SyntheticEvent } from 'react';
 import styles from './burger.constructor.module.css';
+import { getCookie } from '../../utils/cookie-utils';
 
 type TElement = 'top' | 'bottom'
 
@@ -151,6 +154,8 @@ type TBurgerConstructorProps = {
 
 const BurgerConstructor: FC<TBurgerConstructorProps> = ({ onDropHandler }) => {
 
+    const auth = useAuth();
+
     const { orderData, ingredientsConstructor, isLoading, hasError } = useSelector((store: RootState) => ({
         orderData: store?.order?.orderData,
         isLoading: store?.order?.isLoading,
@@ -170,6 +175,7 @@ const BurgerConstructor: FC<TBurgerConstructorProps> = ({ onDropHandler }) => {
     useEffect(() => {
         const orderNumber = orderData?.number
         if(!isLoading && !hasError && orderNumber) {
+            dispatch(actions.removeIngredientsConstructor());
             navigate(`profile/orders/${orderNumber}`, {state: { background: location }})
         }
 
@@ -195,6 +201,9 @@ const BurgerConstructor: FC<TBurgerConstructorProps> = ({ onDropHandler }) => {
     }, [ingredientsConstructor])
 
     const handleButtonClick = () => {
+        if(!getCookie('accessToken') && !auth.user) {
+            navigate(`/login`);
+        }
         if(ingredientsConstructor) {
             const request = getIngredientsRequest();
             dispatch(actions.sendOrderAction(request));
@@ -249,13 +258,13 @@ const BurgerConstructor: FC<TBurgerConstructorProps> = ({ onDropHandler }) => {
                 </div>
                 <div className="pl-4 pr-4">
                     <div className={styles.total_price_container}>
+                        {isLoading && <div className="mr-10"><ThreeDots height="80" width="80" radius="9" color = '#8585AD' visible={true}/></div>}
                         <TotalPrice />
                         <div className="ml-10">
-                            <Button htmlType="button" disabled={itemBunId === ''} type="primary" size="large" onClick={handleButtonClick}>Оформить заказ</Button>
+                            <Button htmlType="button" disabled={itemBunId === '' || isLoading} type="primary" size="large" onClick={handleButtonClick}>Оформить заказ</Button>
                         </div>
                     </div>    
                 </div>
-
             </div>
             </TotalPriceContext.Provider>
         </div>

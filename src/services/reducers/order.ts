@@ -15,7 +15,7 @@ const initialState: TOrderState = {
 
 export const getOrderReducer = (state = initialState, action: any) => {
     switch (action.type) {
-        case GET_ORDER_REQUEST: 
+        case GET_ORDER_REQUEST:
             return {
                 ...state,
                 isLoading: true,

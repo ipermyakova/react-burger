@@ -1,4 +1,4 @@
-import { loginRequest, registerRequest, logoutRequest, getUserRequest, patchUserRequest, tokenRequest, resetPasswordRequest, confirmResetPasswordRequest } from "../../components/utils/burger-api";
+import { loginRequest, registerRequest, logoutRequest, getUserRequest, patchUserRequest, tokenRequest, resetPasswordRequest, confirmResetPasswordRequest } from "../../utils/burger-api";
 import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED, REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILED, LOGOUT_REQUEST, 
     LOGOUT_SUCCESS, LOGOUT_FAILED, GET_USER_REQUEST, GET_USER_FAILED, GET_USER_SUCCESS, UPDATE_USER_FAILED, UPDATE_USER_SUCCESS, 
     UPDATE_USER_REQUEST, TOKEN_SUCCESS, TOKEN_REQUEST, TOKEN_FAILED, RESET_PASSWORD_FAILED, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_REQUEST, 

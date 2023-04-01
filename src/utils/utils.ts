@@ -1,6 +1,6 @@
+import { TIngredient, TOrder, TResponseBody} from '../services/types/data' 
 
-import { TokenSyntaxKind } from 'typescript';
-import { TIngredient, TOrder, TResponseBody} from '../../services/types/data' 
+const NORMA_API = 'https://norma.nomoreparties.space/api'
 
 type TResponse<T> = {
   readonly headers: Headers;
@@ -37,6 +37,10 @@ export const mapToColums = (arr: ReadonlyArray<TIngredient>): Array<TColumn> => 
 
 export const filter = (ingredients: ReadonlyArray<TIngredient>, current: string) => {
     return ingredients.filter(item => item.type === current);  
+}
+
+export const request = (endpoint: string, options: any) => {
+    return fetch(`${NORMA_API}${endpoint}`, options).then(checkResponse);
 }
 
 export const checkResponse = <T>(res: TResponse<T>): Promise<T> => {
