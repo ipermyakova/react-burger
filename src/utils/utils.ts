@@ -1,3 +1,4 @@
+import { ResultType } from '@remix-run/router/dist/utils';
 import { TIngredient, TOrder, TResponseBody} from '../services/types/data' 
 
 const NORMA_API = 'https://norma.nomoreparties.space/api'
@@ -45,5 +46,23 @@ export const request = (endpoint: string, options: any) => {
 
 export const checkResponse = <T>(res: TResponse<T>): Promise<T> => {
     return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
+}
+
+export const toDate = (dateStr: string | undefined): Date => {
+    if(!dateStr) {
+        return new Date()
+    }
+    const date = new Date(dateStr);
+    const timezoneOffset = date.getTimezoneOffset() * 60000;
+    return new Date (date.getTime() + timezoneOffset);
+}
+
+export const uniq = <T>(array: Array<T>): Array<T> => {
+    let result: Array<T> =[];
+    array.forEach(item => {
+        if(result.indexOf(item) < 0)
+        result.push(item)
+    })
+    return result;
 }
 

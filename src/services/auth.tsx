@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { actions } from './actions'
 import { RootState } from './reducers'
-import { AppDispatch } from './index'
+import { AppDispatch } from './types'
 import { TForm, TRegisterForm, TFormResetPassword, TFormConfirmPassword } from '../services/types/data'
 
 const AuthContext = createContext<ReturnType<typeof useProvideAuth>>({} as ReturnType<typeof useProvideAuth>);

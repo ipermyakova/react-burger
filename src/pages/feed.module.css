@@ -1,0 +1,233 @@
+.item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    width: 584px;
+    border-radius: 40px;
+    background: #1c1c21;
+}
+.container_price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 536px;
+}
+
+.container_image {
+    display: flex;
+    flex-direction: row-reverse; 
+    align-items: center; 
+    justify-content: start;
+    height: 74px;
+    padding-left: 20px;
+
+}
+
+.total_price {
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    justify-content: start;   
+}
+
+.item_number {
+    font-family: 'Iceland', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 28px;
+    margin: 0;
+}
+
+.item_title {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 24px;
+    margin: 0;
+}
+.date {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #8585AD;
+    font-size: 16px;
+}
+.box {
+    background: #131316;
+    width: 74px;
+    height: 74px;
+    border-width: 4px;
+    position: relative;
+    margin-left: -20px;
+    border-radius: 50%;
+}
+.box::before {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(45deg, #801AB2, #4C4CFF);
+    content: "";
+    -webkit-mask: 
+        linear-gradient(#131316 0 0) content-box,
+        linear-gradient(#131316 0 0);
+    -webkit-mask-composite: xor;
+        mask-composite: exclude;
+}
+.image {
+    margin-left: -34px;
+}
+.image_opacity {
+    margin-left: -34px;
+    opacity: 0.6;
+}
+.count {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+}
+.number_time_container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    width: 536px;
+}
+.order_container {
+    width: 600px;
+}
+.main_title {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 36px;
+    margin: 0;
+}
+.items_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height:  716px;
+}
+
+@media (max-width: 768px) {
+    .items_container {
+        max-height:  200px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .items_container {
+        max-height:  716px;
+    }
+}
+
+@media (min-width: 1366px) {
+    .items_container {
+        max-height:  716px;
+    }   
+}
+
+.items_container::-webkit-scrollbar {
+    width: 8px;
+    background-color: #2f2f37;
+
+}
+.items_container::-webkit-scrollbar-thumb {
+    background-color: #8585AD;   
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.analyze_order_container {
+    width: 580px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.flex_row {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: flex-start;
+}
+
+.flex_column {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: flex-start;
+}
+.flex_column_status {
+    composes: flex_column;
+    width: 254px;
+}
+
+.flex_one_column {
+    composes: flex_column;
+    width: 103px;
+}
+
+.status_ready {
+    font-family: 'Iceland', Arial, sans-serif;
+    color: #00CCCC;
+    font-size: 28px;
+    margin: 0;
+    list-style: none;
+    padding-left: 0;
+}
+
+.status_ready > li + li {
+    margin-top: 8px;
+}
+
+.status_header {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 24px;
+    margin: 0;
+}
+.box_count_order {
+    height: 120px;
+}
+
+.order_count_title {
+    font-family: 'Iceland', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 120px;
+    margin: 0;
+    text-shadow: 0px 4px 32px #3333FF;
+}
+.status_name {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 16px;
+    margin: 0;
+}
+
+.status_name_ready {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #00CCCC;
+    font-size: 16px;
+    margin: 0;
+}
+.status_progress {
+    composes: status_ready;
+    color: #F2F2F3;
+} 
+
+.feed_item_number {
+    composes: item_number;
+    align-self: center;
+}

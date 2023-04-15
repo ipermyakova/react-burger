@@ -2,18 +2,16 @@ import React, { useContext, useEffect, useState, useMemo, useReducer, useRef, us
 import { ConstructorElement, Button, DragIcon, CurrencyIcon} from '@ya.praktikum/react-developer-burger-ui-components';
 
 import { TotalPriceContext} from  '../../services/appContext';
-import { useDispatch, useSelector } from 'react-redux';
 import { actions } from '../../services/actions';
 import { useDrop, useDrag, DropTargetMonitor } from "react-dnd";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ThreeDots } from 'react-loader-spinner'
 import { useAuth } from '../../services/auth'
 import { TIngredient, TTotalPriceState, TAction, TRequestOrder } from '../../services/types/data';
-import { RootState } from '../../services/reducers'
-import { AppDispatch } from '../../services';
 import { SyntheticEvent } from 'react';
 import styles from './burger.constructor.module.css';
 import { getCookie } from '../../utils/cookie-utils';
+import { useSelector, useDispatch } from '../../hooks/hooks';
 
 type TElement = 'top' | 'bottom'
 
@@ -155,15 +153,14 @@ type TBurgerConstructorProps = {
 const BurgerConstructor: FC<TBurgerConstructorProps> = ({ onDropHandler }) => {
 
     const auth = useAuth();
+    const dispatch = useDispatch();
 
-    const { orderData, ingredientsConstructor, isLoading, hasError } = useSelector((store: RootState) => ({
+    const { orderData, ingredientsConstructor, isLoading, hasError } = useSelector(store => ({
         orderData: store?.order?.orderData,
         isLoading: store?.order?.isLoading,
         hasError: store?.order?.hasError,
         ingredientsConstructor: store?.ingredientsConstructor || []
     }))
-
-    const dispatch: AppDispatch = useDispatch();
 
     const [itemBunId, setItemBunId] = useState<string>('');
 
@@ -176,7 +173,6 @@ const BurgerConstructor: FC<TBurgerConstructorProps> = ({ onDropHandler }) => {
         const orderNumber = orderData?.number
         if(!isLoading && !hasError && orderNumber) {
             dispatch(actions.removeIngredientsConstructor());
-            navigate(`profile/orders/${orderNumber}`, {state: { background: location }})
         }
 
     }, [orderData])

@@ -25,7 +25,7 @@ export type TOrder = {
     readonly ingredients: ReadonlyArray<TIngredient>;
     readonly _id: string;
     readonly owner: TOwner;
-    readonly status: string;
+    readonly status: TStatusOrder;
     readonly name: string;
     readonly createdAt: string;
     readonly updatedAt: string;
@@ -80,4 +80,28 @@ export type TAction = {
 
 export type TRequestOrder = {
     ingredients: ReadonlyArray<string>
+}
+
+export type TStatusOrder = 'created' | 'pending' | 'done'
+
+export type TWsOrder = {
+    readonly ingredients: ReadonlyArray<string>;
+    readonly _id: string;
+    readonly status: TStatusOrder;
+    readonly createdAt: string;
+    readonly updatedAt: string;
+    readonly number: number;
+    readonly name: string;
+}
+
+export type TOrdersAll = {
+    orders: ReadonlyArray<TWsOrder>;
+    total: number;
+    totalToday: number;
+}
+
+export enum WebSocketStatus {
+    CONNECTING = 'CONNECTING',
+    ONLINE = 'ONLINE',
+    OFFLINE = 'OFFLINE'
 }

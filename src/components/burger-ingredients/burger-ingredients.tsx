@@ -4,9 +4,9 @@ import { Tab, CurrencyIcon, Counter } from '@ya.praktikum/react-developer-burger
 import { mapToColums, filter} from '../../utils/utils';
 import { useDrag } from 'react-dnd';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { actions } from '../../services/actions';
 import { TIngredient } from '../../services/types/data';
+import { useDispatch } from '../../hooks/hooks';
 
 type TType = 'bun' | 'sauce' | 'main';
 type TRenderName = {

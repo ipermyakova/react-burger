@@ -1,15 +1,14 @@
 import React, { useCallback, useEffect, useState, useRef, ChangeEvent, FormEvent } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import { EmailInput, PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
 import styles from './login.module.css';
 import { useAuth } from '../services/auth';
 import { getCookie } from '../utils/cookie-utils';
-import { RootState } from '../services/reducers';
 import { TRegisterForm} from '../services/types/data';
 import { useForm } from '../hooks/useForm';
+import { useSelector } from '../hooks/hooks';
 
 export const ProfilePage = () => {
 
@@ -19,7 +18,7 @@ export const ProfilePage = () => {
 
     const ref = useRef<HTMLInputElement>(null);
 
-    const { isLoadingLogout, hasErrorLogout } = useSelector((store: RootState) => ({ 
+    const { isLoadingLogout, hasErrorLogout } = useSelector(store => ({ 
         isLoadingLogout: store?.auth?.isLoadingLogout || false,
         hasErrorLogout: store?.auth?.hasErrorLogout || false
     }));
@@ -65,14 +64,15 @@ export const ProfilePage = () => {
 
     return (
         <div className={styles.main_container}>
-            <div className={styles.wrapper}>
                 <div className={styles.container}>
-                    <div className={styles.menu}>
-                        <NavLink to="/profile" className={ styles.menu_active_link}>Профиль</NavLink>
-                        <NavLink to="/profile/orders" className={styles.menu_link}>История заказов</NavLink>
-                        <div onClick={handleExitClick} className={styles.menu_link}>Выход</div>
-                        <div className="mt-20">
-                            <p className={styles.text}>В этом разделе вы можете изменить свои персональные данные</p>
+                    <div className="mt-30">
+                        <div className={styles.menu}>
+                            <NavLink to="/profile" className={ styles.menu_active_link}>Профиль</NavLink>
+                            <NavLink to="/profile/orders" className={styles.menu_link}>История заказов</NavLink>
+                            <div onClick={handleExitClick} className={styles.menu_link}>Выход</div>
+                            <div className="mt-20">
+                                <p className={styles.text}>В этом разделе вы можете изменить свои персональные данные</p>
+                            </div>
                         </div>
                     </div>
                     
@@ -95,7 +95,6 @@ export const ProfilePage = () => {
                             </div>}
                         </form>
                     </div>
-                </div>
             </div>
         </div>    
     )
