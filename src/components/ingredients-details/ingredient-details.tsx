@@ -1,20 +1,19 @@
 import React , { useState, useEffect } from 'react';
 import styles from './ingredient.details.module.css';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { RootState } from '../../services/reducers';
 import { TIngredient } from '../../services/types/data';
+import { useSelector } from '../../hooks/hooks';
 
 const IngredientDetails = () => {
 
     const { ingredientId } = useParams();
     const [ ingredient, setIngredient ] = useState<TIngredient | null>(null);
 
-    const { ingredientDetails } = useSelector((store: RootState) => ({
+    const { ingredientDetails } = useSelector(store => ({
         ingredientDetails: store?.ingredientDetails?.currentIngredient || null,
     }))
 
-    const { ingredients } = useSelector((store: RootState) => ({
+    const { ingredients } = useSelector(store => ({
         ingredients: store?.ingredients?.ingredients || null
     }))
 

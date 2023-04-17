@@ -1,19 +1,18 @@
 import React, { useCallback, FormEvent } from 'react';
 import { Navigate, Link } from 'react-router-dom';
 import { useAuth } from '../services/auth';
-import { useSelector } from 'react-redux';
 
 import { PasswordInput, Input, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 import { TFormConfirmPassword } from '../services/types/data';
-import { RootState } from '../services/reducers';
 import { useForm } from '../hooks/useForm';
+import { useSelector } from '../hooks/hooks';
 
 import styles from './login.module.css';
 
 export const ResetPasswordPage = () => {
     let auth = useAuth();
 
-    const { isLoading, hasError, messageConfirmResetPassword } = useSelector((store: RootState) => ({ 
+    const { isLoading, hasError, messageConfirmResetPassword } = useSelector(store => ({ 
         isLoading: store?.auth?.isLoading || null,
         hasError: store?.auth?.hasError || false,
         messageConfirmResetPassword: store?.auth?.messageConfirmResetPassword || null

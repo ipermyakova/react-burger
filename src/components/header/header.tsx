@@ -17,11 +17,12 @@ const Menu: FC<TMenuProps> = ({ children }) => {
 
 type TMenuItemProps = {
     children?: ReactNode;
+    path: string;
 }
 
-const MenuItem: FC<TMenuItemProps> = ({ children }) => {
+const MenuItem: FC<TMenuItemProps> = ({ children, path }) => {
     return (
-        <NavLink to="/" className={styles.link}>
+        <NavLink to={path} className={styles.link}>
             {children}
         </NavLink>
     )
@@ -45,12 +46,13 @@ const Profile = () => {
 
 const AppHeader = () => {
     const {state, pathname } = useLocation();
-    const matchHome = useMatch('/'); 
+    const matchHome = useMatch('/');
+    const matchFeed = useMatch('/feed'); 
 
     return (
         <header className={styles.header}>
                 <Menu>
-                    <MenuItem>
+                    <MenuItem path="/">
                         <div className = "ml-5">
                             <BurgerIcon type={ matchHome ? "primary" : "secondary"}/>
                         </div>
@@ -58,12 +60,12 @@ const AppHeader = () => {
                             <p className={ matchHome ? styles.title : styles.title_secondary }>Конструктор</p>
                         </div>
                     </MenuItem>
-                    <MenuItem>
+                    <MenuItem path="/feed">
                         <div className = "ml-5">
                             <ListIcon type="secondary" />
                         </div>
                         <div className="ml-2 mr-5">
-                            <p className={ styles.title_secondary }>Лента заказов</p>
+                            <p className={ matchFeed ? styles.title : styles.title_secondary }>Лента заказов</p>
                         </div>
                     </MenuItem>
                 </Menu>

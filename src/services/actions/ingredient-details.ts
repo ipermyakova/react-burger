@@ -10,6 +10,7 @@ export interface IAddIngredientDetails {
 export interface IRemoveIngredientDetails {
     readonly type: typeof REMOVE_INGREDIENT_DETAILS
 }
+export type TIngredientDetailsActions = IAddIngredientDetails | IRemoveIngredientDetails;
 
 export const addIngredientDetails = (ingredient: TIngredient): IAddIngredientDetails => ({
     type: ADD_INGREDIENT_DETAILS,

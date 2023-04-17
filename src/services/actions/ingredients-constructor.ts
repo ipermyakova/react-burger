@@ -22,6 +22,12 @@ export interface IUpdateIngredientConstructor {
     ingredients: Array<TIngredient>
 };
 
+export interface IRemoveIngredientsConstructor {
+    readonly type: typeof REMOVE_INGREDIENTS_CONSTRUCTOR 
+}
+
+export type TIngredientsConstructorActions = IGetIngredientsConstructor | IAddIngredientConstructor | IRemoveIngredientConstructor | IUpdateIngredientConstructor | IRemoveIngredientsConstructor
+
 export const getIngredientsConstructor = (): IGetIngredientsConstructor => ({
     type: GET_INGREDIENTS_CONSTRUCTOR
 });
@@ -42,6 +48,6 @@ export const updateIngredientConstructor = (ingredients: Array<TIngredient>): IU
     ingredients: [...ingredients]
 });
 
-export const removeIngredientsConstructor = () => ({
+export const removeIngredientsConstructor = (): IRemoveIngredientsConstructor => ({
     type: REMOVE_INGREDIENTS_CONSTRUCTOR
 });

@@ -30,6 +30,19 @@ export const sendOrder = (data: TRequestOrder):Promise<TResponseBody<'order', TO
         body: JSON.stringify(data)});
 }
 
+export const getOrder = (orderNumber: string):Promise<TResponseBody<'orders', ReadonlyArray<TOrder>>> => {
+    return request(`/orders/${orderNumber}`, {
+        method: 'GET', 
+        mode: 'cors', 
+        cache: 'no-cache', 
+        credentials: 'same-origin', 
+        headers: { 
+            'Content-Type': 'application/json',
+        },
+        redirect: 'follow',
+        referrerPolicy: 'no-referrer'})
+}
+
 export const loginRequest = (form: TForm): Promise<TResponseBodyAuth<'user', TUser>> => {
     return request(`/auth/login`, {
         method: 'POST', 

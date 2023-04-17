@@ -4,6 +4,7 @@ GET_USER_FAILED, GET_USER_SUCCESS, GET_USER_REQUEST, UPDATE_USER_FAILED, UPDATE_
 RESET_PASSWORD_FAILED, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_REQUEST, CONFIRM_RESET_PASSWORD_FAILED, CONFIRM_RESET_PASSWORD_REQUEST, CONFIRM_RESET_PASSWORD_SUCCESS } from "../constants";
 
 import { TUser } from '../types/data';
+import { TAuthActions } from "../actions/auth";
 
 export type TAuthState = {
     readonly isLoading: boolean,
@@ -33,7 +34,7 @@ const initialState: TAuthState = {
     hasErrorLogout: false
 }
 
-export const authReducer = (state = initialState, action: any) => {
+export const authReducer = (state = initialState, action: TAuthActions) => {
     switch (action.type) {
 
         case LOGIN_REQUEST: 

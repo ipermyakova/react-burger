@@ -1,9 +1,8 @@
 import { useEffect, FC  } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { useAuth } from '../../services/auth';
 import { getCookie } from '../../utils/cookie-utils';
-import { RootState } from '../../services/reducers';
+import { useSelector } from '../../hooks/hooks';
 
 type TProtectedRouteProps = {
     children: JSX.Element;
@@ -12,13 +11,13 @@ type TProtectedRouteProps = {
 
 export const ProtectedRoute: FC<TProtectedRouteProps> = ({ children, onlyUnAuth=false }) => {
 
-    const { user, isLoadingUser, hasErrorUser } = useSelector((store: RootState) => ({ 
+    const { user, isLoadingUser, hasErrorUser } = useSelector(store => ({ 
         user: store?.auth?.user || null,
         isLoadingUser: store?.auth?.isLoadingUser || false,
         hasErrorUser: store?.auth?.hasErrorUser || false
     }));
 
-    const { messageResetPassword } = useSelector((store: RootState) => ({ 
+    const { messageResetPassword } = useSelector(store => ({ 
         messageResetPassword: store?.auth?.messageResetPassword || null
     }))
 

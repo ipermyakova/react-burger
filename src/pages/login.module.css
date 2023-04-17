@@ -119,6 +119,15 @@
     justify-content: end;
 
 }
+.profile_orders_continer {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: start;
+}
+.orders_container {
+    flex: 1;
+}
 
 
 

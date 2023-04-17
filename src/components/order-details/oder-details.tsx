@@ -1,12 +1,11 @@
 import React from 'react';
 import styles from './order.details.module.css';
 let imagePath = require ('../images/done.png');
-import { useSelector } from 'react-redux';
-import { RootState } from '../../services/reducers';
+import { useSelector, useDispatch } from '../../hooks/hooks';
 
-const OrderDetails = () => {
+const OrderDetailsComponent = () => {
 
-    const { orderData } = useSelector((store: RootState) => ({
+    const { orderData } = useSelector(store => ({
         orderData: store?.order?.orderData,
     }))
 
@@ -32,4 +31,4 @@ const OrderDetails = () => {
     )
 };
 
-export default OrderDetails;
+export default OrderDetailsComponent;

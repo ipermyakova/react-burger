@@ -3,173 +3,380 @@ import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED, REGISTER_REQUEST, REGISTER_
     LOGOUT_SUCCESS, LOGOUT_FAILED, GET_USER_REQUEST, GET_USER_FAILED, GET_USER_SUCCESS, UPDATE_USER_FAILED, UPDATE_USER_SUCCESS, 
     UPDATE_USER_REQUEST, TOKEN_SUCCESS, TOKEN_REQUEST, TOKEN_FAILED, RESET_PASSWORD_FAILED, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_REQUEST, 
     CONFIRM_RESET_PASSWORD_FAILED, CONFIRM_RESET_PASSWORD_REQUEST, CONFIRM_RESET_PASSWORD_SUCCESS, TOKEN_EXPIRED_ERROR, TOKEN_MALFORMED_ERROR } from "../constants";
+import { AppDispatch } from "../types";
 
-import { TForm, TRegisterForm, TFormConfirmPassword, TFormResetPassword } from '../types/data'    
+import { TForm, TRegisterForm, TFormConfirmPassword, TFormResetPassword, TUser, TResponseBodyAuth, TResponseBody } from '../types/data'  
 
-export const login = (form: TForm) => (dispatch: any) => {
-    dispatch({ type: LOGIN_REQUEST })
+export interface ILoginRequestAction {
+    readonly type: typeof LOGIN_REQUEST;
+}
+
+export interface ILoginSuccessAction {
+    readonly type: typeof LOGIN_SUCCESS;
+    readonly payload: TResponseBodyAuth<'user', TUser>;
+}
+
+export interface ILoginFailedAction {
+    readonly type: typeof LOGIN_FAILED;
+}
+
+export interface IRegisterRequestAction {
+    readonly type: typeof REGISTER_REQUEST;
+}
+
+export interface IRegisterSuccessAction {
+    readonly type: typeof REGISTER_SUCCESS;
+    readonly payload: TResponseBodyAuth<'user', TUser>;
+}
+
+export interface IRegisterFailedAction {
+    readonly type: typeof REGISTER_FAILED;
+}
+
+export interface IResetPasswordRequestAction {
+    readonly type: typeof RESET_PASSWORD_REQUEST;
+}
+
+export interface IResetPasswordSuccessAction {
+    readonly type: typeof RESET_PASSWORD_SUCCESS;
+    readonly payload: TResponseBody<"message", string>;
+}
+
+export interface IResetPasswordFailedAction {
+    readonly type: typeof RESET_PASSWORD_FAILED;
+}
+
+export interface IConfirmResetPasswordRequestAction {
+    readonly type: typeof CONFIRM_RESET_PASSWORD_REQUEST;
+}
+
+export interface IConfirmResetPasswordSuccessAction {
+    readonly type: typeof CONFIRM_RESET_PASSWORD_SUCCESS;
+    readonly payload: TResponseBody<"message", string>;
+}
+
+export interface IConfirmResetPasswordFailedAction {
+    readonly type: typeof CONFIRM_RESET_PASSWORD_FAILED;
+}
+
+export interface ILogoutRequestAction {
+    readonly type: typeof LOGOUT_REQUEST;
+}
+
+export interface ILogoutSuccessAction {
+    readonly type: typeof LOGOUT_SUCCESS;
+    readonly payload: TResponseBody<"message", string>;
+}
+
+export interface ILogoutFailedAction {
+    readonly type: typeof LOGOUT_FAILED;
+}
+
+export interface IGetUserRequestAction {
+    readonly type: typeof GET_USER_REQUEST;
+}
+
+export interface IGetUserSuccessAction {
+    readonly type: typeof GET_USER_SUCCESS;
+    readonly payload: TResponseBody<'user', TUser>;
+}
+
+export interface IGetUserFailedAction {
+    readonly type: typeof GET_USER_FAILED;
+}
+
+export interface IUpdateUserRequestAction {
+    readonly type: typeof UPDATE_USER_REQUEST;
+}
+
+export interface IUpdateUserSuccessAction {
+    readonly type: typeof UPDATE_USER_SUCCESS;
+    readonly payload: TResponseBody<'user', TUser>;
+}
+
+export interface IUpdateUserFailedAction {
+    readonly type: typeof UPDATE_USER_FAILED;
+}
+
+export interface ITokenRequestAction {
+    readonly type: typeof TOKEN_REQUEST;
+}
+
+export interface ITokenSuccessAction {
+    readonly type: typeof TOKEN_SUCCESS;
+    readonly payload: TResponseBodyAuth;
+}
+
+export interface ITokenFailedAction {
+    readonly type: typeof TOKEN_FAILED;
+}
+
+export type TAuthActions = ILoginRequestAction | ILoginSuccessAction | ILoginFailedAction 
+                           | IConfirmResetPasswordFailedAction | IConfirmResetPasswordRequestAction | IConfirmResetPasswordSuccessAction
+                           | IGetUserSuccessAction | IGetUserRequestAction | IGetUserFailedAction
+                           | IResetPasswordSuccessAction | IResetPasswordRequestAction | IResetPasswordFailedAction
+                           | ILogoutSuccessAction | ILogoutRequestAction | ILogoutFailedAction
+                           | IUpdateUserSuccessAction | IUpdateUserRequestAction | IUpdateUserFailedAction
+                           | IRegisterSuccessAction | IRegisterRequestAction | IRegisterFailedAction
+                           | ITokenSuccessAction | ITokenRequestAction | ITokenFailedAction
+
+export const loginRequestAction = (): ILoginRequestAction => ({
+    type: LOGIN_REQUEST
+})
+
+export const loginSuccessAction = (data: TResponseBodyAuth<'user', TUser>): ILoginSuccessAction => ({
+    type: LOGIN_SUCCESS,
+    payload: data
+})
+
+export const loginFailedAction = (): ILoginFailedAction => ({
+    type: LOGIN_FAILED
+})
+
+export const registerRequestAction = (): IRegisterRequestAction => ({
+    type: REGISTER_REQUEST
+})
+
+export const registerSuccessAction = (data: TResponseBodyAuth<'user', TUser>): IRegisterSuccessAction => ({
+    type: REGISTER_SUCCESS,
+    payload: data
+})
+
+export const registerFailedAction = (): IRegisterFailedAction => ({
+    type: REGISTER_FAILED
+})
+
+export const resetPasswordRequestAction = (): IResetPasswordRequestAction => ({
+    type: RESET_PASSWORD_REQUEST
+})
+
+export const resetPasswordSuccessAction = (data: TResponseBody<"message", string>): IResetPasswordSuccessAction => ({
+    type: RESET_PASSWORD_SUCCESS,
+    payload: data
+})
+
+export const resetPasswordFailedAction = (): IResetPasswordFailedAction => ({
+    type: RESET_PASSWORD_FAILED
+})
+
+export const confirmResetPasswordRequestAction = (): IConfirmResetPasswordRequestAction => ({
+    type: CONFIRM_RESET_PASSWORD_REQUEST
+})
+
+export const confirmResetPasswordSuccessAction = (data: TResponseBody<"message", string>): IConfirmResetPasswordSuccessAction => ({
+    type: CONFIRM_RESET_PASSWORD_SUCCESS,
+    payload: data
+})
+
+export const confirmResetPasswordFailedAction = (): IConfirmResetPasswordFailedAction => ({
+    type: CONFIRM_RESET_PASSWORD_FAILED
+})
+
+export const logoutRequestAction = (): ILogoutRequestAction => ({
+    type: LOGOUT_REQUEST
+})
+
+export const logoutSuccessAction = (data: TResponseBody<"message", string>): ILogoutSuccessAction => ({
+    type: LOGOUT_SUCCESS,
+    payload: data
+})
+
+export const logoutFailedAction = (): ILogoutFailedAction => ({
+    type: LOGOUT_FAILED
+})
+
+export const getUserRequestAction = (): IGetUserRequestAction => ({
+    type: GET_USER_REQUEST
+})
+
+export const getUserSuccessAction = (data: TResponseBody<'user', TUser>): IGetUserSuccessAction => ({
+    type: GET_USER_SUCCESS,
+    payload: data
+})
+
+export const getUserFailedAction = (): IGetUserFailedAction => ({
+    type: GET_USER_FAILED
+})
+
+export const tokenRequestAction = (): ITokenRequestAction => ({
+    type: TOKEN_REQUEST
+})
+
+export const tokenSuccessAction = (data: TResponseBodyAuth): ITokenSuccessAction => ({
+    type: TOKEN_SUCCESS,
+    payload: data
+})
+
+export const tokenFailedAction = (): ITokenFailedAction => ({
+    type: TOKEN_FAILED
+})
+
+export const updateUserRequestAction = (): IUpdateUserRequestAction => ({
+    type: UPDATE_USER_REQUEST
+})
+
+export const updateUserSuccessAction = (data: TResponseBody<'user', TUser>): IUpdateUserSuccessAction => ({
+    type: UPDATE_USER_SUCCESS,
+    payload: data
+})
+
+export const updateUserFailedAction = (): IUpdateUserFailedAction => ({
+    type: UPDATE_USER_FAILED
+})
+
+export const login = (form: TForm) => (dispatch: AppDispatch) => {
+    dispatch(loginRequestAction())
     loginRequest(form)
     .then(data => {
         if(data.success) {
-            dispatch({ type: LOGIN_SUCCESS, payload: data })
+            dispatch(loginSuccessAction(data))
         } else {
-            dispatch({ type: LOGIN_FAILED }) 
+            dispatch(loginFailedAction()) 
         }
     })
     .catch(e => {
-        dispatch({
-            type: LOGIN_FAILED
-        })
+        dispatch(loginFailedAction())
     })
 }
 
-export const register = (form: TRegisterForm) => (dispatch: any) => {
-    dispatch({ type: REGISTER_REQUEST})
+export const register = (form: TRegisterForm) => (dispatch: AppDispatch) => {
+    dispatch(registerRequestAction())
     registerRequest(form)
     .then(data => {
         if(data.success) {
-            dispatch({ type: REGISTER_SUCCESS, payload: data })
+            dispatch(registerSuccessAction(data))
         } else {
-            dispatch({ type: REGISTER_FAILED})
+            dispatch(registerFailedAction())
         }
     }) 
     .catch(e => {
-        dispatch({
-            type: REGISTER_FAILED
-        })
+        dispatch(registerFailedAction())
     })  
 }
 
-export const resetPassword = (form: TFormResetPassword) => (dispatch: any) => {
-    dispatch({ type: RESET_PASSWORD_REQUEST})
+export const resetPassword = (form: TFormResetPassword) => (dispatch: AppDispatch) => {
+    dispatch(resetPasswordRequestAction())
     resetPasswordRequest(form)
     .then(data => {
         if(data.success) {
-            dispatch({ type: RESET_PASSWORD_SUCCESS, payload: data})
+            dispatch(resetPasswordSuccessAction(data))
         } else {
-            dispatch({ type: RESET_PASSWORD_FAILED})
+            dispatch(resetPasswordFailedAction())
         }
     }) 
     .catch(e => {
-        dispatch({
-            type: RESET_PASSWORD_FAILED
-        })
+        dispatch(resetPasswordFailedAction())
     })  
 }
 
-export const confirmResetPassword = (form: TFormConfirmPassword) => (dispatch: any) => {
-    dispatch({ type: CONFIRM_RESET_PASSWORD_REQUEST})
+export const confirmResetPassword = (form: TFormConfirmPassword) => (dispatch: AppDispatch) => {
+    dispatch(confirmResetPasswordRequestAction())
     confirmResetPasswordRequest(form)
     .then(data => {
         if(data.success) {
-            dispatch({ type: CONFIRM_RESET_PASSWORD_SUCCESS, payload: data})
+            dispatch(confirmResetPasswordSuccessAction(data))
         } else {
-            dispatch({ type: CONFIRM_RESET_PASSWORD_FAILED})
+            dispatch(confirmResetPasswordFailedAction())
         }
     }) 
     .catch(e => {
-        dispatch({
-            type: CONFIRM_RESET_PASSWORD_FAILED
-        })
+        dispatch(confirmResetPasswordFailedAction())
     })  
 }
 
-export const logout = () => (dispatch: any) => {
-    dispatch({ type: LOGOUT_REQUEST})
+export const logout = () => (dispatch: AppDispatch) => {
+    dispatch(logoutRequestAction())
     logoutRequest()
     .then(data => {
         if(data.success) {
-            dispatch({ type: LOGOUT_SUCCESS, payload: data })
+            dispatch(logoutSuccessAction(data))
         } else {
-            dispatch({ type: LOGOUT_FAILED})
+            dispatch(logoutFailedAction())
         }
     })
     .catch(e => {
-        dispatch({
-            type: LOGOUT_FAILED
-        })
+        dispatch(loginFailedAction())
     })
 }
 
-export const getUser = () => (dispatch: any) => {
-    dispatch({ type: GET_USER_REQUEST})
+export const getUser = () => (dispatch: AppDispatch) => {
+    dispatch(getUserRequestAction())
     getUserRequest()
     .then(data => {
         if(data.success) {
-            dispatch({ type: GET_USER_SUCCESS, payload: data })
+            dispatch(getUserSuccessAction(data))
         } else {
-            dispatch({ type: GET_USER_FAILED})
+            dispatch(getUserFailedAction())
         }
                 
     })
     .catch(error => {
         if(error.message === TOKEN_EXPIRED_ERROR || error.message === TOKEN_MALFORMED_ERROR) {
-            dispatch({ type: TOKEN_REQUEST })
+            dispatch(tokenRequestAction())
             tokenRequest()
                 .then(dataToken => {
                     if(dataToken.success) {
-                        dispatch({ type: TOKEN_SUCCESS, payload: dataToken })
+                        dispatch(tokenSuccessAction(dataToken))
                         getUserRequest()
                         .then(dataUser => {
                             if(dataUser.success) {
-                                dispatch({ type: GET_USER_SUCCESS, payload: dataUser })
+                                dispatch(getUserSuccessAction(dataUser))
                             } else {
-                                dispatch({ type: GET_USER_FAILED})
+                                dispatch(getUserFailedAction())
                             }
                         })
                         .catch(e => { 
-                            dispatch({ type: GET_USER_FAILED })
+                            dispatch(getUserFailedAction())
                         })   
                     } else {
-                        dispatch({ type: TOKEN_FAILED })
+                        dispatch(tokenFailedAction())
                     }              
                 })
                 .catch(e => { 
-                    dispatch({ type: TOKEN_FAILED })
-                    dispatch({ type: GET_USER_FAILED })
+                    dispatch(tokenFailedAction())
+                    dispatch(getUserFailedAction())
                 })   
         } else {
-            dispatch({ type: GET_USER_FAILED})
+            dispatch(getUserFailedAction())
         }
     })
 }
 
-export const updateUser = (form: TRegisterForm) => (dispatch: any) => {
-    dispatch({ type: UPDATE_USER_REQUEST})
+export const updateUser = (form: TRegisterForm) => (dispatch: AppDispatch) => {
+    dispatch(updateUserRequestAction())
     patchUserRequest(form)
     .then(data => {
         if(data.success) {
-            dispatch({ type: UPDATE_USER_SUCCESS, payload: data })
+            dispatch(updateUserSuccessAction(data))
         } else {
-            dispatch({ type: UPDATE_USER_FAILED})
-        }
-                
+            dispatch(updateUserFailedAction())
+        }             
     })
     .catch(error => {
         if(error.message === TOKEN_EXPIRED_ERROR || error.message === TOKEN_MALFORMED_ERROR) {
-            dispatch({ type: TOKEN_REQUEST })
+            dispatch(tokenRequestAction())
             tokenRequest()
             .then(dataToken => {
                 if(dataToken.success) {
-                    dispatch({ type: TOKEN_SUCCESS, payload: dataToken })
+                    dispatch(tokenSuccessAction(dataToken))
                     patchUserRequest(form)
                     .then(dataUser => {
                         if(dataUser.success) {
-                            dispatch({ type: UPDATE_USER_SUCCESS, payload: dataUser })
+                            dispatch(updateUserSuccessAction(dataUser))
                         } else {
-                            dispatch({ type: UPDATE_USER_FAILED})
+                            dispatch(updateUserFailedAction())
                         }
                     })
                 } else {
-                    dispatch({ type: TOKEN_FAILED })
+                    dispatch(tokenFailedAction())
                 }              
             })
             .catch(e => { 
-                dispatch({ type: TOKEN_FAILED })
-                dispatch({ type: UPDATE_USER_FAILED })
+                dispatch(tokenFailedAction())
+                dispatch(updateUserFailedAction())
             })  
         } else {
-            dispatch({ type: UPDATE_USER_FAILED})
+            dispatch(updateUserFailedAction())
         }
     })      
 }

@@ -3,19 +3,16 @@ import { useParams } from 'react-router-dom';
 
 import pageStyles from './login.module.css';
 import styles from '../components/ingredients-details/ingredient.details.module.css';
-import { actions } from '../services/actions'
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../services/reducers'
-import { AppDispatch } from '../services';
 import { TIngredient } from '../services/types/data';
+import { useSelector } from '../hooks/hooks';
+
 
 export const IngredientDetailsPage =() => {
 
-    const dispatch: AppDispatch = useDispatch();
     const { id } = useParams();
     const [ ingredient, setIngredient ] = useState<TIngredient | null>(null);
 
-    const { ingredients, hasError, isLoading } = useSelector((store: RootState) => ({
+    const { ingredients, hasError, isLoading } = useSelector(store => ({
         ingredients: store?.ingredients?.ingredients || null,
         isLoading: store?.ingredients?.isLoading || false, 
         hasError: store?.ingredients?.hasError || false

@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState, ChangeEvent, FormEvent } from 'react';
 import { Navigate, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../services/auth'
-import { useSelector } from 'react-redux';
-import { RootState } from '../services/reducers';
 import { TFormResetPassword } from '../services/types/data';
 import { useForm } from '../hooks/useForm';
+import { useSelector } from '../hooks/hooks';
 
 import { EmailInput, Button } from '@ya.praktikum/react-developer-burger-ui-components';
 
@@ -14,7 +13,7 @@ export const ForgotPasswordPage = () => {
 
     let auth = useAuth();
 
-    const { isLoading, hasError, messageResetPassword } = useSelector((store: RootState) => ({ 
+    const { isLoading, hasError, messageResetPassword } = useSelector(store => ({ 
         isLoading: store?.auth?.isLoading || null,
         hasError: store?.auth?.hasError || false,
         messageResetPassword: store?.auth?.messageResetPassword || null

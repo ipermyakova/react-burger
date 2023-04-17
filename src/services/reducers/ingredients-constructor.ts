@@ -1,11 +1,12 @@
 import { GET_INGREDIENTS_CONSTRUCTOR, ADD_INGREDIENT_CONSTRUCTOR, REMOVE_INGREDIENT_CONSTRUCTOR, UPDATE_INGREDIENT_CONSTRUCTOR, REMOVE_INGREDIENTS_CONSTRUCTOR } from '../constants'
 import { TIngredient } from '../types/data';
+import { TIngredientsConstructorActions } from '../actions/ingredients-constructor';
 
 export type TIngredientsConstructorState = Array<TIngredient>
 
 const initialState: TIngredientsConstructorState = []
 
-export const getIngredientsConstructorReducer = (state = initialState, action: any) => {
+export const getIngredientsConstructorReducer = (state = initialState, action: TIngredientsConstructorActions) => {
     switch(action.type) {
         case GET_INGREDIENTS_CONSTRUCTOR: 
             return state
