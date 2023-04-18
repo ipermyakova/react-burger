@@ -73,3 +73,8 @@
     background-position: center;
     width: 640px;
 }
+.loader_wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}

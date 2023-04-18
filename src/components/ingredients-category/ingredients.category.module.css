@@ -1,0 +1,18 @@
+.tab_title {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 24px;
+    margin: 0;
+}
+
+.items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.items_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}

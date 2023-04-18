@@ -30,15 +30,15 @@ const MenuItem: FC<TMenuItemProps> = ({ children, path }) => {
 
 const Profile = () => {
     const {state, pathname } = useLocation();
-    const match = useMatch('/profile/*'); 
+    const isProfile = useMatch('/profile/*'); 
 
     return (
         <NavLink to="/profile" state={{ from: { pathname: pathname }}} className={styles.link}>
                 <div className = "ml-5">
-                    <ProfileIcon type={ match ? "primary" : "secondary" }/>
+                    <ProfileIcon type={ isProfile ? "primary" : "secondary" }/>
                 </div>
                 <div className="ml-2 mr-5">
-                    <p className={ match ? styles.title : styles.title_secondary }>Личный кабинет</p>
+                    <p className={ isProfile ? styles.title : styles.title_secondary }>Личный кабинет</p>
                 </div>
         </NavLink>
     )
@@ -46,26 +46,26 @@ const Profile = () => {
 
 const AppHeader = () => {
     const {state, pathname } = useLocation();
-    const matchHome = useMatch('/');
-    const matchFeed = useMatch('/feed'); 
+    const isConstructor = useMatch('/');
+    const isFeed = useMatch('/feed/*'); 
 
     return (
         <header className={styles.header}>
                 <Menu>
                     <MenuItem path="/">
                         <div className = "ml-5">
-                            <BurgerIcon type={ matchHome ? "primary" : "secondary"}/>
+                            <BurgerIcon type={ isConstructor ? "primary" : "secondary"}/>
                         </div>
                         <div className="ml-2 mr-5">
-                            <p className={ matchHome ? styles.title : styles.title_secondary }>Конструктор</p>
+                            <p className={ isConstructor ? styles.title : styles.title_secondary }>Конструктор</p>
                         </div>
                     </MenuItem>
                     <MenuItem path="/feed">
                         <div className = "ml-5">
-                            <ListIcon type="secondary" />
+                            <ListIcon type={isFeed ? "primary" : "secondary"} />
                         </div>
                         <div className="ml-2 mr-5">
-                            <p className={ matchFeed ? styles.title : styles.title_secondary }>Лента заказов</p>
+                            <p className={ isFeed ? styles.title : styles.title_secondary }>Лента заказов</p>
                         </div>
                     </MenuItem>
                 </Menu>

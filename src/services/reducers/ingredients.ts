@@ -38,23 +38,6 @@ export const getIngredientsReducer = (state = initialState, action: TIngredients
                 hasError: true,
                 ingredients: []
             }
-        case UPDATE_COUNT_INGREDIENT: {          
-            return {
-                ...state,
-                ingredients: state.ingredients.map(item => {
-                    if (item._id === action.id) {
-                        if(item.count === undefined) {
-                            return {...item, count: action.value } 
-                        } else {
-                            return  {...item, count: action.value + item.count }
-                        }   
-                    }
-                    if(action.bunId !== "" && item._id === action.bunId && action.itemType ==='bun') {
-                        return {...item, count: undefined } 
-                    }
-                    return item  
-            })}    
-        }   
         
         default: {
             return state

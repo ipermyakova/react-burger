@@ -8,8 +8,7 @@ export interface IGetIngredientsConstructor {
 
 export interface IAddIngredientConstructor {
     readonly type: typeof ADD_INGREDIENT_CONSTRUCTOR
-    readonly ingredient: TIngredient
-    readonly dragId: string
+    readonly payload: TIngredient
 };
 
 export interface IRemoveIngredientConstructor {
@@ -34,8 +33,10 @@ export const getIngredientsConstructor = (): IGetIngredientsConstructor => ({
 
 export const addIngredientConstructor = (ingredient: TIngredient): IAddIngredientConstructor => ({
     type: ADD_INGREDIENT_CONSTRUCTOR,
-    ingredient: ingredient,
-    dragId: uuid()
+    payload: {
+        ...ingredient,
+        dragId: uuid(),
+    }
 });
 
 export const removeIngredientConstructor = (id: string): IRemoveIngredientConstructor => ({

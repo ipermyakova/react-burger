@@ -47,3 +47,8 @@
     margin: 0;
 
 }
+.loader_wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}

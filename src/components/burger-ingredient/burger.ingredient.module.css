@@ -1,0 +1,41 @@
+
+.items {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.item_drag {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 272px;
+}
+
+.item {
+    position: relative;
+}
+
+.main_title {
+    font-family: 'Jet Brains Mono', Arial, sans-serif;
+    color: #F2F2F3;
+    font-size: 36px;
+    margin: 0;
+}
+
+.price {
+    composes: main_title;
+    font-family: 'Iceland', Arial, sans-serif;
+    font-size: 28px;
+} 
+
+.text {
+    composes: main_title;
+    font-size: 16px;
+    height: 48px;
+}
+
+.link {
+    text-decoration: none;
+}

@@ -4,19 +4,28 @@ import { useParams } from 'react-router-dom';
 import pageStyles from './login.module.css';
 import styles from '../components/ingredients-details/ingredient.details.module.css';
 import { TIngredient } from '../services/types/data';
-import { useSelector } from '../hooks/hooks';
+import { useSelector, useDispatch } from '../hooks/hooks';
+import Loader from '../components/loader/loader';
+import { actions } from '../services/actions';
 
 
 export const IngredientDetailsPage =() => {
 
     const { id } = useParams();
     const [ ingredient, setIngredient ] = useState<TIngredient | null>(null);
+    const dispatch = useDispatch();
 
     const { ingredients, hasError, isLoading } = useSelector(store => ({
         ingredients: store?.ingredients?.ingredients || null,
         isLoading: store?.ingredients?.isLoading || false, 
         hasError: store?.ingredients?.hasError || false
     }))
+
+    useEffect(()=> {
+        if(ingredients && ingredients.length === 0) {
+            dispatch(actions.getIngredientsAction());
+        }
+    },[]);
 
     const currentIngredient = ingredients?.find( item => item._id === id);
 
@@ -28,7 +37,7 @@ export const IngredientDetailsPage =() => {
 
     return (
         <div>
-            {isLoading && 'Загрузка'}
+            {isLoading && <div className={styles.loader_wrapper}><Loader /></div>}
             {hasError && 'Возникла ошибка'}
             {!isLoading && !hasError && ingredients && ingredients.length > 0 &&
             <div className={pageStyles.ingredient_wrapper}>

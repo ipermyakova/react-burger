@@ -4,6 +4,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { BrowserRouter, Routes, Route, useLocation, useNavigate } from'react-router-dom';
 import { LoginPage, RegisterPage, ResetPasswordPage, ForgotPasswordPage, ProfilePage, IngredientDetailsPage, NotFound404, ProfileOrdersPage, 
     FeedPage, OrderDetailsPage} from '../../pages';
+import Loader from '../loader/loader'
 
 import appStyles from './app.module.css';
 import AppHeader from '../header/header';
@@ -12,7 +13,6 @@ import BurgerConstructor from '../burger-constructor/burger-constructor';
 import { OrderDetails } from '../../pages/feed-details'
 import Modal from '../modal/modal'
 import IngredientDetails from '../ingredients-details/ingredient-details';
-import OrderDetailComponent from '../order-details/oder-details'
 import { actions } from '../../services/actions';
 import { ProvideAuth } from '../../services/auth'
 import { ProtectedRoute } from '../protected-route/protected-route';
@@ -51,14 +51,13 @@ const HomePage = () => {
 
     const handleDrop = (item: TIngredient, itemBunId: string) => {
         if(item._id != itemBunId) {
-            dispatch(actions.updateCountIngredients(item._id, itemBunId, item.type === 'bun' ? 2 : 1, item.type));
             dispatch(actions.addIngredientConstructor(item));
         }            
     }
 
     return (
         <div>   
-            {isLoading && 'Загрузка'}
+            {isLoading && <div className={appStyles.loader_wrapper}><Loader /></div>}
                 {hasError && 'Возникла ошибка'}
                 {!isLoading && !hasError && ingredients && ingredients.length > 0 &&
                     <div>
@@ -79,10 +78,6 @@ const ModalSwitch = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const { ingredients } = useSelector(state => ({
-        ingredients: state?.ingredients?.ingredients || null
-    }))
 
     const { ingredientDetails } = useSelector(state => ({
         ingredientDetails: state?.ingredientDetails?.currentIngredient || null,

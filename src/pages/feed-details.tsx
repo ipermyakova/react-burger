@@ -7,6 +7,7 @@ import feedStyles from './feed.module.css';
 import styles from './feed.details.module.css';
 import { TIngredient, TWsOrder, TStatusOrder, TOrder } from '../services/types/data';
 import { uniq, toDate } from '../utils/utils';
+import Loader from '../components/loader/loader' 
 
 type TRenderName = {
     [key in TStatusOrder] : string
@@ -55,16 +56,18 @@ export const OrderDetails = () => {
 
     const [order, setOrder] = useState<TWsOrder | null | TOrder>(null)
 
-    const { ingredients } = useSelector(state => ({
-        ingredients: state?.ingredients?.ingredients || null, 
+    const { ingredients, isLoadingIngredients } = useSelector(state => ({
+        ingredients: state?.ingredients?.ingredients || null,
+        isLoadingIngredients: state?.ingredients?.isLoading 
     }))
 
     const { orders } = useSelector(state => ({
         orders: state?.orders?.orders
     }))
 
-    const { orderData } = useSelector(store => ({
+    const { orderData, isLoadingOrder } = useSelector(store => ({
         orderData: store?.order?.orderData,
+        isLoadingOrder: store?.order?.isLoading
     }))
 
     useEffect(()=> {
@@ -108,6 +111,10 @@ export const OrderDetails = () => {
         acc[item._id] = count + 1
         return acc
     }, {})
+
+    if(isLoadingIngredients || isLoadingOrder) {
+        return <div className={styles.loader_wrapper}><Loader /></div>
+    }
 
 
     return (
