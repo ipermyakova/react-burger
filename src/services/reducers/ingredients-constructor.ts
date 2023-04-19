@@ -13,32 +13,36 @@ const initialState: TIngredientsConstructorState = {
 }
 
 export const getIngredientsConstructorReducer = (state = initialState, action: TIngredientsConstructorActions) => {
-    switch(action.type) {
-        case GET_INGREDIENTS_CONSTRUCTOR: 
+    switch (action.type) {
+        case GET_INGREDIENTS_CONSTRUCTOR:
             return state
         case ADD_INGREDIENT_CONSTRUCTOR: {
             if (action.payload.type === 'bun') {
-                return {...state, bun: action.payload}
+                return { ...state, bun: action.payload }
             }
-            return {...state, ingredients: [...state.ingredients, action.payload]} 
+            return { ...state, ingredients: [...state.ingredients, action.payload] }
         }
-        
+
         case REMOVE_INGREDIENT_CONSTRUCTOR: {
-            return {...state, ingredients:[
-                ...state.ingredients.filter(item => item.dragId !== action.id)
-            ]}
-        } 
+            return {
+                ...state, ingredients: [
+                    ...state.ingredients.filter(item => item.dragId !== action.id)
+                ]
+            }
+        }
 
         case UPDATE_INGREDIENT_CONSTRUCTOR: {
-            return {...state, ingredients:[
-                ...action.ingredients
-            ]}
+            return {
+                ...state, ingredients: [
+                    ...action.ingredients
+                ]
+            }
         }
 
         case REMOVE_INGREDIENTS_CONSTRUCTOR: {
             return initialState;
         }
 
-        default: return state;    
+        default: return state;
     }
 }

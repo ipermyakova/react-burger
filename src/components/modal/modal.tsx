@@ -26,17 +26,17 @@ const ModalHeader: FC<TModalHeaderProps> = ({ header, handleCloseModal }) => {
 type TModalProps = {
     readonly header: string;
     readonly children?: ReactNode;
-    readonly onCloseClick: () => void; 
+    readonly onCloseClick: () => void;
 }
 
-const Modal: FC<TModalProps> = ({ header,  children, onCloseClick}) => {
+const Modal: FC<TModalProps> = ({ header, children, onCloseClick }) => {
     const modalRoot = document.getElementById('modal-root');
 
     useEffect(() => {
         const handleKeyDown = (event: React.KeyboardEvent<HTMLElement> | KeyboardEvent): void => {
-            if(event.key === "Escape") {
+            if (event.key === "Escape") {
                 onCloseClick();
-            } 
+            }
         };
         document.addEventListener('keydown', handleKeyDown);
 
@@ -46,9 +46,9 @@ const Modal: FC<TModalProps> = ({ header,  children, onCloseClick}) => {
     return modalRoot ? ReactDOM.createPortal(
         (
             <div>
-                <ModalOverlay handleCloseModal={onCloseClick}/>
+                <ModalOverlay handleCloseModal={onCloseClick} />
                 <div className={styles.modal_body}>
-                    <ModalHeader header={header} handleCloseModal={onCloseClick}/>
+                    <ModalHeader header={header} handleCloseModal={onCloseClick} />
                     <div>
                         {children}
                     </div>

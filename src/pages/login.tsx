@@ -12,7 +12,7 @@ export const LoginPage = () => {
 
     let auth = useAuth();
 
-    const { values, handleChange } = useForm<TForm>({ email: "", password: ""});
+    const { values, handleChange } = useForm<TForm>({ email: "", password: "" });
 
     const handleLogin = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -20,7 +20,7 @@ export const LoginPage = () => {
         auth.signIn(values);
     }, [auth, values])
 
-    if(auth.user) {
+    if (auth.user) {
         return (<Navigate to="/" replace />);
     }
 
@@ -30,10 +30,10 @@ export const LoginPage = () => {
                 <form className={styles.form} onSubmit={handleLogin}>
                     <h2 className={styles.heading}>Вход</h2>
                     <div className="mt-6">
-                        <EmailInput value={values?.email} name='email' isIcon={false} onChange={handleChange}/>
+                        <EmailInput value={values?.email} name='email' isIcon={false} onChange={handleChange} />
                     </div>
                     <div className="mt-6">
-                        <PasswordInput value={values?.password} name='password' onChange={handleChange}/>
+                        <PasswordInput value={values?.password} name='password' onChange={handleChange} />
                     </div>
                     <div className='mt-6 mb-20'>
                         <Button htmlType="submit">Войти</Button>
@@ -49,7 +49,7 @@ export const LoginPage = () => {
                     <div className={styles.link_container}>
                         <p className={styles.text}>Забыли пароль?</p>
                         <div className='ml-2'>
-                            <Link to="/forgot-password"className={styles.link}>Восстановить пароль</Link>
+                            <Link to="/forgot-password" className={styles.link}>Восстановить пароль</Link>
                         </div>
                     </div>
                 </form>

@@ -4,7 +4,7 @@ import { TIngredient } from '../types/data'
 
 export interface IAddIngredientDetails {
     readonly type: typeof ADD_INGREDIENT_DETAILS,
-    readonly ingredient: TIngredient 
+    readonly ingredient: TIngredient
 }
 
 export interface IRemoveIngredientDetails {

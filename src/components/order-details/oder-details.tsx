@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './order.details.module.css';
-let imagePath = require ('../images/done.png');
+let imagePath = require('../images/done.png');
 import { useSelector, useDispatch } from '../../hooks/hooks';
 
 const OrderDetailsComponent = () => {
@@ -13,12 +13,12 @@ const OrderDetailsComponent = () => {
 
     return (
         <div className={styles.container}>
-            <p className={styles.order_number_title}>{orderNumber || "" }</p>
-            <div className="mt-8"> 
+            <p className={styles.order_number_title}>{orderNumber || ""}</p>
+            <div className="mt-8">
                 <p className={styles.title}>идентификатор заказа</p>
             </div>
             <div className="m-15">
-                <img src={imagePath}/>
+                <img src={imagePath} />
             </div>
             <div className="mb-2">
                 <p className={styles.status_title}>Ваш заказ начали готовить</p>

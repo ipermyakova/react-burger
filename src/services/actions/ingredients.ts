@@ -1,4 +1,4 @@
-import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED, UPDATE_COUNT_INGREDIENT } from '../constants'
+import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED } from '../constants'
 import { getIngredients } from '../../utils/burger-api'
 import { TIngredient } from '../types/data'
 import { AppDispatch } from '../types';
@@ -32,10 +32,10 @@ export const getIngredientsFailedAction = (): IGetIngredientsFailedAction => ({
 export const getIngredientsAction = () => (dispatch: AppDispatch) => {
     dispatch(getIngredientsRequestAction())
     getIngredients()
-    .then(data => {
-        dispatch(getIngredientsSuccessAction(data.data))
-    })
-    .catch(e => {
-        dispatch(getIngredientsFailedAction())
-    });
+        .then(data => {
+            dispatch(getIngredientsSuccessAction(data.data))
+        })
+        .catch(e => {
+            dispatch(getIngredientsFailedAction())
+        });
 }

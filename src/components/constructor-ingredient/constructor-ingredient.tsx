@@ -78,7 +78,7 @@ const ConstructorIngredient: FC<TConstructorIngredientProps> = ({ item, index, e
             if (dragIndex > hoverIndex && hoverClientY > hoverMiddleY) {
                 return;
             }
-            if(moveItem) {
+            if (moveItem) {
                 moveItem(dragIndex, hoverIndex);
             }
             item.index = hoverIndex;

@@ -33,7 +33,7 @@ export interface IGetOrderFailedAction {
     readonly type: typeof GET_ORDER_FAILED;
 }
 
-export type TOrderActions = ISendOrderRequestAction | ISendOrderSuccessAction | ISendOrderFailedAction | IRemoveOrderDetailsAction | IGetOrderSuccessAction | IGetOrderRequestAction | IGetOrderFailedAction;  
+export type TOrderActions = ISendOrderRequestAction | ISendOrderSuccessAction | ISendOrderFailedAction | IRemoveOrderDetailsAction | IGetOrderSuccessAction | IGetOrderRequestAction | IGetOrderFailedAction;
 
 export const sendOrderRequestAction = (): ISendOrderRequestAction => ({
     type: SEND_ORDER_REQUEST
@@ -64,11 +64,12 @@ export const getOrderFailedAction = (): IGetOrderFailedAction => ({
 export const sendOrderAction = (request: TRequestOrder) => (dispatch: AppDispatch) => {
     dispatch(sendOrderRequestAction());
     sendOrder(request)
-    .then(data => {
-        dispatch(sendOrderSuccessAction(data.order))})
-    .catch(e => {
-        dispatch(sendOrderFailedAction())
-    })
+        .then(data => {
+            dispatch(sendOrderSuccessAction(data.order))
+        })
+        .catch(e => {
+            dispatch(sendOrderFailedAction())
+        })
 }
 
 export const removeOrderDetails = (): IRemoveOrderDetailsAction => ({
@@ -78,10 +79,11 @@ export const removeOrderDetails = (): IRemoveOrderDetailsAction => ({
 export const getOrderActions = (orderNumber: string) => (dispatch: AppDispatch) => {
     dispatch(getOrderRequestAction());
     getOrder(orderNumber)
-    .then(data => {
-        dispatch(getOrderSuccessAction(data.orders[0]))})
-    .catch(e => {
-        dispatch(getOrderFailedAction())
-    })
+        .then(data => {
+            dispatch(getOrderSuccessAction(data.orders[0]))
+        })
+        .catch(e => {
+            dispatch(getOrderFailedAction())
+        })
 }
 

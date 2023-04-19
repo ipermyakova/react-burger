@@ -1,4 +1,4 @@
-import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED, UPDATE_COUNT_INGREDIENT } from '../constants'
+import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED } from '../constants'
 import { TIngredient } from '../types/data';
 import { TIngredientsActions } from '../actions/ingredients';
 
@@ -16,29 +16,29 @@ const initialState: TIngredientsState = {
 
 export const getIngredientsReducer = (state = initialState, action: TIngredientsActions) => {
     switch (action.type) {
-        case GET_INGREDIENTS_REQUEST: 
+        case GET_INGREDIENTS_REQUEST:
             return {
-                ...state, 
+                ...state,
                 isLoading: true,
-                hasError: false 
+                hasError: false
             }
-        
-        case GET_INGREDIENTS_SUCCESS: 
+
+        case GET_INGREDIENTS_SUCCESS:
             return {
                 ...state,
                 ingredients: action.ingredients,
                 isLoading: false,
                 hasError: false
             }
-        
-        case GET_INGREDIENTS_FAILED: 
+
+        case GET_INGREDIENTS_FAILED:
             return {
                 ...state,
                 isLoading: false,
                 hasError: true,
                 ingredients: []
             }
-        
+
         default: {
             return state
         }

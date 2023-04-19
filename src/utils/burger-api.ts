@@ -1,54 +1,59 @@
-import { request } from './utils'; 
+import { request } from './utils';
 import { getCookie } from './cookie-utils'
 import { TIngredient, TOrder, TUser, TResponseBody, TResponseBodyAuth, TForm, TRegisterForm, TFormResetPassword, TFormConfirmPassword, TRequestOrder } from '../services/types/data'
 
-export const getIngredients = ():Promise<TResponseBody<'data', ReadonlyArray<TIngredient>>> => {
+export const BURGER_API_WSS_FEED = 'wss://norma.nomoreparties.space/orders/all';
+export const BURGER_API_WSS_ORDERS = 'wss://norma.nomoreparties.space/orders';
+
+export const getIngredients = (): Promise<TResponseBody<'data', ReadonlyArray<TIngredient>>> => {
     return request(`/ingredients`, {
-        method: 'GET', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
-        headers: { 
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
             'Content-Type': 'application/json',
         },
         redirect: 'follow',
         referrerPolicy: 'no-referrer'
-        });
+    });
 }
 
-export const sendOrder = (data: TRequestOrder):Promise<TResponseBody<'order', TOrder>> => {
+export const sendOrder = (data: TRequestOrder): Promise<TResponseBody<'order', TOrder>> => {
     return request(`/orders`, {
-        method: 'POST', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
-        headers: { 
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + getCookie('token')
         },
         redirect: 'follow',
-        body: JSON.stringify(data)});
+        body: JSON.stringify(data)
+    });
 }
 
-export const getOrder = (orderNumber: string):Promise<TResponseBody<'orders', ReadonlyArray<TOrder>>> => {
+export const getOrder = (orderNumber: string): Promise<TResponseBody<'orders', ReadonlyArray<TOrder>>> => {
     return request(`/orders/${orderNumber}`, {
-        method: 'GET', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
-        headers: { 
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
+        headers: {
             'Content-Type': 'application/json',
         },
         redirect: 'follow',
-        referrerPolicy: 'no-referrer'})
+        referrerPolicy: 'no-referrer'
+    })
 }
 
 export const loginRequest = (form: TForm): Promise<TResponseBodyAuth<'user', TUser>> => {
     return request(`/auth/login`, {
-        method: 'POST', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -60,10 +65,10 @@ export const loginRequest = (form: TForm): Promise<TResponseBodyAuth<'user', TUs
 
 export const registerRequest = (form: TRegisterForm): Promise<TResponseBodyAuth<'user', TUser>> => {
     return request(`/auth/register`, {
-        method: 'POST', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -74,12 +79,12 @@ export const registerRequest = (form: TRegisterForm): Promise<TResponseBodyAuth<
 }
 
 export const logoutRequest = (): Promise<TResponseBody<'message', string>> => {
-    const token = { token: getCookie('refreshToken')}
+    const token = { token: getCookie('refreshToken') }
     return request(`/auth/logout`, {
-        method: 'POST', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -89,12 +94,12 @@ export const logoutRequest = (): Promise<TResponseBody<'message', string>> => {
     });
 }
 
-export const getUserRequest = (): Promise<TResponseBody<'user', TUser>>  => {
+export const getUserRequest = (): Promise<TResponseBody<'user', TUser>> => {
     return request(`/auth/user`, {
-        method: 'GET', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
+        method: 'GET',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + getCookie('token')
@@ -106,10 +111,10 @@ export const getUserRequest = (): Promise<TResponseBody<'user', TUser>>  => {
 
 export const patchUserRequest = (form: TRegisterForm): Promise<TResponseBody<'user', TUser>> => {
     return request(`/auth/user`, {
-        method: 'PATCH', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
+        method: 'PATCH',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json',
             Authorization: 'Bearer ' + getCookie('token')
@@ -121,12 +126,12 @@ export const patchUserRequest = (form: TRegisterForm): Promise<TResponseBody<'us
 }
 
 export const tokenRequest = (): Promise<TResponseBodyAuth> => {
-    const token = { token: getCookie('refreshToken')}
+    const token = { token: getCookie('refreshToken') }
     return request(`/auth/token`, {
-        method: 'POST', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -138,10 +143,10 @@ export const tokenRequest = (): Promise<TResponseBodyAuth> => {
 
 export const resetPasswordRequest = (form: TFormResetPassword): Promise<TResponseBody<'message', string>> => {
     return request(`/password-reset`, {
-        method: 'POST', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
         },
@@ -153,10 +158,10 @@ export const resetPasswordRequest = (form: TFormResetPassword): Promise<TRespons
 
 export const confirmResetPasswordRequest = (form: TFormConfirmPassword): Promise<TResponseBody<'message', string>> => {
     return request(`/password-reset/reset`, {
-        method: 'POST', 
-        mode: 'cors', 
-        cache: 'no-cache', 
-        credentials: 'same-origin', 
+        method: 'POST',
+        mode: 'cors',
+        cache: 'no-cache',
+        credentials: 'same-origin',
         headers: {
             'Content-Type': 'application/json'
         },

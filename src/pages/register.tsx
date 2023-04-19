@@ -12,7 +12,7 @@ export const RegisterPage = () => {
 
     let auth = useAuth();
 
-    const { values, handleChange } = useForm<TRegisterForm>({ name: "", email: "", password: ""});
+    const { values, handleChange } = useForm<TRegisterForm>({ name: "", email: "", password: "" });
 
     const handleRegister = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -20,7 +20,7 @@ export const RegisterPage = () => {
         auth.register(values);
     }, [auth, values])
 
-    if(auth.user) {
+    if (auth.user) {
         return <Navigate to="/login" />
     }
 
@@ -30,13 +30,13 @@ export const RegisterPage = () => {
                 <form className={styles.form} onSubmit={handleRegister}>
                     <h2 className={styles.heading}>Регистрация</h2>
                     <div className="mt-6">
-                        <Input value={values.name} name='name' placeholder={'Имя'} onChange={handleChange}/>
+                        <Input value={values.name} name='name' placeholder={'Имя'} onChange={handleChange} />
                     </div>
                     <div className="mt-6">
-                        <EmailInput value={values.email} name='email' onChange={handleChange}/>
+                        <EmailInput value={values.email} name='email' onChange={handleChange} />
                     </div>
                     <div className="mt-6">
-                        <PasswordInput value={values.password} name='password' onChange={handleChange}/>
+                        <PasswordInput value={values.password} name='password' onChange={handleChange} />
                     </div>
                     <div className='mt-6 mb-20'>
                         <Button htmlType='submit'>Зарегистрироваться</Button>
@@ -44,7 +44,7 @@ export const RegisterPage = () => {
                     <div className={styles.link_container}>
                         <p className={styles.text}>Уже зарегистрированы?</p>
                         <div className='ml-2'>
-                            <Link to="/login"className={styles.link}>Войти</Link>
+                            <Link to="/login" className={styles.link}>Войти</Link>
                         </div>
                     </div>
                 </form>

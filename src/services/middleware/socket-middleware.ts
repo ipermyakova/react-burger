@@ -1,17 +1,18 @@
 import { Middleware } from "redux";
 import { RootState } from '../reducers';
 import { TOrdersAll } from "../types/data";
-import { TOrdersAllActions, IConnect, IDisconnect, IWSConnecting, IWSOpen, IWSClose, IWSMessage, IWSError, ISend } from '../actions/ws-orders-all';
+import { actions } from '../actions';
+import { getCookie } from '../../utils/cookie-utils'
 
 export type TwsActionTypes = {
-    connect: (url: string) => IConnect;
-    disconnect: () => IDisconnect;
-    wsConnecting: () => IWSConnecting;
-    wsOpen: () => IWSOpen;
-    wsClose: () => IWSClose;
-    wsMessage: (orders: TOrdersAll) => IWSMessage;
-    wsError: (messageError: string) => IWSError; 
-    send: (data: any) => ISend   
+    connect: string;
+    disconnect: string;
+    wsConnecting: string;
+    wsOpen: string;
+    wsClose: string;
+    wsMessage: string;
+    wsError: string;
+    send: string
 }
 
 export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}, RootState> => {
@@ -20,60 +21,59 @@ export const createSocketMiddleware = (wsActions: TwsActionTypes): Middleware<{}
         let url = '';
         let isConnected = false;
         let reconnectTimer = 0
-        return (next) => (action: TOrdersAllActions) => {
+        return (next) => (action) => {
             const { dispatch } = store
-            const { connect, disconnect, wsClose, wsConnecting, wsError, wsMessage, wsOpen} = wsActions
+            const { connect, disconnect, wsClose, wsConnecting, wsError, wsMessage, wsOpen, send } = wsActions
 
-            if(action.type === "ORDERS_ALL_CONNECT") {
+            if (action.type === connect) {
                 console.log('Websocket connecting')
                 url = action.payload
                 socket = new WebSocket(url)
                 window.clearTimeout(reconnectTimer)
                 reconnectTimer = 0
                 isConnected = true
-                dispatch(wsConnecting)
+                dispatch({ type: wsConnecting })
             }
 
-            if(socket) {
+            if (socket) {
                 socket.onopen = () => {
-                    dispatch(wsOpen)
-                } 
+                    dispatch({ type: wsOpen })
+                }
                 socket.onerror = () => {
-                    dispatch(wsError('Websocket error'))
+                    dispatch({ type: wsError, payload: 'Websocket error' })
                 }
                 socket.onmessage = (event: MessageEvent) => {
                     const { data } = event
                     const parsedData: TOrdersAll = JSON.parse(data)
-                    dispatch(wsMessage(parsedData)) 
+                    dispatch({ type: wsMessage, payload: parsedData })
                 }
                 socket.onclose = (event: CloseEvent) => {
-                    if(event.code !== 1000) {
+                    if (event.code !== 1000) {
                         console.log('error')
-                        dispatch(wsError(event.code.toString()))
+                        dispatch({ type: wsError, payload: event.code.toString() })
                     }
-                    if(socket?.readyState === 3 && isConnected) {
-                        dispatch(wsConnecting())
+                    if (socket?.readyState === 3 && isConnected) {
+                        dispatch({ type: wsConnecting })
                         reconnectTimer = window.setTimeout(() => {
-                            dispatch(connect(url))
+                            dispatch({ type: connect, payload: url })
                         }, 6000)
-
                     }
                 }
             }
 
-            if(socket && action.type === "ORDERS_ALL_DISCONNECT") {
+            if (socket && action.type === disconnect) {
                 console.log('Websocket disconnect')
                 isConnected = false
                 reconnectTimer = 0
-                dispatch(wsClose())
+                dispatch({ type: wsClose })
                 socket.close()
             }
 
-            if(socket && action.type === "ORDERS_ALL_SEND") {
+            if (socket && action.type === send) {
                 console.log('Websocket send')
                 socket.send(JSON.stringify(action.payload))
             }
-            
+
             next(action)
         }
     }

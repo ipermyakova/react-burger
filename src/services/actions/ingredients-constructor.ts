@@ -22,7 +22,7 @@ export interface IUpdateIngredientConstructor {
 };
 
 export interface IRemoveIngredientsConstructor {
-    readonly type: typeof REMOVE_INGREDIENTS_CONSTRUCTOR 
+    readonly type: typeof REMOVE_INGREDIENTS_CONSTRUCTOR
 }
 
 export type TIngredientsConstructorActions = IGetIngredientsConstructor | IAddIngredientConstructor | IRemoveIngredientConstructor | IUpdateIngredientConstructor | IRemoveIngredientsConstructor
