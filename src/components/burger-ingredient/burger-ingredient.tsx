@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { actions } from '../../services/actions';
 import { TIngredient } from '../../services/types/data';
 import { useDispatch } from '../../hooks/hooks';
+import { Item } from '../../pages/feed';
 
 type TBurgerIngredientProps = {
     readonly ingredient: TIngredient;
@@ -36,7 +37,7 @@ const BurgerIngredient: FC<TBurgerIngredientProps> = ({ ingredient, count }) => 
         <div onClick={handleClick} className={styles.item}>
             {count && <Counter count={count} size="default" extraClass='m-1'></Counter>}
             < div style={{ opacity }}>
-                <div className={styles.item_drag} ref={dragRef}>
+                <div className={styles.item_drag} ref={dragRef} data-testid={`burger_ingredient_${ingredient.type}`}>
                     <img src={ingredient.image} />
                     <div className={styles.items}>
                         <div className="mt-2 mb-2">

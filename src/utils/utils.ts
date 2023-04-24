@@ -52,7 +52,7 @@ export const toDate = (dateStr: string | undefined): Date => {
     if (!dateStr) {
         return new Date()
     }
-    const date = new Date(dateStr);
+    const date = new Date(dateStr.slice(0, -1));
     return date
 }
 

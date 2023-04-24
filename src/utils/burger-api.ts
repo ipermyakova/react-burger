@@ -1,6 +1,6 @@
 import { request } from './utils';
 import { getCookie } from './cookie-utils'
-import { TIngredient, TOrder, TUser, TResponseBody, TResponseBodyAuth, TForm, TRegisterForm, TFormResetPassword, TFormConfirmPassword, TRequestOrder } from '../services/types/data'
+import { TIngredient, TOrder, TUser, TResponseBody, TResponseBodyAuth, TForm, TRegisterForm, TFormResetPassword, TFormConfirmPassword, TRequestOrder, TGetOrder } from '../services/types/data'
 
 export const BURGER_API_WSS_FEED = 'wss://norma.nomoreparties.space/orders/all';
 export const BURGER_API_WSS_ORDERS = 'wss://norma.nomoreparties.space/orders';
@@ -34,7 +34,7 @@ export const sendOrder = (data: TRequestOrder): Promise<TResponseBody<'order', T
     });
 }
 
-export const getOrder = (orderNumber: string): Promise<TResponseBody<'orders', ReadonlyArray<TOrder>>> => {
+export const getOrder = (orderNumber: string): Promise<TResponseBody<'orders', ReadonlyArray<TGetOrder>>> => {
     return request(`/orders/${orderNumber}`, {
         method: 'GET',
         mode: 'cors',

@@ -129,7 +129,7 @@ const App = () => {
     
     return (
         <ProvideAuth>
-            <BrowserRouter>
+            <BrowserRouter basename={process.env.PUBLIC_URL}>
                 <ModalSwitch />
             </BrowserRouter>
         </ProvideAuth>

@@ -1,11 +1,11 @@
 import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED, REMOVE_ORDER_DETAILS, SEND_ORDER_SUCCESS, SEND_ORDER_REQUEST, SEND_ORDER_FAILED } from '../constants'
-import { TOrder } from '../types/data';
+import { TOrder, TGetOrder } from '../types/data';
 import { TOrderActions } from '../actions/order';
 
 export type TOrderState = {
     isLoading: boolean;
     hasError: boolean;
-    orderData: TOrder | null;
+    orderData: TOrder | TGetOrder | null;
 }
 
 const initialState: TOrderState = {

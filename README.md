@@ -1,2 +1,1 @@
-# react-burger
-# react-burger
+Проект размещён на GitHub Pages: https://ipermyakova.github.io/react-burger/

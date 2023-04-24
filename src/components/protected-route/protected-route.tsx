@@ -1,3 +1,4 @@
+import React from 'react';
 import { useEffect, FC } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../services/auth';

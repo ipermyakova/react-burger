@@ -1,4 +1,4 @@
-import { setCookie, getCookie, deleteCookie } from "../../utils/cookie-utils";
+import { setCookie, deleteCookie } from "../../utils/cookie-utils";
 import {
     LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED, REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILED, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILED,
     GET_USER_FAILED, GET_USER_SUCCESS, GET_USER_REQUEST, UPDATE_USER_FAILED, UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, TOKEN_FAILED, TOKEN_SUCCESS, TOKEN_REQUEST,
@@ -12,7 +12,7 @@ export type TAuthState = {
     readonly isLoading: boolean,
     readonly hasError: boolean,
     user: TUser | null,
-    accessToken: | null,
+    accessToken: string| null,
     refreshToken: string | null,
     readonly messageResetPassword: string | null,
     readonly messageConfirmResetPassword: string | null,
@@ -74,14 +74,14 @@ export const authReducer = (state = initialState, action: TAuthActions) => {
         case RESET_PASSWORD_SUCCESS:
             return { ...state, messageResetPassword: action.payload.message, isLoading: false, hasError: false }
         case RESET_PASSWORD_FAILED:
-            return { ...state, messageResetPassword: null, isLoadin: false, hasError: true }
+            return { ...state, messageResetPassword: null, isLoading: false, hasError: true }
 
         case CONFIRM_RESET_PASSWORD_REQUEST:
             return { ...state, isLoading: true, hasError: false }
         case CONFIRM_RESET_PASSWORD_SUCCESS:
             return { ...state, messageConfirmResetPassword: action.payload.message, isLoading: false, hasError: false }
         case CONFIRM_RESET_PASSWORD_FAILED:
-            return { ...state, messageConfirmResetPassword: null, isLoadin: false, hasError: true }
+            return { ...state, messageConfirmResetPassword: null, isLoading: false, hasError: true }
 
         case LOGOUT_REQUEST: {
             return { ...state, isLoadingLogout: true, hasErrorLogout: false }
@@ -89,7 +89,7 @@ export const authReducer = (state = initialState, action: TAuthActions) => {
         case LOGOUT_SUCCESS: {
             deleteCookie('token');
             deleteCookie('refreshToken');
-            return { ...state, user: null, message: null, refreshToken: null, accessToken: null, isLoadingLogout: false, hasErrorLogout: false }
+            return { ...state, user: null, messageResetPassword: null, messageConfirmResetPassword: null, refreshToken: null, accessToken: null, isLoadingLogout: false, hasErrorLogout: false }
         }
         case LOGOUT_FAILED: {
             return { ...state, isLoadingLogout: false, hasErrorLogout: true }

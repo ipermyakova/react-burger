@@ -88,7 +88,7 @@ const BurgerConstructor: FC<TBurgerConstructorProps> = ({ onDropHandler }) => {
     return (
         <section className="ml-10">
             <div className={`${styles.burger_container} pl-4 pr-4 pt-25 pb-10`}>
-                <section ref={dropTarget} className={`${(collectedProps as { isHover: boolean }).isHover ? styles.on_hover : ''}`}>
+                <section ref={dropTarget} className={`${(collectedProps as { isHover: boolean }).isHover ? styles.on_hover : ''}`} data-testid='construtor'>
                     <div className={styles.items_container}  >
                         {bun && <ConstructorIngredient item={bun} elementType="top" />}
                         <div className={styles.items_constructor}>

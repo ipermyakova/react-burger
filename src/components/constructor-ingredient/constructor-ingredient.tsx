@@ -97,7 +97,7 @@ const ConstructorIngredient: FC<TConstructorIngredientProps> = ({ item, index, e
 
     return (
         <section className="mb-4">
-            <div ref={dragDropRef} style={{ opacity }} onDrop={onDropHandler}>
+            <div ref={dragDropRef} style={{ opacity }} onDrop={onDropHandler} data-testid={`constructor_element__${index !== undefined ? index : ""}`}>
                 <div className={`${styles.items} mb-4`} >
                     {item.type !== 'bun' ? <div className="mr-2">
                         <DragIcon type="primary" /></div> : <div className="mr-8" />}

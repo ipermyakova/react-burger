@@ -1,6 +1,6 @@
 import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED, REMOVE_ORDER_DETAILS, SEND_ORDER_SUCCESS, SEND_ORDER_REQUEST, SEND_ORDER_FAILED } from '../constants'
 import { sendOrder, getOrder } from '../../utils/burger-api'
-import { TOrder, TRequestOrder } from '../types/data';
+import { TGetOrder, TOrder, TRequestOrder } from '../types/data';
 import { AppDispatch } from '../types';
 
 export interface ISendOrderRequestAction {
@@ -26,7 +26,7 @@ export interface IGetOrderRequestAction {
 
 export interface IGetOrderSuccessAction {
     readonly type: typeof GET_ORDER_SUCCESS;
-    readonly order: TOrder
+    readonly order: TGetOrder
 }
 
 export interface IGetOrderFailedAction {
@@ -52,7 +52,7 @@ export const getOrderRequestAction = (): IGetOrderRequestAction => ({
     type: GET_ORDER_REQUEST
 })
 
-export const getOrderSuccessAction = (data: TOrder): IGetOrderSuccessAction => ({
+export const getOrderSuccessAction = (data: TGetOrder): IGetOrderSuccessAction => ({
     type: GET_ORDER_SUCCESS,
     order: data
 })
