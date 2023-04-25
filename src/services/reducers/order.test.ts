@@ -2,6 +2,8 @@ import { GET_ORDER_REQUEST, GET_ORDER_SUCCESS, GET_ORDER_FAILED, REMOVE_ORDER_DE
 import { TOrderActions } from '../actions/order'
 import { getOrderReducer } from './order'
 import { order1, order2 } from './test-data'
+import { initialState } from './order'
+
 
 
 describe('ingredients reduce', () => {
@@ -9,9 +11,7 @@ describe('ingredients reduce', () => {
         expect(getOrderReducer(undefined, {} as TOrderActions)
         ).toEqual(
             {
-                isLoading: false,
-                hasError: false,
-                orderData: null
+                ...initialState
             }
         )
     })
@@ -19,9 +19,7 @@ describe('ingredients reduce', () => {
         expect(
             getOrderReducer(
                 {
-                    orderData: null,
-                    isLoading: false,
-                    hasError: false
+                    ...initialState
                 },
                 {
                     type: GET_ORDER_REQUEST
@@ -29,9 +27,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                orderData: null,
-                isLoading: true,
-                hasError: false,
+                ...initialState,
+                isLoading: true
             }
         )
     })
@@ -39,9 +36,7 @@ describe('ingredients reduce', () => {
         expect(
             getOrderReducer(
                 {
-                    orderData: null,
-                    isLoading: false,
-                    hasError: false
+                    ...initialState,
                 },
                 {
                     type: GET_ORDER_SUCCESS,
@@ -50,9 +45,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                orderData: order1,
-                isLoading: false,
-                hasError: false,
+                ...initialState,
+                orderData: order1
             }
         )
     })
@@ -60,9 +54,8 @@ describe('ingredients reduce', () => {
         expect(
             getOrderReducer(
                 {
-                    orderData: null,
-                    isLoading: false,
-                    hasError: false
+                    ...initialState,
+                    isLoading: true
                 },
                 {
                     type: GET_ORDER_FAILED
@@ -70,8 +63,7 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                orderData: null,
-                isLoading: false,
+                ...initialState,
                 hasError: true
             }
         )
@@ -81,9 +73,7 @@ describe('ingredients reduce', () => {
         expect(
             getOrderReducer(
                 {
-                    orderData: null,
-                    isLoading: false,
-                    hasError: false
+                    ...initialState
                 },
                 {
                     type: SEND_ORDER_SUCCESS,
@@ -92,9 +82,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                orderData: {...order2},
-                isLoading: false,
-                hasError: false
+                ...initialState,
+                orderData: {...order2}
             }
         )
     })
@@ -102,9 +91,7 @@ describe('ingredients reduce', () => {
         expect(
             getOrderReducer(
                 {
-                    orderData: null,
-                    isLoading: false,
-                    hasError: false
+                    ...initialState,
                 },
                 {
                     type: SEND_ORDER_REQUEST
@@ -112,9 +99,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                orderData: null,
-                isLoading: true,
-                hasError: false
+                ...initialState,
+                isLoading: true
             }
         )
     })  
@@ -122,9 +108,7 @@ describe('ingredients reduce', () => {
         expect(
             getOrderReducer(
                 {
-                    orderData: null,
-                    isLoading: false,
-                    hasError: false
+                    ...initialState
                 },
                 {
                     type: SEND_ORDER_FAILED
@@ -132,8 +116,7 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                orderData: null,
-                isLoading: false,
+                ...initialState,
                 hasError: true
             }
         )
@@ -142,9 +125,8 @@ describe('ingredients reduce', () => {
         expect(
             getOrderReducer(
                 {
-                    orderData: {...order2},
-                    isLoading: false,
-                    hasError: false
+                    ...initialState,
+                    orderData: {...order2}
                 },
                 {
                     type: REMOVE_ORDER_DETAILS
@@ -152,9 +134,7 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                orderData: null,
-                isLoading: false,
-                hasError: false,
+                ...initialState
             }
         )
     })      

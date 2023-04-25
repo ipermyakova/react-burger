@@ -4,16 +4,14 @@ import { orders } from './test-data'
 import { ORDERS_WS_CLOSE, ORDERS_WS_ERROR, ORDERS_WS_MESSAGE, ORDERS_WS_OPEN, ORDERS_WS_CONNECTING } from '../constants'
 import { WebSocketStatus } from '../types/data';
 import { TOrdersActions } from '../actions/ws-orders';
-
+import { initialState } from './ws-orders';
 
 describe('ingredients reduce', () => {
     it('should return the initial state', () => {
         expect(getOrdersReducer(undefined, {} as TOrdersActions)
         ).toEqual(
             {
-                status: WebSocketStatus.OFFLINE,
-                connectionError: "",
-                orders: null
+                ...initialState 
             }
         )
     })
@@ -21,9 +19,7 @@ describe('ingredients reduce', () => {
         expect(
             getOrdersReducer(
                 {
-                    status: WebSocketStatus.OFFLINE,
-                    connectionError: "",
-                    orders: null
+                    ...initialState 
                 },
                 {
                     type: ORDERS_WS_CONNECTING
@@ -31,9 +27,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                    status: WebSocketStatus.CONNECTING,
-                    connectionError: "",
-                    orders: null
+                ...initialState,
+                status: WebSocketStatus.CONNECTING,
             }
         )
     })
@@ -41,9 +36,7 @@ describe('ingredients reduce', () => {
         expect(
             getOrdersReducer(
                 {
-                    status: WebSocketStatus.OFFLINE,
-                    connectionError: "",
-                    orders: null
+                    ...initialState,
                 },
                 {
                     type: ORDERS_WS_OPEN
@@ -51,9 +44,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                    status: WebSocketStatus.ONLINE,
-                    connectionError: "",
-                    orders: null
+                ...initialState,
+                status: WebSocketStatus.ONLINE,
             }
         )
     })
@@ -61,9 +53,7 @@ describe('ingredients reduce', () => {
         expect(
             getOrdersReducer(
                 {
-                    status: WebSocketStatus.OFFLINE,
-                    connectionError: "",
-                    orders: null
+                    ...initialState
                 },
                 {
                     type: ORDERS_WS_ERROR,
@@ -72,9 +62,9 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                    status: WebSocketStatus.OFFLINE,
-                    connectionError: "Error",
-                    orders: null
+                ...initialState,   
+                connectionError: "Error",
+                
             }
         )
     })
@@ -82,9 +72,8 @@ describe('ingredients reduce', () => {
         expect(
             getOrdersReducer(
                 {
+                    ...initialState,
                     status: WebSocketStatus.ONLINE,
-                    connectionError: "",
-                    orders: null
                 },
                 {
                     type: ORDERS_WS_MESSAGE,
@@ -93,9 +82,9 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                    status: WebSocketStatus.ONLINE,
-                    connectionError: "",
-                    orders: orders
+                ...initialState,
+                status: WebSocketStatus.ONLINE,
+                orders: orders
             }
         )
     })
@@ -103,9 +92,8 @@ describe('ingredients reduce', () => {
         expect(
             getOrdersReducer(
                 {
+                    ...initialState,
                     status: WebSocketStatus.ONLINE,
-                    connectionError: "",
-                    orders: null
                 },
                 {
                     type: ORDERS_WS_CLOSE,
@@ -113,9 +101,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                    status: WebSocketStatus.OFFLINE,
-                    connectionError: "",
-                    orders: null
+                ...initialState,
+                status: WebSocketStatus.OFFLINE,
             }
         )
     })

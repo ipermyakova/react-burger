@@ -70,12 +70,6 @@ export const OrderDetails = () => {
         isLoadingOrder: store?.order?.isLoading
     }))
 
-    useEffect(() => {
-        if (ingredients && ingredients.length === 0) {
-            dispatch(actions.getIngredientsAction());
-        }
-    }, []);
-
 
     useEffect(() => {
         if (!orders && !orderData && id) {

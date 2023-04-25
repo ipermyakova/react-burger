@@ -1,27 +1,13 @@
 import { TAuthActions } from '../actions/auth'
 import { authReducer } from './auth'
 import { user, response, authResponse, userResponse, tokenResponse } from './test-data'
-import { TAuthState } from './auth';
+import { initialState } from './auth';
 
 import {
     LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED, REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILED, LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILED,
     GET_USER_FAILED, GET_USER_SUCCESS, GET_USER_REQUEST, UPDATE_USER_FAILED, UPDATE_USER_REQUEST, UPDATE_USER_SUCCESS, TOKEN_FAILED, TOKEN_SUCCESS, TOKEN_REQUEST,
     RESET_PASSWORD_FAILED, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_REQUEST, CONFIRM_RESET_PASSWORD_FAILED, CONFIRM_RESET_PASSWORD_REQUEST, CONFIRM_RESET_PASSWORD_SUCCESS
 } from "../constants";
-
-const initialState: TAuthState = {
-    isLoading: false,
-    hasError: false,
-    user: null,
-    accessToken: null,
-    refreshToken: null,
-    messageResetPassword: null,
-    messageConfirmResetPassword: null,
-    isLoadingUser: false,
-    hasErrorUser: false,
-    isLoadingLogout: false,
-    hasErrorLogout: false
-}
 
 
 describe('ingredients reduce', () => {

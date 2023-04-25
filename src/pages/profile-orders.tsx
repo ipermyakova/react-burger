@@ -8,7 +8,6 @@ import { getCookie } from '../utils/cookie-utils';
 import { useAuth } from '../services/auth';
 import { useSelector, useDispatch } from '../hooks/hooks';
 import { Item } from './feed';
-import { connect, disconnect } from '../services/actions/ws-orders';
 import { BURGER_API_WSS_ORDERS } from '../utils/burger-api';
 
 export const ProfileOrdersPage = () => {

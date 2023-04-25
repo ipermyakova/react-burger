@@ -21,12 +21,6 @@ export const IngredientDetailsPage = () => {
         hasError: store?.ingredients?.hasError || false
     }))
 
-    useEffect(() => {
-        if (ingredients && ingredients.length === 0) {
-            dispatch(actions.getIngredientsAction());
-        }
-    }, []);
-
     const currentIngredient = ingredients?.find(item => item._id === id);
 
     useEffect(() => {

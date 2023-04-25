@@ -22,7 +22,7 @@ export type TAuthState = {
     readonly hasErrorLogout: boolean
 }
 
-const initialState: TAuthState = {
+export const initialState: TAuthState = {
     isLoading: false,
     hasError: false,
     user: null,

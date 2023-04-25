@@ -8,7 +8,7 @@ export type TOrderState = {
     orderData: TOrder | TGetOrder | null;
 }
 
-const initialState: TOrderState = {
+export const initialState: TOrderState = {
     isLoading: false,
     hasError: false,
     orderData: null,

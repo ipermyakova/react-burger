@@ -8,7 +8,7 @@ export type TOrdersState = {
     orders: TOrdersAll | null;
 }
 
-const initialState: TOrdersState = {
+export const initialState: TOrdersState = {
     status: WebSocketStatus.OFFLINE,
     connectionError: "",
     orders: null,

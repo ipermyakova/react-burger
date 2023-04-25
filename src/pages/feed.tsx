@@ -78,7 +78,7 @@ export const Item: FC<TItemProps> = ({ item, ingredients, withStatus = false }) 
                     <div className={styles.container_price}>
                         <div className={styles.container_image}>
                             {ingredientsToShow.map((ingredient, index) => {
-                                return <div className={styles.box}>
+                                return <div  key={ingredient.dragId} className={styles.box}>
                                     <img className={remains && index === 0 ? styles.image_opacity : styles.image} src={ingredient?.image_mobile} />
                                     {remains && index === 0 && <p className={styles.count}>+{remains}</p>}
                                 </div>
@@ -141,14 +141,14 @@ export const FeedPage = () => {
                                     <div className={styles.flex_one_column}>
                                         <ul className={styles.status_ready}>
                                             {ordersDone?.filter((_, index) => index < 5).map((item) =>
-                                                <li>{item.number}</li>)}
+                                                <li key={item._id}>{item.number}</li>)}
                                         </ul>
                                     </div>
                                     <div className={styles.flex_one_column}>
                                         <div className="ml-6">
                                             <ul className={styles.status_ready}>
                                                 {ordersDone?.filter((_, index) => index >= 5 && index < 10).map((item) =>
-                                                    <li>{item.number}</li>)}
+                                                    <li key={item._id}>{item.number}</li>)}
                                             </ul>
                                         </div>
                                     </div>
@@ -163,14 +163,14 @@ export const FeedPage = () => {
                                         <div className={styles.flex_one_column}>
                                             <ul className={styles.status_progress}>
                                                 {ordersPending?.filter((_, index) => index < 5).map((item) =>
-                                                    <li>{item.number}</li>)}
+                                                    <li key={item._id}>{item.number}</li>)}
                                             </ul>
                                         </div>
                                         <div className={styles.flex_one_column}>
                                             <div className="ml-6">
                                                 <ul className={styles.status_progress}>
                                                     {ordersPending?.filter((_, index) => index >= 5 && index < 10).map((item) =>
-                                                        <li>{item.number}</li>)}
+                                                        <li key={item._id}>{item.number}</li>)}
                                                 </ul>
                                             </div>
                                         </div>

@@ -2,15 +2,14 @@ import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILE
 import { TIngredientsActions } from '../actions/ingredients'
 import { getIngredientsReducer } from './ingredients'
 import { ingredients } from './test-data'
+import { initialState } from './ingredients'
 
 describe('ingredients reduce', () => {
     it('should return the initial state', () => {
         expect(getIngredientsReducer(undefined, {} as TIngredientsActions)
         ).toEqual(
             {
-                isLoading: false,
-                hasError: false,
-                ingredients: []
+                ...initialState
             }
         )
     })
@@ -18,9 +17,7 @@ describe('ingredients reduce', () => {
         expect(
             getIngredientsReducer(
                 {
-                    ingredients: [],
-                    isLoading: false,
-                    hasError: false
+                    ...initialState
                 },
                 {
                     type: GET_INGREDIENTS_REQUEST
@@ -28,9 +25,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                ingredients: [],
+                ...initialState,
                 isLoading: true,
-                hasError: false,
             }
         )
     })
@@ -38,9 +34,8 @@ describe('ingredients reduce', () => {
         expect(
             getIngredientsReducer(
                 {
-                    ingredients: [],
-                    isLoading: true,
-                    hasError: false
+                    ...initialState,
+                    isLoading: true
                 },
                 {
                     type: GET_INGREDIENTS_SUCCESS,
@@ -49,8 +44,7 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                isLoading: false,
-                hasError: false,
+                ...initialState,
                 ingredients: ingredients
             }
         )  
@@ -59,9 +53,8 @@ describe('ingredients reduce', () => {
         expect(
             getIngredientsReducer(
                 {
-                    ingredients: [],
-                    isLoading: true,
-                    hasError: false
+                    ...initialState,
+                    isLoading: true
                 },
                 {
                     type: GET_INGREDIENTS_FAILED
@@ -69,9 +62,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                isLoading: false,
-                hasError: true,
-                ingredients: []
+                ...initialState,
+                hasError: true
             }
         )       
     })

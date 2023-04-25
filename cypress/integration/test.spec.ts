@@ -1,6 +1,8 @@
+import { BURGER_TEST_URL } from './constants';
+
 describe('service is available', function() {
     before(function() {
-        cy.visit('http://localhost:3000/react-burger');
+        cy.visit(BURGER_TEST_URL);
     });
 
     it('Открытие модального окна с описанием ингредиента', function(){
@@ -52,39 +54,45 @@ describe('service is available', function() {
         cy.get('@main').parent().parent().find('div').first().find('p').should('have.text', '1')
 
         //Проверка, что элементы были добавлены в конструктор
-        cy.get('[data-testid=constructor_element__0]').as('constructor_sauce')
-        cy.get('@constructor_sauce').contains('Соус Spicy-X')
+        cy.get('[data-testid=constructor_element__0]').as('first_element')
+        cy.get('@first_element').contains('Соус Spicy-X')
 
-        cy.get('[data-testid=constructor_element__1]').as('constructor_main')
-        cy.get('@constructor_main').contains('Биокотлета из марсианской Магнолии')
+        cy.get('[data-testid=constructor_element__1]').as('second_element')
+        cy.get('@second_element').contains('Биокотлета из марсианской Магнолии')
 
-        cy.get('[data-testid=constructor_element__]').first().as('constructor_bun_1')
-        cy.get('@constructor_bun_1').contains('Краторная булка N-200i')
-        cy.get('[data-testid=constructor_element__]').last().as('constructor_bun_2')
-        cy.get('@constructor_bun_2').contains('Краторная булка N-200i')
+        cy.get('[data-testid=constructor_element__]').as('bun_elements')
+        cy.get('[data-testid=constructor_element__]').first().contains('Краторная булка N-200i')
+        cy.get('[data-testid=constructor_element__]').last().contains('Краторная булка N-200i')
+
+        cy.get('[class^=burger_constructor_items_constructor__]').as('mains_container')
+        cy.get('@mains_container').children().should('have.length', 2)
 
         //Перетаскивание элементов внутри конструктора
-        cy.get('@constructor_main').trigger('dragstart', {dataTransfer});
-        cy.get('@constructor_sauce').trigger('drop', {dataTransfer});
+        cy.get('@second_element').trigger('dragstart', {dataTransfer})
+        cy.get('@first_element').trigger('drop', {dataTransfer})
 
-        cy.get('[data-testid=constructor_element__0]').contains('Биокотлета из марсианской Магнолии')
-
-        cy.get('[data-testid=constructor_element__1]').contains('Соус Spicy-X')
+        cy.get('[data-testid=constructor_element__0]').as('new_first_element')
+        cy.get('@new_first_element').contains('Биокотлета из марсианской Магнолии')
+        cy.get('[data-testid=constructor_element__1]').as('new_second_element')
+        cy.get('@new_second_element').contains('Соус Spicy-X')
 
         //Удаление элемента в конструкторе
-        cy.get('[data-testid=constructor_element__0]').within(()=> {
+        cy.get('@new_second_element').within(()=> {
             cy.get('[class^=constructor-element__action]').click()
         })
 
-        cy.get('[data-testid=constructor_element__0]').contains('Соус Spicy-X')
-        cy.get('[data-testid=constructor_element__1]').should('not.exist')
-        cy.get('@main').trigger('dragstart', {dataTransfer});
+        cy.get('@mains_container').children().should('have.length', 1)
+
+        cy.get('@sauce').trigger('dragstart', {dataTransfer});
         cy.get('@constructor').trigger('drop', {dataTransfer});
+
+        cy.get('@mains_container').children().should('have.length', 2)
 
 
         //Оформление заказа
         cy.get('[class^=burger_constructor_price__]').should('have.text', '3024');
-        cy.get('button').contains('Оформить заказ').click();
+        cy.get('button').contains('Оформить заказ').as('order_button');
+        cy.get('@order_button').click();
 
         //Авторизация
         cy.get('form').within(() => {
@@ -95,7 +103,7 @@ describe('service is available', function() {
         cy.wait(2000)
 
         cy.contains('Соберите бургер');
-        cy.get('button').contains('Оформить заказ').click();
+        cy.get('@order_button').click();
         cy.wait(16000)
 
         //Открытие модального окна с данными о заказе
@@ -106,9 +114,8 @@ describe('service is available', function() {
         cy.get('[class^=modal_modal_body__]').should('not.exist');
 
         //Проверка удаления данных из контруктора
-        cy.get('[data-testid=constructor_element__]').should('not.exist')
-        cy.get('[data-testid=constructor_element__0]').should('not.exist')
-        cy.get('[data-testid=constructor_element__1]').should('not.exist')
-        cy.get('button').contains('Оформить заказ').should('be.disabled')
+        cy.get('@bun_elements').should('not.exist')
+        cy.get('@mains_container').children().should('have.length', 0)
+        cy.get('@order_button').should('be.disabled')
     });
 })

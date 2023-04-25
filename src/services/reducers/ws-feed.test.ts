@@ -4,6 +4,7 @@ import { orders } from './test-data'
 
 import { FEED_WS_CLOSE, FEED_WS_ERROR, FEED_WS_MESSAGE, FEED_WS_OPEN, FEED_WS_CONNECTING } from '../constants'
 import { WebSocketStatus } from '../types/data';
+import { initialState } from './ws-feed';
 
 
 describe('ingredients reduce', () => {
@@ -11,9 +12,7 @@ describe('ingredients reduce', () => {
         expect(getFeedReducer(undefined, {} as TFeedActions)
         ).toEqual(
             {
-                status: WebSocketStatus.OFFLINE,
-                connectionError: "",
-                orders: null
+                ...initialState
             }
         )
     })
@@ -21,9 +20,7 @@ describe('ingredients reduce', () => {
         expect(
             getFeedReducer(
                 {
-                    status: WebSocketStatus.OFFLINE,
-                    connectionError: "",
-                    orders: null
+                    ...initialState
                 },
                 {
                     type: FEED_WS_CONNECTING
@@ -31,9 +28,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                    status: WebSocketStatus.CONNECTING,
-                    connectionError: "",
-                    orders: null
+                ...initialState,
+                status: WebSocketStatus.CONNECTING,
             }
         )
     })
@@ -41,9 +37,7 @@ describe('ingredients reduce', () => {
         expect(
             getFeedReducer(
                 {
-                    status: WebSocketStatus.OFFLINE,
-                    connectionError: "",
-                    orders: null
+                    ...initialState
                 },
                 {
                     type: FEED_WS_OPEN
@@ -51,9 +45,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                    status: WebSocketStatus.ONLINE,
-                    connectionError: "",
-                    orders: null
+                ...initialState,
+                status: WebSocketStatus.ONLINE,
             }
         )
     })
@@ -61,9 +54,7 @@ describe('ingredients reduce', () => {
         expect(
             getFeedReducer(
                 {
-                    status: WebSocketStatus.OFFLINE,
-                    connectionError: "",
-                    orders: null
+                    ...initialState
                 },
                 {
                     type: FEED_WS_ERROR,
@@ -72,9 +63,8 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                    status: WebSocketStatus.OFFLINE,
-                    connectionError: "Error",
-                    orders: null
+                ...initialState,   
+                connectionError: "Error",
             }
         )
     })
@@ -82,9 +72,8 @@ describe('ingredients reduce', () => {
         expect(
             getFeedReducer(
                 {
+                    ...initialState,
                     status: WebSocketStatus.ONLINE,
-                    connectionError: "",
-                    orders: null
                 },
                 {
                     type: FEED_WS_MESSAGE,
@@ -93,9 +82,9 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                    status: WebSocketStatus.ONLINE,
-                    connectionError: "",
-                    orders: orders
+                ...initialState,
+                status: WebSocketStatus.ONLINE,
+                orders: orders
             }
         )
     })
@@ -103,9 +92,8 @@ describe('ingredients reduce', () => {
         expect(
             getFeedReducer(
                 {
-                    status: WebSocketStatus.ONLINE,
-                    connectionError: "",
-                    orders: null
+                    ...initialState,
+                    status: WebSocketStatus.ONLINE
                 },
                 {
                     type: FEED_WS_CLOSE,
@@ -113,9 +101,7 @@ describe('ingredients reduce', () => {
             )
         ).toEqual(
             {
-                    status: WebSocketStatus.OFFLINE,
-                    connectionError: "",
-                    orders: null
+                ...initialState
             }
         )
     })

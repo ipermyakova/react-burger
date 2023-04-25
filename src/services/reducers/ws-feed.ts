@@ -8,7 +8,7 @@ export type TFeedState = {
     orders: TOrdersAll | null;
 }
 
-const initialState: TFeedState = {
+export const initialState: TFeedState = {
     status: WebSocketStatus.OFFLINE,
     connectionError: "",
     orders: null,
