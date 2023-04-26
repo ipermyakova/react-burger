@@ -3,9 +3,10 @@ import { getIngredientsConstructorReducer as ingredientsConstructor, TIngredient
 import { ingredientDetailsReducer as ingredientDetails, TIngredientDetailsState } from './ingredient-details'
 import { getOrderReducer as order, TOrderState } from './order'
 import { authReducer as auth, TAuthState } from './auth'
-import { getOrdersAllReducer as orders, TOrdersALLState } from './ws-orders-all'
+import { getOrdersReducer as orders, TOrdersState } from './ws-orders'
+import { getFeedReducer as feed, TFeedState  } from './ws-feed'
 
-export { ingredients, ingredientsConstructor, ingredientDetails, order, auth, orders }
+export { ingredients, ingredientsConstructor, ingredientDetails, order, auth, orders, feed }
 
 export type RootState = {
     ingredients: TIngredientsState,
@@ -13,5 +14,6 @@ export type RootState = {
     ingredientDetails: TIngredientDetailsState,
     ingredientsConstructor: TIngredientsConstructorState,
     auth: TAuthState,
-    orders: TOrdersALLState
+    feed: TFeedState,
+    orders: TOrdersState
 }

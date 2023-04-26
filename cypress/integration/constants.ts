@@ -1,0 +1,1 @@
+export const BURGER_TEST_URL = 'http://localhost:3000/react-burger';

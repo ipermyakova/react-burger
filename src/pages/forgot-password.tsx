@@ -13,15 +13,15 @@ export const ForgotPasswordPage = () => {
 
     let auth = useAuth();
 
-    const { isLoading, hasError, messageResetPassword } = useSelector(store => ({ 
+    const { isLoading, hasError, messageResetPassword } = useSelector(store => ({
         isLoading: store?.auth?.isLoading || null,
         hasError: store?.auth?.hasError || false,
         messageResetPassword: store?.auth?.messageResetPassword || null
     }))
 
-    const {pathname} = useLocation();
+    const { pathname } = useLocation();
 
-    const { values, handleChange } = useForm<TFormResetPassword>({ email: ""});
+    const { values, handleChange } = useForm<TFormResetPassword>({ email: "" });
 
     const handleReset = useCallback((e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -29,8 +29,8 @@ export const ForgotPasswordPage = () => {
         auth.resetPassword(values);
     }, [auth, values])
 
-    if(messageResetPassword && !isLoading && !hasError) {
-        return <Navigate to="/reset-password" state={{from: {pathname: pathname}}}/>
+    if (messageResetPassword && !isLoading && !hasError) {
+        return <Navigate to="/reset-password" state={{ from: { pathname: pathname } }} />
     }
 
     return (
@@ -39,7 +39,7 @@ export const ForgotPasswordPage = () => {
                 <form className={styles.form} onSubmit={handleReset}>
                     <h2 className={styles.heading}>Восстановление пароля</h2>
                     <div className="mt-6">
-                        <EmailInput value={values.email} name='email' placeholder="Укажите e-mail" isIcon={false} onChange={handleChange}/>
+                        <EmailInput value={values.email} name='email' placeholder="Укажите e-mail" isIcon={false} onChange={handleChange} />
                     </div>
                     <div className='mt-6 mb-20'>
                         <Button htmlType='submit'>Восстановить</Button>
@@ -47,7 +47,7 @@ export const ForgotPasswordPage = () => {
                     <div className={styles.link_container}>
                         <p className={styles.text}>Вспомнили пароль?</p>
                         <div className='ml-2'>
-                            <Link to="/login"className={styles.link}>Войти</Link>
+                            <Link to="/login" className={styles.link}>Войти</Link>
                         </div>
                     </div>
                 </form>

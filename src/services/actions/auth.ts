@@ -1,11 +1,13 @@
 import { loginRequest, registerRequest, logoutRequest, getUserRequest, patchUserRequest, tokenRequest, resetPasswordRequest, confirmResetPasswordRequest } from "../../utils/burger-api";
-import { LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED, REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILED, LOGOUT_REQUEST, 
-    LOGOUT_SUCCESS, LOGOUT_FAILED, GET_USER_REQUEST, GET_USER_FAILED, GET_USER_SUCCESS, UPDATE_USER_FAILED, UPDATE_USER_SUCCESS, 
-    UPDATE_USER_REQUEST, TOKEN_SUCCESS, TOKEN_REQUEST, TOKEN_FAILED, RESET_PASSWORD_FAILED, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_REQUEST, 
-    CONFIRM_RESET_PASSWORD_FAILED, CONFIRM_RESET_PASSWORD_REQUEST, CONFIRM_RESET_PASSWORD_SUCCESS, TOKEN_EXPIRED_ERROR, TOKEN_MALFORMED_ERROR } from "../constants";
+import {
+    LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILED, REGISTER_REQUEST, REGISTER_SUCCESS, REGISTER_FAILED, LOGOUT_REQUEST,
+    LOGOUT_SUCCESS, LOGOUT_FAILED, GET_USER_REQUEST, GET_USER_FAILED, GET_USER_SUCCESS, UPDATE_USER_FAILED, UPDATE_USER_SUCCESS,
+    UPDATE_USER_REQUEST, TOKEN_SUCCESS, TOKEN_REQUEST, TOKEN_FAILED, RESET_PASSWORD_FAILED, RESET_PASSWORD_SUCCESS, RESET_PASSWORD_REQUEST,
+    CONFIRM_RESET_PASSWORD_FAILED, CONFIRM_RESET_PASSWORD_REQUEST, CONFIRM_RESET_PASSWORD_SUCCESS, TOKEN_EXPIRED_ERROR, TOKEN_MALFORMED_ERROR
+} from "../constants";
 import { AppDispatch } from "../types";
 
-import { TForm, TRegisterForm, TFormConfirmPassword, TFormResetPassword, TUser, TResponseBodyAuth, TResponseBody } from '../types/data'  
+import { TForm, TRegisterForm, TFormConfirmPassword, TFormResetPassword, TUser, TResponseBodyAuth, TResponseBody } from '../types/data'
 
 export interface ILoginRequestAction {
     readonly type: typeof LOGIN_REQUEST;
@@ -111,14 +113,14 @@ export interface ITokenFailedAction {
     readonly type: typeof TOKEN_FAILED;
 }
 
-export type TAuthActions = ILoginRequestAction | ILoginSuccessAction | ILoginFailedAction 
-                           | IConfirmResetPasswordFailedAction | IConfirmResetPasswordRequestAction | IConfirmResetPasswordSuccessAction
-                           | IGetUserSuccessAction | IGetUserRequestAction | IGetUserFailedAction
-                           | IResetPasswordSuccessAction | IResetPasswordRequestAction | IResetPasswordFailedAction
-                           | ILogoutSuccessAction | ILogoutRequestAction | ILogoutFailedAction
-                           | IUpdateUserSuccessAction | IUpdateUserRequestAction | IUpdateUserFailedAction
-                           | IRegisterSuccessAction | IRegisterRequestAction | IRegisterFailedAction
-                           | ITokenSuccessAction | ITokenRequestAction | ITokenFailedAction
+export type TAuthActions = ILoginRequestAction | ILoginSuccessAction | ILoginFailedAction
+    | IConfirmResetPasswordFailedAction | IConfirmResetPasswordRequestAction | IConfirmResetPasswordSuccessAction
+    | IGetUserSuccessAction | IGetUserRequestAction | IGetUserFailedAction
+    | IResetPasswordSuccessAction | IResetPasswordRequestAction | IResetPasswordFailedAction
+    | ILogoutSuccessAction | ILogoutRequestAction | ILogoutFailedAction
+    | IUpdateUserSuccessAction | IUpdateUserRequestAction | IUpdateUserFailedAction
+    | IRegisterSuccessAction | IRegisterRequestAction | IRegisterFailedAction
+    | ITokenSuccessAction | ITokenRequestAction | ITokenFailedAction
 
 export const loginRequestAction = (): ILoginRequestAction => ({
     type: LOGIN_REQUEST
@@ -227,158 +229,173 @@ export const updateUserFailedAction = (): IUpdateUserFailedAction => ({
 export const login = (form: TForm) => (dispatch: AppDispatch) => {
     dispatch(loginRequestAction())
     loginRequest(form)
-    .then(data => {
-        if(data.success) {
-            dispatch(loginSuccessAction(data))
-        } else {
-            dispatch(loginFailedAction()) 
-        }
-    })
-    .catch(e => {
-        dispatch(loginFailedAction())
-    })
+        .then(data => {
+            if (data.success) {
+                dispatch(loginSuccessAction(data))
+            } else {
+                dispatch(loginFailedAction())
+            }
+        })
+        .catch(e => {
+            dispatch(loginFailedAction())
+        })
 }
 
 export const register = (form: TRegisterForm) => (dispatch: AppDispatch) => {
     dispatch(registerRequestAction())
     registerRequest(form)
-    .then(data => {
-        if(data.success) {
-            dispatch(registerSuccessAction(data))
-        } else {
+        .then(data => {
+            if (data.success) {
+                dispatch(registerSuccessAction(data))
+            } else {
+                dispatch(registerFailedAction())
+            }
+        })
+        .catch(e => {
             dispatch(registerFailedAction())
-        }
-    }) 
-    .catch(e => {
-        dispatch(registerFailedAction())
-    })  
+        })
 }
 
 export const resetPassword = (form: TFormResetPassword) => (dispatch: AppDispatch) => {
     dispatch(resetPasswordRequestAction())
     resetPasswordRequest(form)
-    .then(data => {
-        if(data.success) {
-            dispatch(resetPasswordSuccessAction(data))
-        } else {
+        .then(data => {
+            if (data.success) {
+                dispatch(resetPasswordSuccessAction(data))
+            } else {
+                dispatch(resetPasswordFailedAction())
+            }
+        })
+        .catch(e => {
             dispatch(resetPasswordFailedAction())
-        }
-    }) 
-    .catch(e => {
-        dispatch(resetPasswordFailedAction())
-    })  
+        })
 }
 
 export const confirmResetPassword = (form: TFormConfirmPassword) => (dispatch: AppDispatch) => {
     dispatch(confirmResetPasswordRequestAction())
     confirmResetPasswordRequest(form)
-    .then(data => {
-        if(data.success) {
-            dispatch(confirmResetPasswordSuccessAction(data))
-        } else {
+        .then(data => {
+            if (data.success) {
+                dispatch(confirmResetPasswordSuccessAction(data))
+            } else {
+                dispatch(confirmResetPasswordFailedAction())
+            }
+        })
+        .catch(e => {
             dispatch(confirmResetPasswordFailedAction())
-        }
-    }) 
-    .catch(e => {
-        dispatch(confirmResetPasswordFailedAction())
-    })  
+        })
 }
 
 export const logout = () => (dispatch: AppDispatch) => {
     dispatch(logoutRequestAction())
     logoutRequest()
-    .then(data => {
-        if(data.success) {
-            dispatch(logoutSuccessAction(data))
-        } else {
-            dispatch(logoutFailedAction())
-        }
-    })
-    .catch(e => {
-        dispatch(loginFailedAction())
-    })
+        .then(data => {
+            if (data.success) {
+                dispatch(logoutSuccessAction(data))
+            } else {
+                dispatch(logoutFailedAction())
+            }
+        })
+        .catch(e => {
+            dispatch(loginFailedAction())
+        })
 }
 
 export const getUser = () => (dispatch: AppDispatch) => {
     dispatch(getUserRequestAction())
     getUserRequest()
-    .then(data => {
-        if(data.success) {
-            dispatch(getUserSuccessAction(data))
-        } else {
-            dispatch(getUserFailedAction())
-        }
-                
-    })
-    .catch(error => {
-        if(error.message === TOKEN_EXPIRED_ERROR || error.message === TOKEN_MALFORMED_ERROR) {
-            dispatch(tokenRequestAction())
-            tokenRequest()
-                .then(dataToken => {
-                    if(dataToken.success) {
-                        dispatch(tokenSuccessAction(dataToken))
-                        getUserRequest()
-                        .then(dataUser => {
-                            if(dataUser.success) {
-                                dispatch(getUserSuccessAction(dataUser))
-                            } else {
-                                dispatch(getUserFailedAction())
-                            }
-                        })
-                        .catch(e => { 
-                            dispatch(getUserFailedAction())
-                        })   
-                    } else {
+        .then(data => {
+            if (data.success) {
+                dispatch(getUserSuccessAction(data))
+            } else {
+                dispatch(getUserFailedAction())
+            }
+
+        })
+        .catch(error => {
+            if (error.message === TOKEN_EXPIRED_ERROR || error.message === TOKEN_MALFORMED_ERROR) {
+                dispatch(tokenRequestAction())
+                tokenRequest()
+                    .then(dataToken => {
+                        if (dataToken.success) {
+                            dispatch(tokenSuccessAction(dataToken))
+                            getUserRequest()
+                                .then(dataUser => {
+                                    if (dataUser.success) {
+                                        dispatch(getUserSuccessAction(dataUser))
+                                    } else {
+                                        dispatch(getUserFailedAction())
+                                    }
+                                })
+                                .catch(e => {
+                                    dispatch(getUserFailedAction())
+                                })
+                        } else {
+                            dispatch(tokenFailedAction())
+                        }
+                    })
+                    .catch(e => {
                         dispatch(tokenFailedAction())
-                    }              
-                })
-                .catch(e => { 
-                    dispatch(tokenFailedAction())
-                    dispatch(getUserFailedAction())
-                })   
-        } else {
-            dispatch(getUserFailedAction())
-        }
-    })
+                        dispatch(getUserFailedAction())
+                    })
+            } else {
+                dispatch(getUserFailedAction())
+            }
+        })
+}
+
+export const getToken = () => (dispatch: AppDispatch) => {
+    dispatch(tokenRequestAction())
+    tokenRequest()
+        .then(dataToken => {
+            if (dataToken.success) {
+                dispatch(tokenSuccessAction(dataToken))
+            } else {
+                dispatch(tokenFailedAction())
+            }
+        })
+        .catch(e => {
+            dispatch(tokenFailedAction())
+        })
 }
 
 export const updateUser = (form: TRegisterForm) => (dispatch: AppDispatch) => {
     dispatch(updateUserRequestAction())
     patchUserRequest(form)
-    .then(data => {
-        if(data.success) {
-            dispatch(updateUserSuccessAction(data))
-        } else {
-            dispatch(updateUserFailedAction())
-        }             
-    })
-    .catch(error => {
-        if(error.message === TOKEN_EXPIRED_ERROR || error.message === TOKEN_MALFORMED_ERROR) {
-            dispatch(tokenRequestAction())
-            tokenRequest()
-            .then(dataToken => {
-                if(dataToken.success) {
-                    dispatch(tokenSuccessAction(dataToken))
-                    patchUserRequest(form)
-                    .then(dataUser => {
-                        if(dataUser.success) {
-                            dispatch(updateUserSuccessAction(dataUser))
+        .then(data => {
+            if (data.success) {
+                dispatch(updateUserSuccessAction(data))
+            } else {
+                dispatch(updateUserFailedAction())
+            }
+        })
+        .catch(error => {
+            if (error.message === TOKEN_EXPIRED_ERROR || error.message === TOKEN_MALFORMED_ERROR) {
+                dispatch(tokenRequestAction())
+                tokenRequest()
+                    .then(dataToken => {
+                        if (dataToken.success) {
+                            dispatch(tokenSuccessAction(dataToken))
+                            patchUserRequest(form)
+                                .then(dataUser => {
+                                    if (dataUser.success) {
+                                        dispatch(updateUserSuccessAction(dataUser))
+                                    } else {
+                                        dispatch(updateUserFailedAction())
+                                    }
+                                })
                         } else {
-                            dispatch(updateUserFailedAction())
+                            dispatch(tokenFailedAction())
                         }
                     })
-                } else {
-                    dispatch(tokenFailedAction())
-                }              
-            })
-            .catch(e => { 
-                dispatch(tokenFailedAction())
+                    .catch(e => {
+                        dispatch(tokenFailedAction())
+                        dispatch(updateUserFailedAction())
+                    })
+            } else {
                 dispatch(updateUserFailedAction())
-            })  
-        } else {
-            dispatch(updateUserFailedAction())
-        }
-    })      
+            }
+        })
 }
 
 

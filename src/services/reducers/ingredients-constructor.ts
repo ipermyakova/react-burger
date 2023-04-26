@@ -2,41 +2,47 @@ import { GET_INGREDIENTS_CONSTRUCTOR, ADD_INGREDIENT_CONSTRUCTOR, REMOVE_INGREDI
 import { TIngredient } from '../types/data';
 import { TIngredientsConstructorActions } from '../actions/ingredients-constructor';
 
-export type TIngredientsConstructorState = Array<TIngredient>
+export type TIngredientsConstructorState = {
+    bun: TIngredient | null;
+    ingredients: Array<TIngredient>
+}
 
-const initialState: TIngredientsConstructorState = []
+const initialState: TIngredientsConstructorState = {
+    bun: null,
+    ingredients: []
+}
 
 export const getIngredientsConstructorReducer = (state = initialState, action: TIngredientsConstructorActions) => {
-    switch(action.type) {
-        case GET_INGREDIENTS_CONSTRUCTOR: 
+    switch (action.type) {
+        case GET_INGREDIENTS_CONSTRUCTOR:
             return state
         case ADD_INGREDIENT_CONSTRUCTOR: {
-            const item = action.ingredient as TIngredient;
-            if (item.type !== 'bun') {
-                return [...state, { ...item, dragId: action.dragId }]
+            if (action.payload.type === 'bun') {
+                return { ...state, bun: action.payload }
             }
-            const currentBun = state.find(item => item.type === 'bun')
-            if(currentBun) {
-                if(currentBun._id !== item._id) {
-                    return [...state.filter(item => item._id !== currentBun._id), { ...item, dragId: action.dragId}]
-                } 
-                return state;
-            }
-            return [...state, { ...item, dragId: action.dragId }] 
+            return { ...state, ingredients: [...state.ingredients, action.payload] }
         }
-        
+
         case REMOVE_INGREDIENT_CONSTRUCTOR: {
-            return [...state.filter(item => item.dragId !== action.id)]
-        } 
+            return {
+                ...state, ingredients: [
+                    ...state.ingredients.filter(item => item.dragId !== action.id)
+                ]
+            }
+        }
 
         case UPDATE_INGREDIENT_CONSTRUCTOR: {
-            return [...action.ingredients]
+            return {
+                ...state, ingredients: [
+                    ...action.ingredients
+                ]
+            }
         }
 
         case REMOVE_INGREDIENTS_CONSTRUCTOR: {
             return initialState;
         }
 
-        default: return state;    
+        default: return state;
     }
 }

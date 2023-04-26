@@ -11,7 +11,6 @@ export type TIngredient = {
         readonly image_mobile: string;
         readonly image_large: string;
         readonly __v: number;
-        count?: number;
         dragId?: string
 }
 type TOwner = {
@@ -30,7 +29,7 @@ export type TOrder = {
     readonly createdAt: string;
     readonly updatedAt: string;
     readonly number: number;
-    readonly price: number;
+    readonly price?: number;
 }
 
 export type TResponseBody<TDataKey extends string = '', TDataType = {}> = {
@@ -92,6 +91,10 @@ export type TWsOrder = {
     readonly updatedAt: string;
     readonly number: number;
     readonly name: string;
+}
+
+export type TGetOrder = TWsOrder & {
+    readonly owner: string;
 }
 
 export type TOrdersAll = {

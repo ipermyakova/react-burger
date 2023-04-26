@@ -10,19 +10,19 @@ const initialState: TIngredientDetailsState = {
     currentIngredient: null
 }
 
-export const ingredientDetailsReducer = (state=initialState, action: TIngredientDetailsActions) => {
-    switch(action.type) {
-        case ADD_INGREDIENT_DETAILS: 
+export const ingredientDetailsReducer = (state = initialState, action: TIngredientDetailsActions) => {
+    switch (action.type) {
+        case ADD_INGREDIENT_DETAILS:
             return {
                 ...state,
-                currentIngredient: {...action.ingredient}
+                currentIngredient: { ...action.ingredient }
             }
         case REMOVE_INGREDIENT_DETAILS:
             return {
                 ...state,
-                currentIngredient: null 
-            }    
+                currentIngredient: null
+            }
 
-        default: return state;    
+        default: return state;
     }
 }

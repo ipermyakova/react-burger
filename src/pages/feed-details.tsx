@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect} from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { actions } from '../services/actions';
 import { CurrencyIcon, FormattedDate } from '@ya.praktikum/react-developer-burger-ui-components';
@@ -7,9 +7,10 @@ import feedStyles from './feed.module.css';
 import styles from './feed.details.module.css';
 import { TIngredient, TWsOrder, TStatusOrder, TOrder } from '../services/types/data';
 import { uniq, toDate } from '../utils/utils';
+import Loader from '../components/loader/loader'
 
 type TRenderName = {
-    [key in TStatusOrder] : string
+    [key in TStatusOrder]: string
 }
 
 const renderStatus: TRenderName = {
@@ -21,15 +22,15 @@ const renderStatus: TRenderName = {
 type TItemProps = {
     ingredient: TIngredient,
     count: number
-} 
+}
 
-export const Item: FC<TItemProps> = ({ingredient, count}) => {
+export const Item: FC<TItemProps> = ({ ingredient, count }) => {
     return (
         <div className="mt-4 mr-6">
             <div className={styles.item_container}>
                 <div className={styles.box_container}>
                     <div className={feedStyles.box}>
-                        <img className={feedStyles.image} src={ingredient.image_mobile}/>
+                        <img className={feedStyles.image} src={ingredient.image_mobile} />
                     </div>
                 </div>
                 <div className={styles.text_container}>
@@ -55,90 +56,92 @@ export const OrderDetails = () => {
 
     const [order, setOrder] = useState<TWsOrder | null | TOrder>(null)
 
-    const { ingredients } = useSelector(state => ({
-        ingredients: state?.ingredients?.ingredients || null, 
+    const { ingredients, isLoadingIngredients } = useSelector(state => ({
+        ingredients: state?.ingredients?.ingredients || null,
+        isLoadingIngredients: state?.ingredients?.isLoading
     }))
 
     const { orders } = useSelector(state => ({
         orders: state?.orders?.orders
     }))
 
-    const { orderData } = useSelector(store => ({
+    const { orderData, isLoadingOrder } = useSelector(store => ({
         orderData: store?.order?.orderData,
+        isLoadingOrder: store?.order?.isLoading
     }))
-
-    useEffect(()=> {
-        if(ingredients && ingredients.length === 0) {
-            dispatch(actions.getIngredientsAction());
-        }
-    },[]);
 
 
     useEffect(() => {
-        if(!orders && !orderData && id) {
+        if (!orders && !orderData && id) {
             dispatch(actions.getOrderActions(id))
         }
     }, [])
 
 
-    const currentOrder = orders?.orders.find(item =>  item.number.toString() === id)
+    const currentOrder = orders?.orders.find(item => item.number.toString() === id)
 
     useEffect(() => {
-        if(currentOrder){
+        if (currentOrder) {
             setOrder(currentOrder)
-        } else if(orderData) {
+        } else if (orderData) {
             setOrder(orderData)
         }
-        
+
     }, [id, currentOrder, orderData])
 
     useEffect(() => {
-        return ()=> { dispatch(actions.removeOrderDetails()) }   
+        return () => { dispatch(actions.removeOrderDetails()) }
     }, [])
 
     const currentIngredients: Array<TIngredient> = []
     order?.ingredients.forEach(id => {
         const ingredient = ingredients.find(ingredient => ingredient._id === id);
-        if(ingredient) {
+        if (ingredient) {
             currentIngredients.push(ingredient)
         }
     })
-    const currentIngredientsWithCount = currentIngredients.reduce((acc: any, item) => {
+    const currentIngredientsWithCount = currentIngredients.reduce((acc: Record<string, any>, item) => {
         const count = acc[item._id] || 0
         acc[item._id] = count + 1
         return acc
     }, {})
 
+    const totalPrice = currentIngredients.reduce((acc, item) => {
+        return acc + item.price
+    }, 0)
+
+    if (isLoadingIngredients || isLoadingOrder) {
+        return <div className={styles.loader_wrapper}><Loader /></div>
+    }
+
 
     return (
-            <div className={styles.container}>
-                <p className={feedStyles.feed_item_number}>{`#${order?.number}`}</p>
-                <div className="mt-10">
-                    <p className={feedStyles.item_title}>{order?.name}</p>
-                </div>
-                <div className="mt-3">
-                    <p className={order?.status !== 'done' ? feedStyles.status_name : feedStyles.status_name_ready}>{order? renderStatus[order.status] : ''}</p>
-                </div>
-                <div className="mt-15 mb-6">
-                    <p className={feedStyles.item_title}>Состав:</p>
-                </div>
-                <div className={styles.items_container}>
-                    {uniq(currentIngredients).map(item => <Item key={item._id} ingredient={item} count={currentIngredientsWithCount[item._id]}/>)}              
-                </div>
-                <div className="mt-10">
-                    <div className={styles.footer_container}>
-                        <FormattedDate date={toDate(order?.createdAt)} className={feedStyles.date}/>
-                        <div className={styles.total_price}>
-                            <p className={feedStyles.item_number}>{currentIngredients.reduce((acc, item) => {
-                                return acc + item.price 
-                                }, 0)}</p>
-                            <div className="ml-2">
-                                <CurrencyIcon type="primary" />
-                            </div>
+        <div className={styles.container}>
+            <p className={feedStyles.feed_item_number}>{`#${order?.number}`}</p>
+            <div className="mt-10">
+                <p className={feedStyles.item_title}>{order?.name}</p>
+            </div>
+            <div className="mt-3">
+                <p className={order?.status !== 'done' ? feedStyles.status_name : feedStyles.status_name_ready}>{order ? renderStatus[order.status] : ''}</p>
+            </div>
+            <div className="mt-15 mb-6">
+                <p className={feedStyles.item_title}>Состав:</p>
+            </div>
+            <div className={styles.items_container}>
+                {uniq(currentIngredients).map(item => <Item key={item._id} ingredient={item} count={currentIngredientsWithCount[item._id]} />)}
+            </div>
+            <div className="mt-10">
+                <div className={styles.footer_container}>
+                    <FormattedDate date={toDate(order?.createdAt)} className={feedStyles.date} />
+                    <div className={styles.total_price}>
+                        <p className={feedStyles.item_number}>{totalPrice}</p>
+                        <div className="ml-2">
+                            <CurrencyIcon type="primary" />
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     );
 }
 

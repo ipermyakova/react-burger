@@ -1,14 +1,14 @@
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { ORDERS_CONNECT, ORDERS_DISCONNECT } from '../services/constants'
 
 import styles from './login.module.css';
 import feedStyles from './feed.module.css';
 import { getCookie } from '../utils/cookie-utils';
 import { useAuth } from '../services/auth';
 import { useSelector, useDispatch } from '../hooks/hooks';
-import { actions } from '../services/actions';
 import { Item } from './feed';
-const url = 'wss://norma.nomoreparties.space/orders';
+import { BURGER_API_WSS_ORDERS } from '../utils/burger-api';
 
 export const ProfileOrdersPage = () => {
     const dispatch = useDispatch();
@@ -17,7 +17,7 @@ export const ProfileOrdersPage = () => {
     const { getUser, updateUser, user, signOut, ...auth } = useAuth();
 
     const { ingredients } = useSelector(state => ({
-        ingredients: state?.ingredients?.ingredients || null, 
+        ingredients: state?.ingredients?.ingredients || null,
     }))
 
     const { orders } = useSelector(state => ({
@@ -30,19 +30,16 @@ export const ProfileOrdersPage = () => {
     }));
 
     useEffect(() => {
-        if(getCookie('token')) {
-            dispatch(actions.connect(`${url}?token=${getCookie('token')}`))
+        if (getCookie('token')) {
+            dispatch({ type: ORDERS_CONNECT, payload: `${BURGER_API_WSS_ORDERS}?token=${getCookie('token')}` })
         }
-    }, [])
-
-    useEffect(() => {
-        return () => { dispatch(actions.disconnect()) }
-    }, [])
+        return () => { dispatch({ type: ORDERS_DISCONNECT }) }
+    }, [dispatch])
 
 
     const handleExitClick = () => {
         signOut();
-        if(!isLoadingLogout && !hasErrorLogout && !user && !getCookie('token')) {
+        if (!isLoadingLogout && !hasErrorLogout && !user && !getCookie('token')) {
             navigate('/login');
         }
     }
@@ -62,15 +59,15 @@ export const ProfileOrdersPage = () => {
                         </div>
                     </div>
                 </div>
-                    <div className='ml-15'>
-                        <div className={styles.orders_container}>
-                            <div className={feedStyles.items_container}>
-                                {reverseOrders.filter((_, index: number) => index < 50).map(item => 
-                                <Item key={item._id} item={item} ingredients={ingredients} withStatus={true}/>)}
-                            </div>
-                        </div>                       
+                <div className='ml-15'>
+                    <div className={styles.orders_container}>
+                        <div className={feedStyles.items_container}>
+                            {reverseOrders.filter((_, index: number) => index < 50).map(item =>
+                                <Item key={item._id} item={item} ingredients={ingredients} withStatus={true} />)}
+                        </div>
                     </div>
                 </div>
-        </div>   
+            </div>
+        </div>
     )
 }

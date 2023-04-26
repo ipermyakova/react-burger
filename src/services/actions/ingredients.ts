@@ -1,4 +1,4 @@
-import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED, UPDATE_COUNT_INGREDIENT } from '../constants'
+import { GET_INGREDIENTS_REQUEST, GET_INGREDIENTS_SUCCESS, GET_INGREDIENTS_FAILED } from '../constants'
 import { getIngredients } from '../../utils/burger-api'
 import { TIngredient } from '../types/data'
 import { AppDispatch } from '../types';
@@ -14,15 +14,7 @@ export interface IGetIngredientsSuccessAction {
     readonly ingredients: ReadonlyArray<TIngredient>;
 }
 
-export interface IUpdateCountIngredientsAction {
-    readonly type: typeof UPDATE_COUNT_INGREDIENT;
-    readonly id: string;
-    readonly bunId: string;
-    readonly value: number;
-    readonly itemType: string;
-}
-
-export type TIngredientsActions = IGetIngredientsRequestAction | IGetIngredientsFailedAction | IGetIngredientsSuccessAction | IUpdateCountIngredientsAction
+export type TIngredientsActions = IGetIngredientsRequestAction | IGetIngredientsFailedAction | IGetIngredientsSuccessAction
 
 export const getIngredientsRequestAction = (): IGetIngredientsRequestAction => ({
     type: GET_INGREDIENTS_REQUEST
@@ -40,18 +32,10 @@ export const getIngredientsFailedAction = (): IGetIngredientsFailedAction => ({
 export const getIngredientsAction = () => (dispatch: AppDispatch) => {
     dispatch(getIngredientsRequestAction())
     getIngredients()
-    .then(data => {
-        dispatch(getIngredientsSuccessAction(data.data))
-    })
-    .catch(e => {
-        dispatch(getIngredientsFailedAction())
-    });
+        .then(data => {
+            dispatch(getIngredientsSuccessAction(data.data))
+        })
+        .catch(e => {
+            dispatch(getIngredientsFailedAction())
+        });
 }
-
-export const updateCountIngredients = (id: string, bunId: string, value: number, itemType: string): IUpdateCountIngredientsAction => ({
-    type: UPDATE_COUNT_INGREDIENT,
-    id,
-    bunId,
-    value,
-    itemType
-})

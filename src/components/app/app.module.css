@@ -11,3 +11,14 @@
     justify-content: space-between;
     align-items: start;
 }
+.loader_wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+}
+
+.loader {
+    height: 80;
+    width: 80;
+    color: #8585AD; 
+}

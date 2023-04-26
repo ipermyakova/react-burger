@@ -4,35 +4,38 @@ import { useParams } from 'react-router-dom';
 import pageStyles from './login.module.css';
 import styles from '../components/ingredients-details/ingredient.details.module.css';
 import { TIngredient } from '../services/types/data';
-import { useSelector } from '../hooks/hooks';
+import { useSelector, useDispatch } from '../hooks/hooks';
+import Loader from '../components/loader/loader';
+import { actions } from '../services/actions';
 
 
-export const IngredientDetailsPage =() => {
+export const IngredientDetailsPage = () => {
 
     const { id } = useParams();
-    const [ ingredient, setIngredient ] = useState<TIngredient | null>(null);
+    const [ingredient, setIngredient] = useState<TIngredient | null>(null);
+    const dispatch = useDispatch();
 
     const { ingredients, hasError, isLoading } = useSelector(store => ({
         ingredients: store?.ingredients?.ingredients || null,
-        isLoading: store?.ingredients?.isLoading || false, 
+        isLoading: store?.ingredients?.isLoading || false,
         hasError: store?.ingredients?.hasError || false
     }))
 
-    const currentIngredient = ingredients?.find( item => item._id === id);
+    const currentIngredient = ingredients?.find(item => item._id === id);
 
     useEffect(() => {
-        if(currentIngredient) {
+        if (currentIngredient) {
             setIngredient(currentIngredient);
-        }           
+        }
     }, [id, currentIngredient])
 
     return (
         <div>
-            {isLoading && 'Загрузка'}
+            {isLoading && <div className={styles.loader_wrapper}><Loader /></div>}
             {hasError && 'Возникла ошибка'}
             {!isLoading && !hasError && ingredients && ingredients.length > 0 &&
-            <div className={pageStyles.ingredient_wrapper}>
-                <div className={pageStyles.ingredient_container}>
+                <div className={pageStyles.ingredient_wrapper}>
+                    <div className={pageStyles.ingredient_container}>
                         <h2 className={pageStyles.ingredient_heading}>Детали ингредиента</h2>
                         <img src={ingredient?.image_large}></img>
                         <div className="mt-4 mb-8">
@@ -66,8 +69,8 @@ export const IngredientDetailsPage =() => {
                                 </div>
                             </div>
                         </div>
-                    </div> 
+                    </div>
                 </div>}
-            </div>            
+        </div>
     )
 }
