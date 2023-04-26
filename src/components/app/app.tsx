@@ -42,7 +42,6 @@ const HomePage = () => {
         if(getCookie("refreshToken")) {
             auth.getUser();         
         }
-        dispatch(actions.getIngredientsAction());
     },[]);
 
     const handleCloseModal = useCallback(() => {
@@ -126,6 +125,11 @@ const ModalSwitch = () => {
 }
 
 const App = () => {
+    const dispatch = useDispatch();
+
+    useEffect(()=> {
+        dispatch(actions.getIngredientsAction());
+    },[]);
     
     return (
         <ProvideAuth>

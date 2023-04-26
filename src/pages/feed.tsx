@@ -78,7 +78,7 @@ export const Item: FC<TItemProps> = ({ item, ingredients, withStatus = false }) 
                     <div className={styles.container_price}>
                         <div className={styles.container_image}>
                             {ingredientsToShow.map((ingredient, index) => {
-                                return <div  key={ingredient.dragId} className={styles.box}>
+                                return <div  key={index} className={styles.box}>
                                     <img className={remains && index === 0 ? styles.image_opacity : styles.image} src={ingredient?.image_mobile} />
                                     {remains && index === 0 && <p className={styles.count}>+{remains}</p>}
                                 </div>
